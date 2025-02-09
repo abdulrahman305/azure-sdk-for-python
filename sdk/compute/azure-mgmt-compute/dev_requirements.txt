@@ -7,3 +7,5 @@ aiohttp>=3.0; python_version >= '3.5'
 ../../identity/azure-identity
 azure-storage-blob==12.9.0
 azure-mgmt-keyvault==10.0.0
+requests>=2.32.2 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
