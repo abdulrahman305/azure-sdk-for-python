@@ -122,7 +122,7 @@
 
 # ServiceLabel: %Communication - Phone Numbers
 # PRLabel: %Communication - Phone Numbers
-/sdk/communication/azure-communication-phonenumbers/                 @miguhern @whisper6284 @danielav7
+/sdk/communication/azure-communication-phonenumbers/                 @Arazan @whisper6284 @danielortega-msft @sofiar-msft
 
 # ServiceLabel: %Communication - Rooms
 # PRLabel: %Communication - Rooms
@@ -178,7 +178,7 @@
 /sdk/keyvault/                                                       @mccoyp
 
 # PRLabel: %Load Test Service
-/sdk/loadtesting/azure-developer-loadtesting/                        @msyyc @iscai-msft
+/sdk/loadtesting/azure-developer-loadtesting/                        @prativen @mitsha-microsoft @ninallam
 
 # PRLabel: %Monitor
 /sdk/loganalytics/azure-loganalytics/                                @azmonapplicationinsights @pvaneck
