@@ -144,7 +144,10 @@ class ContainerProxy:
 
         container_properties = await self._get_properties()
         partition_key_definition = container_properties["partitionKey"]
-        partition_key = PartitionKey(path=partition_key_definition["paths"], kind=partition_key_definition["kind"])
+        partition_key = PartitionKey(
+            path=partition_key_definition["paths"],
+            kind=partition_key_definition["kind"],
+            version=partition_key_definition["version"])
 
         return partition_key._get_epk_range_for_partition_key(partition_key_value)
 
@@ -208,6 +211,7 @@ class ContainerProxy:
         initial_headers: Optional[Dict[str, str]] = None,
         priority: Optional[Literal["High", "Low"]] = None,
         no_response: Optional[bool] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> CosmosDict:
         """Create an item in the container.
@@ -236,6 +240,7 @@ class ContainerProxy:
         :keyword bool no_response: Indicates whether service should be instructed to skip
             sending response payloads. When not specified explicitly here, the default value will be determined from
             client-level options.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :raises ~azure.cosmos.exceptions.CosmosHttpResponseError: Item with the given ID already exists.
         :returns: A CosmosDict representing the new item. The dict will be empty if `no_response` is specified.
         :rtype: ~azure.cosmos.CosmosDict[str, Any]
@@ -265,6 +270,8 @@ class ContainerProxy:
             kwargs['priority'] = priority
         if no_response is not None:
             kwargs['no_response'] = no_response
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         request_options["disableAutomaticIdGeneration"] = not enable_automatic_id_generation
         if indexing_directive is not None:
@@ -288,6 +295,7 @@ class ContainerProxy:
         initial_headers: Optional[Dict[str, str]] = None,
         max_integrated_cache_staleness_in_ms: Optional[int] = None,
         priority: Optional[Literal["High", "Low"]] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> CosmosDict:
         """Get the item identified by `item`.
@@ -307,6 +315,7 @@ class ContainerProxy:
         :keyword Literal["High", "Low"] priority: Priority based execution allows users to set a priority for each
             request. Once the user has reached their provisioned throughput, low priority requests are throttled
             before high priority requests start getting throttled. Feature must first be enabled at the account level.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :keyword list[str] excluded_locations: Excluded locations to be skipped from preferred locations. The locations
             in this list are specified as the names of the azure Cosmos locations like, 'West US', 'East US' and so on.
             If all preferred locations were excluded, primary/hub location will be used.
@@ -334,6 +343,8 @@ class ContainerProxy:
             kwargs['initial_headers'] = initial_headers
         if priority is not None:
             kwargs['priority'] = priority
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
 
         request_options["partitionKey"] = await self._set_partition_key(partition_key)
@@ -354,6 +365,7 @@ class ContainerProxy:
         initial_headers: Optional[Dict[str, str]] = None,
         max_integrated_cache_staleness_in_ms: Optional[int] = None,
         priority: Optional[Literal["High", "Low"]] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> AsyncItemPaged[Dict[str, Any]]:
         """List all the items in the container.
@@ -369,6 +381,7 @@ class ContainerProxy:
         :keyword Literal["High", "Low"] priority: Priority based execution allows users to set a priority for each
             request. Once the user has reached their provisioned throughput, low priority requests are throttled
             before high priority requests start getting throttled. Feature must first be enabled at the account level.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :keyword list[str] excluded_locations: Excluded locations to be skipped from preferred locations. The locations
             in this list are specified as the names of the azure Cosmos locations like, 'West US', 'East US' and so on.
             If all preferred locations were excluded, primary/hub location will be used.
@@ -382,6 +395,8 @@ class ContainerProxy:
             kwargs['initial_headers'] = initial_headers
         if priority is not None:
             kwargs['priority'] = priority
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         feed_options = _build_options(kwargs)
         if max_item_count is not None:
             feed_options["maxItemCount"] = max_item_count
@@ -416,6 +431,7 @@ class ContainerProxy:
         priority: Optional[Literal["High", "Low"]] = None,
         continuation_token_limit: Optional[int] = None,
         response_hook: Optional[Callable[[Mapping[str, str], Dict[str, Any]], None]] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> AsyncItemPaged[Dict[str, Any]]:
         """Return all results matching the given `query`.
@@ -453,6 +469,7 @@ class ContainerProxy:
         :keyword Literal["High", "Low"] priority: Priority based execution allows users to set a priority for each
             request. Once the user has reached their provisioned throughput, low priority requests are throttled
             before high priority requests start getting throttled. Feature must first be enabled at the account level.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :keyword list[str] excluded_locations: Excluded locations to be skipped from preferred locations. The locations
             in this list are specified as the names of the azure Cosmos locations like, 'West US', 'East US' and so on.
             If all preferred locations were excluded, primary/hub location will be used.
@@ -484,6 +501,8 @@ class ContainerProxy:
             kwargs['initial_headers'] = initial_headers
         if priority is not None:
             kwargs['priority'] = priority
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         feed_options = _build_options(kwargs)
         if max_item_count is not None:
             feed_options["maxItemCount"] = max_item_count
@@ -766,6 +785,7 @@ class ContainerProxy:
         match_condition: Optional[MatchConditions] = None,
         priority: Optional[Literal["High", "Low"]] = None,
         no_response: Optional[bool] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> CosmosDict:
         """Insert or update the specified item.
@@ -790,6 +810,7 @@ class ContainerProxy:
         :keyword bool no_response: Indicates whether service should be instructed to skip
             sending response payloads. When not specified explicitly here, the default value will be determined from
             client-level options.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :keyword list[str] excluded_locations: Excluded locations to be skipped from preferred locations. The locations
             in this list are specified as the names of the azure Cosmos locations like, 'West US', 'East US' and so on.
             If all preferred locations were excluded, primary/hub location will be used.
@@ -815,6 +836,8 @@ class ContainerProxy:
             kwargs['match_condition'] = match_condition
         if no_response is not None:
             kwargs['no_response'] = no_response
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         request_options["disableAutomaticIdGeneration"] = True
         if self.container_link in self.__get_client_container_caches():
@@ -842,6 +865,7 @@ class ContainerProxy:
         match_condition: Optional[MatchConditions] = None,
         priority: Optional[Literal["High", "Low"]] = None,
         no_response: Optional[bool] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> CosmosDict:
         """Replaces the specified item if it exists in the container.
@@ -867,6 +891,7 @@ class ContainerProxy:
         :keyword bool no_response: Indicates whether service should be instructed to skip
             sending response payloads. When not specified explicitly here, the default value will be determined from
             client-level options.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :keyword list[str] excluded_locations: Excluded locations to be skipped from preferred locations. The locations
             in this list are specified as the names of the azure Cosmos locations like, 'West US', 'East US' and so on.
             If all preferred locations were excluded, primary/hub location will be used.
@@ -894,6 +919,8 @@ class ContainerProxy:
             kwargs['match_condition'] = match_condition
         if no_response is not None:
             kwargs['no_response'] = no_response
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         request_options["disableAutomaticIdGeneration"] = True
         if self.container_link in self.__get_client_container_caches():
@@ -919,6 +946,7 @@ class ContainerProxy:
         match_condition: Optional[MatchConditions] = None,
         priority: Optional[Literal["High", "Low"]] = None,
         no_response: Optional[bool] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> CosmosDict:
         """ Patches the specified item with the provided operations if it
@@ -947,6 +975,7 @@ class ContainerProxy:
         :keyword bool no_response: Indicates whether service should be instructed to skip
             sending response payloads. When not specified explicitly here, the default value will be determined from
             client-level options.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :keyword list[str] excluded_locations: Excluded locations to be skipped from preferred locations. The locations
             in this list are specified as the names of the azure Cosmos locations like, 'West US', 'East US' and so on.
             If all preferred locations were excluded, primary/hub location will be used.
@@ -971,6 +1000,8 @@ class ContainerProxy:
             kwargs['match_condition'] = match_condition
         if no_response is not None:
             kwargs['no_response'] = no_response
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         request_options["disableAutomaticIdGeneration"] = True
         request_options["partitionKey"] = await self._set_partition_key(partition_key)
@@ -997,6 +1028,7 @@ class ContainerProxy:
         etag: Optional[str] = None,
         match_condition: Optional[MatchConditions] = None,
         priority: Optional[Literal["High", "Low"]] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> None:
         """Delete the specified item from the container.
@@ -1024,6 +1056,7 @@ class ContainerProxy:
             This excluded_location will override existing excluded_locations in client level.
         :keyword response_hook: A callable invoked with the response metadata.
         :paramtype response_hook: Callable[[Mapping[str, str], None], None]
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :raises ~azure.cosmos.exceptions.CosmosHttpResponseError: The item wasn't deleted successfully.
         :raises ~azure.cosmos.exceptions.CosmosResourceNotFoundError: The item does not exist in the container.
         :rtype: None
@@ -1042,6 +1075,8 @@ class ContainerProxy:
             kwargs['match_condition'] = match_condition
         if priority is not None:
             kwargs['priority'] = priority
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         request_options["partitionKey"] = await self._set_partition_key(partition_key)
         if self.container_link in self.__get_client_container_caches():
@@ -1259,6 +1294,7 @@ class ContainerProxy:
         pre_trigger_include: Optional[str] = None,
         post_trigger_include: Optional[str] = None,
         session_token: Optional[str] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> None:
         """The delete by partition key feature is an asynchronous, background operation that allows you to delete all
@@ -1277,6 +1313,7 @@ class ContainerProxy:
             If all preferred locations were excluded, primary/hub location will be used.
             This excluded_location will override existing excluded_locations in client level.
         :keyword Callable response_hook: A callable invoked with the response metadata.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :rtype: None
         """
         etag = kwargs.get('etag')
@@ -1298,6 +1335,8 @@ class ContainerProxy:
             kwargs['post_trigger_include'] = post_trigger_include
         if session_token is not None:
             kwargs['session_token'] = session_token
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         # regardless if partition key is valid we set it as invalid partition keys are set to a default empty value
         request_options["partitionKey"] = await self._set_partition_key(partition_key)
@@ -1317,6 +1356,7 @@ class ContainerProxy:
         post_trigger_include: Optional[str] = None,
         session_token: Optional[str] = None,
         priority: Optional[Literal["High", "Low"]] = None,
+        throughput_bucket: Optional[int] = None,
         **kwargs: Any
     ) -> CosmosList:
         """ Executes the transactional batch for the specified partition key.
@@ -1336,6 +1376,7 @@ class ContainerProxy:
             If all preferred locations were excluded, primary/hub location will be used.
             This excluded_location will override existing excluded_locations in client level.
         :keyword Callable response_hook: A callable invoked with the response metadata.
+        :keyword int throughput_bucket: The desired throughput bucket for the client
         :returns: A CosmosList representing the items after the batch operations went through.
         :raises ~azure.cosmos.exceptions.CosmosHttpResponseError: The batch failed to execute.
         :raises ~azure.cosmos.exceptions.CosmosBatchOperationError: A transactional batch operation failed in the batch.
@@ -1362,6 +1403,8 @@ class ContainerProxy:
             kwargs['session_token'] = session_token
         if priority is not None:
             kwargs['priority'] = priority
+        if throughput_bucket is not None:
+            kwargs["throughput_bucket"] = throughput_bucket
         request_options = _build_options(kwargs)
         request_options["partitionKey"] = await self._set_partition_key(partition_key)
         request_options["disableAutomaticIdGeneration"] = True

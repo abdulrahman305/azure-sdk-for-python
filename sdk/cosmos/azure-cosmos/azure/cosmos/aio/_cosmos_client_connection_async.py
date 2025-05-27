@@ -163,6 +163,10 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
             http_constants.HttpHeaders.IsContinuationExpected: False,
         }
 
+        throughput_bucket = kwargs.pop('throughput_bucket', None)
+        if throughput_bucket:
+            self.default_headers[http_constants.HttpHeaders.ThroughputBucket] = throughput_bucket
+
         if consistency_level is not None:
             self.default_headers[http_constants.HttpHeaders.ConsistencyLevel] = consistency_level
 
@@ -219,7 +223,6 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
                 logger=kwargs.pop("logger", None),
                 enable_diagnostics_logging=kwargs.pop("enable_diagnostics_logging", False),
                 global_endpoint_manager=self._global_endpoint_manager,
-                diagnostics_handler=kwargs.pop("diagnostics_handler", None),
                 **kwargs
             ),
         ]
@@ -2275,7 +2278,8 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
             options,
             fetch_function=fetch_fn,
             collection_link=database_or_container_link,
-            page_iterator_class=query_iterable.QueryIterable
+            page_iterator_class=query_iterable.QueryIterable,
+            response_hook=response_hook
         )
 
     def QueryItemsChangeFeed(
@@ -2910,7 +2914,10 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
         if cont_prop:
             cont_prop = await cont_prop()
             pk_properties = cont_prop["partitionKey"]
-            partition_key_definition = PartitionKey(path=pk_properties["paths"], kind=pk_properties["kind"])
+            partition_key_definition = PartitionKey(
+                path=pk_properties["paths"],
+                kind=pk_properties["kind"],
+                version=pk_properties["version"])
             if partition_key_definition.kind == "MultiHash" and \
                     (isinstance(partition_key, List) and \
                      len(partition_key_definition['paths']) != len(partition_key)):
@@ -3203,7 +3210,8 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
                                     documents._QueryFeature.Top + "," +
                                     documents._QueryFeature.NonStreamingOrderBy + "," +
                                     documents._QueryFeature.HybridSearch + "," +
-                                    documents._QueryFeature.CountIf)
+                                    documents._QueryFeature.CountIf + "," +
+                                    documents._QueryFeature.WeightedRankFusion)
         if os.environ.get(Constants.NON_STREAMING_ORDER_BY_DISABLED_CONFIG,
                           Constants.NON_STREAMING_ORDER_BY_DISABLED_CONFIG_DEFAULT) == "True":
             supported_query_features = (documents._QueryFeature.Aggregate + "," +

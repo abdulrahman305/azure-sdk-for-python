@@ -160,6 +160,10 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
             http_constants.HttpHeaders.IsContinuationExpected: False,
         }
 
+        throughput_bucket = kwargs.pop('throughput_bucket', None)
+        if throughput_bucket:
+            self.default_headers[http_constants.HttpHeaders.ThroughputBucket] = throughput_bucket
+
         # Keeps the latest response headers from the server.
         self.last_response_headers: CaseInsensitiveDict = CaseInsensitiveDict()
 
@@ -214,7 +218,6 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
                 logger=kwargs.pop("logger", None),
                 enable_diagnostics_logging=kwargs.pop("enable_diagnostics_logging", False),
                 global_endpoint_manager=self._global_endpoint_manager,
-                diagnostics_handler=kwargs.pop("diagnostics_handler", None),
                 **kwargs
             ),
         ]
@@ -1109,7 +1112,8 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
             options,
             fetch_function=fetch_fn,
             collection_link=database_or_container_link,
-            page_iterator_class=query_iterable.QueryIterable
+            page_iterator_class=query_iterable.QueryIterable,
+            response_hook=response_hook
         )
 
     def QueryItemsChangeFeed(
@@ -3114,12 +3118,15 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
 
         # check if query has prefix partition key
         isPrefixPartitionQuery = kwargs.pop("isPrefixPartitionQuery", None)
-        if isPrefixPartitionQuery:
+        if isPrefixPartitionQuery and "partitionKeyDefinition" in kwargs:
             last_response_headers = CaseInsensitiveDict()
             # here get the over lapping ranges
-            partition_key_definition = kwargs.pop("partitionKeyDefinition", None)
-            pk_properties = partition_key_definition
-            partition_key_definition = PartitionKey(path=pk_properties["paths"], kind=pk_properties["kind"])
+            # Default to empty Dictionary, but unlikely to be empty as we first check if we have it in kwargs
+            pk_properties: Union[PartitionKey, Dict] = kwargs.pop("partitionKeyDefinition", {})
+            partition_key_definition = PartitionKey(
+                path=pk_properties["paths"],
+                kind=pk_properties["kind"],
+                version=pk_properties["version"])
             partition_key_value = pk_properties["partition_key"]
             feedrangeEPK = partition_key_definition._get_epk_range_for_prefix_partition_key(
                 partition_key_value
@@ -3192,7 +3199,8 @@ class CosmosClientConnection:  # pylint: disable=too-many-public-methods,too-man
                                     documents._QueryFeature.Top + "," +
                                     documents._QueryFeature.NonStreamingOrderBy + "," +
                                     documents._QueryFeature.HybridSearch + "," +
-                                    documents._QueryFeature.CountIf)
+                                    documents._QueryFeature.CountIf + "," +
+                                    documents._QueryFeature.WeightedRankFusion)
         if os.environ.get(Constants.NON_STREAMING_ORDER_BY_DISABLED_CONFIG,
                           Constants.NON_STREAMING_ORDER_BY_DISABLED_CONFIG_DEFAULT) == "True":
             supported_query_features = (documents._QueryFeature.Aggregate + "," +
