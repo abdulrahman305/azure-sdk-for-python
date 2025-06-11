@@ -7,3 +7,4 @@
 azure-mgmt-loganalytics==2.0.0
 -e ../../resources/azure-mgmt-msi/
 aiohttp
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
