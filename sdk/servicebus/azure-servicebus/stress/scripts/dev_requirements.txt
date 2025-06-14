@@ -9,3 +9,4 @@ python-dotenv
 websocket-client
 memray
 azure-identity
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
