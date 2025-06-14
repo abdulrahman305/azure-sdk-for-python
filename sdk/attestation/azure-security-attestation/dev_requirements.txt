@@ -4,3 +4,4 @@ aiohttp>=3.0
 ../../core/azure-core
 azure-identity
 ../../nspkg/azure-security-nspkg
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
