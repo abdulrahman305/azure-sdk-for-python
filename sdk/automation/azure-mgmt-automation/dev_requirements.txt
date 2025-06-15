@@ -2,3 +2,4 @@
 ../../identity/azure-identity
 azure-mgmt-resource<=21.1.0
 aiohttp
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
