@@ -4,3 +4,4 @@ azure-storage-blob==12.9.0
 -e ../../identity/azure-identity
 aiohttp>=3.0
 pytz
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
