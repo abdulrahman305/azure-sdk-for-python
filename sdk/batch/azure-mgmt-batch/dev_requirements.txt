@@ -5,3 +5,4 @@ azure-mgmt-network<19.0.0
 -e ../../storage/azure-mgmt-storage
 ../../identity/azure-identity
 aiohttp
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
