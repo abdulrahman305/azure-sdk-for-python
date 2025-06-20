@@ -5,3 +5,4 @@ azure-mgmt-digitaltwins
 -e ../../../tools/azure-sdk-tools
 aiohttp>=3.0
 ../../nspkg/azure-digitaltwins-nspkg
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
