@@ -5,3 +5,4 @@ azure-mgmt-authorization
 azure-mgmt-network
 azure-mgmt-compute
 aiohttp
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
