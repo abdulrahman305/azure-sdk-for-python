@@ -6,3 +6,4 @@ azure-mgmt-resource==22.0.0
 azure-storage-queue
 cloudevents<=2.0.0; python_version >= "3.7"
 aiohttp>=3.0
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
