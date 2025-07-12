@@ -8,3 +8,4 @@ azure-keyvault-secrets>=0.0.0b1
 azure-storage-blob>=0.0.0b1
 # Required for template release to trigger smoke tests
 azure-template>=0.0.0b1
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
