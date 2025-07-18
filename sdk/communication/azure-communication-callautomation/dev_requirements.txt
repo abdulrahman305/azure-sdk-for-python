@@ -4,4 +4,4 @@
 -e ../azure-communication-phonenumbers
 -e ../../servicebus/azure-servicebus
 ../../core/azure-core
-aiohttp>=3.0
+aiohttp>=3.12.14
