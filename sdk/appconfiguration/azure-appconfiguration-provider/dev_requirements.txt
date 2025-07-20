@@ -2,6 +2,6 @@
 -e ../azure-appconfiguration
 -e ../../identity/azure-identity
 -e ../../keyvault/azure-keyvault-secrets
-aiohttp>=3.0
+aiohttp>=3.12.14
 -e ../../../tools/azure-sdk-tools
 dnspython
