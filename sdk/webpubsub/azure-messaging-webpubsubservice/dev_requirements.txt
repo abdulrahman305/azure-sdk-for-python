@@ -2,6 +2,6 @@
 ../../core/azure-core
 ../../identity/azure-identity
 ../../nspkg/azure-messaging-nspkg
-aiohttp>=3.0
+aiohttp>=3.12.14
 typing_extensions>=3.7.2
 websocket_client>=1.4.2
