@@ -4,3 +4,4 @@ aiohttp>=3.12.14
 ../../core/azure-core
 azure-identity
 ../../nspkg/azure-security-nspkg
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
