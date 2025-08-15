@@ -13,7 +13,7 @@ USAGE:
 
     Before running the sample:
 
-    pip install azure-ai-agents azure-identity
+    pip install azure-ai-projects azure-ai-agents azure-identity
 
     Set these environment variables with your own values:
     1) PROJECT_ENDPOINT - The Azure AI Project endpoint, as found in the Overview
@@ -23,21 +23,37 @@ USAGE:
 """
 
 import os, time
-from azure.ai.agents import AgentsClient
+from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from azure.ai.agents.models import ListSortOrder
 
-# [START create_agents_client]
-agents_client = AgentsClient(
-    endpoint=os.environ["PROJECT_ENDPOINT"],
-    credential=DefaultAzureCredential(),
-)
-# [END create_agents_client]
+import sys
+import logging
 
-with agents_client:
+# Enable detailed console logs across Azure libraries
+azure_logger = logging.getLogger("azure")
+azure_logger.setLevel(logging.DEBUG)
+azure_logger.addHandler(logging.StreamHandler(stream=sys.stdout))
+
+# Exclude details logs for network calls associated with getting Entra ID token
+identity_logger = logging.getLogger("azure.identity")
+identity_logger.setLevel(logging.ERROR)
+
+# Make sure regular (redacted) detailed azure.core logs are not shown, as we are about to
+# turn on non-redacted logs by passing 'logging_enable=True' to the client constructor
+# (which are implemented as a separate logging policy)
+logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
+logger.setLevel(logging.ERROR)
+
+# Pass in 'logging_enable=True' to your client constructor for un-redacted logs
+project_client = AIProjectClient(
+    endpoint=os.environ["PROJECT_ENDPOINT"], credential=DefaultAzureCredential(), logging_enable=True
+)
+
+with project_client:
+    agents_client = project_client.agents
 
     # [START create_agent]
-
     agent = agents_client.create_agent(
         model=os.environ["MODEL_DEPLOYMENT_NAME"],
         name="my-agent",

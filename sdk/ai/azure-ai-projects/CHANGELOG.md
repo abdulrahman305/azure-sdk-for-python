@@ -1,5 +1,88 @@
 # Release History
 
+## 1.1.0b3 (Unreleased)
+
+### Features added
+
+* File `setup.py` was updated to indicate the dependency `azure-ai-agents>=1.2.0b1`
+instead of `azure-ai-agents>=1.0.0`. This means that in a clean environment installing
+this version of `azure-ai-projects` will install latest beta version of `azure-ai-agents`
+(which has lots of features in preview) instead of latest stable version (which does
+not include preview features).
+
+### Breaking changes
+
+### Bugs Fixed
+
+### Sample updates
+
+## 1.1.0b2 (2025-08-05)
+
+### Bugs Fixed
+
+Fix regression in Red-Team operations, in the definition of the class `AzureOpenAIModelConfiguration`.
+
+## 1.1.0b1 (2025-08-01)
+
+First beta version following the 1.0.0 stable release. It brings back the Evaluation and Red-Team operations which are still in preview.
+
+### Features added
+
+* Evaluation and Red-Team operations (in preview) were restored.
+
+## 1.0.0 (2025-07-31)
+
+First stable version of the client library. The client library now uses version `v1` of the
+AI Foundry [data plane REST APIs](https://aka.ms/azsdk/azure-ai-projects/ga-rest-api-reference).
+
+### Breaking changes
+
+* Features that are still in preview were removed from this stable release. This includes:
+  * Evaluation operations (property `.evaluations`)
+  * Red-Team operations (property `.red_teams`)
+  * Class `PromptTemplate`.
+  * Package function `enable_telemetry()`
+* Classes were renamed:
+  * Class `Sku` was renamed `ModelDeploymentSku`
+  * Class `SasCredential` was renamed `BlobReferenceSasCredential`
+  * Class `AssetCredentialResponse` was renamed `DatasetCredential`
+* Method `.inference.get_azure_openai_client()` was renamed `.get_openai_client()`. The `.inference` property was removed.
+  The method is documented as returning an object of type `OpenAI`, but it still returns an object of the derived type `AzureOpenAI`.
+  The function implementation has not changed.
+* Method `.telemetry.get_connection_string()` was renamed `.telemetry.get_application_insights_connection_string()`
+
+### Sample updates
+
+* Added a new Dataset sample named `sample_datasets_download.py` to show how you can download all files referenced by a certain Dataset (following a question in [this GitHub issue](https://github.com/Azure/azure-sdk-for-python/issues/41960))
+* Two samples added showing how to do a `responses` operation using an authenticated Azure OpenAI client created
+using `get_openai_client()`.
+* Existing inference samples that used the package function `enable_telemetry()` were updated to remove this call,
+and instead add the necessary tracing configuration calls to the sample.
+
+## 1.0.0b12 (2025-06-23)
+
+### Breaking changes
+
+* These 3 methods on `AIProjectClient` were removed: `.inference.get_chat_completions_client()`,
+`.inference.get_embeddings_client()` and `.inference.get_image_embeddings_client()`.
+For guidance on obtaining an authenticated `azure-ai-inference` client for your AI Foundry Project,
+refer to the updated samples in the `samples\inference` directory. For example,
+`sample_chat_completions_with_azure_ai_inference_client.py`. Alternatively, use the `.inference.get_azure_openai_client()` method to perform chat completions with an Azure OpenAI client.
+* Method argument name changes:
+  * In method `.indexes.create_or_update()` argument `body` was renamed `index`.
+  * In method `.datasets.create_or_update()` argument `body` was renamed `dataset_version`.
+  * In method `.datasets.pending_upload()` argument `body` was renamed `pending_upload_request`.
+
+### Bugs Fixed
+
+* Fix to package function `enable_telemetry()` to correctly instrument `azure-ai-agents`.
+* Updated RedTeam target type visibility to allow for type being sent in the JSON for redteam run creation.
+
+### Other
+
+* Set dependency on `azure-ai-agents` version `1.0.0` or above,
+now that we have a stable release of the Agents package.
+
 ## 1.0.0b11 (2025-05-15)
 
 There have been significant updates with the release of version 1.0.0b11, including breaking changes.
@@ -15,7 +98,7 @@ Please see new samples and package README.md file.
 
 * Azure AI Foundry Project endpoint is now required to construct the `AIProjectClient`. It has the form
 `https://<your-ai-services-account-name>.services.ai.azure.com/api/projects/<your-project-name>`. Find it in your AI Foundry Project
-Overview page. The factory method `from_connection_string` was removed.
+Overview page. The factory method `from_connection_string` was removed. Support for project connection string and hub-based projects has been discontinued. We recommend creating a new Azure AI Foundry resource utilizing project endpoint. If this is not possible, please pin the version of or pin the version of `azure-ai-projects` to `1.0.0b10` or earlier.
 * Agents are now implemented in a separate package `azure-ai-agents`. Continue using the ".agents" operations on the
 `AIProjectsClient` to create, run and delete agents, as before. However there have been some breaking changes in these operations.
 See [Agents package document and samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-agents) for more details.
@@ -29,6 +112,7 @@ AI models deployed to the Project's AI Services. This is in addition to the exis
 * Evaluator Ids are available using the Enum `EvaluatorIds` and no longer require `azure-ai-evaluation` package to be installed.
 * Property `scope` on `AIProjectClient` is removed, use AI Foundry Project endpoint instead.
 * Property `id` on Evaluation is replaced with `name`.
+* Please see the [agents migration guide](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/AGENTS_MIGRATION_GUIDE.md) on how to use the new `azure-ai-projects` with `azure-ai-agents` package.
 
 ### Sample updates
 

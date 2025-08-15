@@ -9,20 +9,7 @@
 from collections.abc import MutableMapping
 from io import IOBase
 import json
-from typing import (
-    Any,
-    AsyncIterable,
-    AsyncIterator,
-    Callable,
-    Dict,
-    IO,
-    List,
-    Optional,
-    TYPE_CHECKING,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import Any, AsyncIterator, Callable, Dict, IO, List, Optional, TYPE_CHECKING, TypeVar, Union, overload
 import urllib.parse
 
 from azure.core import AsyncPipelineClient
@@ -263,7 +250,7 @@ class ThreadsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -284,7 +271,7 @@ class ThreadsOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.AgentThread"]:
+    ) -> AsyncItemPaged["_models.AgentThread"]:
         """Gets a list of threads that were previously created.
 
         :keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and
@@ -350,7 +337,7 @@ class ThreadsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -405,7 +392,7 @@ class ThreadsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -569,7 +556,7 @@ class ThreadsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -630,7 +617,7 @@ class ThreadsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -838,7 +825,7 @@ class MessagesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -861,7 +848,7 @@ class MessagesOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.ThreadMessage"]:
+    ) -> AsyncItemPaged["_models.ThreadMessage"]:
         """Gets a list of messages that exist on a thread.
 
         :param thread_id: Identifier of the thread. Required.
@@ -990,7 +977,7 @@ class MessagesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -1151,7 +1138,7 @@ class MessagesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -1195,6 +1182,7 @@ class RunsOperations:
         additional_instructions: Optional[str] = None,
         additional_messages: Optional[List[_models.ThreadMessageOptions]] = None,
         tools: Optional[List[_models.ToolDefinition]] = None,
+        tool_resources: Optional[_models.ToolResources] = None,
         stream_parameter: Optional[bool] = None,
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
@@ -1237,6 +1225,9 @@ class RunsOperations:
         :keyword tools: The overridden list of enabled tools that the agent should use to run the
          thread. Default value is None.
         :paramtype tools: list[~azure.ai.agents.models.ToolDefinition]
+        :keyword tool_resources: The overridden enabled tool resources that the agent should use to run
+         the thread. Default value is None.
+        :paramtype tool_resources: ~azure.ai.agents.models.ToolResources
         :keyword stream_parameter: If ``true``, returns a stream of events that happen during the Run
          as server-sent events,
          terminating when the Run enters a terminal state with a ``data: [DONE]`` message. Default
@@ -1366,6 +1357,7 @@ class RunsOperations:
         additional_instructions: Optional[str] = None,
         additional_messages: Optional[List[_models.ThreadMessageOptions]] = None,
         tools: Optional[List[_models.ToolDefinition]] = None,
+        tool_resources: Optional[_models.ToolResources] = None,
         stream_parameter: Optional[bool] = None,
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
@@ -1407,6 +1399,9 @@ class RunsOperations:
         :keyword tools: The overridden list of enabled tools that the agent should use to run the
          thread. Default value is None.
         :paramtype tools: list[~azure.ai.agents.models.ToolDefinition]
+        :keyword tool_resources: The overridden enabled tool resources that the agent should use to run
+         the thread. Default value is None.
+        :paramtype tool_resources: ~azure.ai.agents.models.ToolResources
         :keyword stream_parameter: If ``true``, returns a stream of events that happen during the Run
          as server-sent events,
          terminating when the Run enters a terminal state with a ``data: [DONE]`` message. Default
@@ -1495,6 +1490,7 @@ class RunsOperations:
                 "stream": stream_parameter,
                 "temperature": temperature,
                 "tool_choice": tool_choice,
+                "tool_resources": tool_resources,
                 "tools": tools,
                 "top_p": top_p,
                 "truncation_strategy": truncation_strategy,
@@ -1535,7 +1531,7 @@ class RunsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -1557,7 +1553,7 @@ class RunsOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.ThreadRun"]:
+    ) -> AsyncItemPaged["_models.ThreadRun"]:
         """Gets a list of runs for a specified thread.
 
         :param thread_id: Identifier of the thread. Required.
@@ -1626,7 +1622,7 @@ class RunsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -1684,7 +1680,7 @@ class RunsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -1845,7 +1841,7 @@ class RunsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -1864,8 +1860,9 @@ class RunsOperations:
         thread_id: str,
         run_id: str,
         *,
-        tool_outputs: List[_models.ToolOutput],
         content_type: str = "application/json",
+        tool_outputs: Optional[List[_models.ToolOutput]] = None,
+        tool_approvals: Optional[List[_models.ToolApproval]] = None,
         stream_parameter: Optional[bool] = None,
         **kwargs: Any
     ) -> _models.ThreadRun:
@@ -1875,11 +1872,15 @@ class RunsOperations:
         :type thread_id: str
         :param run_id: Identifier of the run. Required.
         :type run_id: str
-        :keyword tool_outputs: A list of tools for which the outputs are being submitted. Required.
-        :paramtype tool_outputs: list[~azure.ai.agents.models.ToolOutput]
         :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
          Default value is "application/json".
         :paramtype content_type: str
+        :keyword tool_outputs: A list of tools for which the outputs are being submitted. Default value
+         is None.
+        :paramtype tool_outputs: list[~azure.ai.agents.models.ToolOutput]
+        :keyword tool_approvals: A list of tool approvals allowing data to be sent to tools. Default
+         value is None.
+        :paramtype tool_approvals: list[~azure.ai.agents.models.ToolApproval]
         :keyword stream_parameter: If true, returns a stream of events that happen during the Run as
          SSE, terminating at ``[DONE]``. Default value is None.
         :paramtype stream_parameter: bool
@@ -1935,7 +1936,8 @@ class RunsOperations:
         run_id: str,
         body: Union[JSON, IO[bytes]] = _Unset,
         *,
-        tool_outputs: List[_models.ToolOutput] = _Unset,
+        tool_outputs: Optional[List[_models.ToolOutput]] = None,
+        tool_approvals: Optional[List[_models.ToolApproval]] = None,
         stream_parameter: Optional[bool] = None,
         **kwargs: Any
     ) -> _models.ThreadRun:
@@ -1947,8 +1949,12 @@ class RunsOperations:
         :type run_id: str
         :param body: Is either a JSON type or a IO[bytes] type. Required.
         :type body: JSON or IO[bytes]
-        :keyword tool_outputs: A list of tools for which the outputs are being submitted. Required.
+        :keyword tool_outputs: A list of tools for which the outputs are being submitted. Default value
+         is None.
         :paramtype tool_outputs: list[~azure.ai.agents.models.ToolOutput]
+        :keyword tool_approvals: A list of tool approvals allowing data to be sent to tools. Default
+         value is None.
+        :paramtype tool_approvals: list[~azure.ai.agents.models.ToolApproval]
         :keyword stream_parameter: If true, returns a stream of events that happen during the Run as
          SSE, terminating at ``[DONE]``. Default value is None.
         :paramtype stream_parameter: bool
@@ -1971,9 +1977,7 @@ class RunsOperations:
         cls: ClsType[_models.ThreadRun] = kwargs.pop("cls", None)
 
         if body is _Unset:
-            if tool_outputs is _Unset:
-                raise TypeError("missing required argument: tool_outputs")
-            body = {"stream": stream_parameter, "tool_outputs": tool_outputs}
+            body = {"stream": stream_parameter, "tool_approvals": tool_approvals, "tool_outputs": tool_outputs}
             body = {k: v for k, v in body.items() if v is not None}
         content_type = content_type or "application/json"
         _content = None
@@ -2010,7 +2014,7 @@ class RunsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2074,7 +2078,7 @@ class RunsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2173,7 +2177,7 @@ class RunStepsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2197,7 +2201,7 @@ class RunStepsOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.RunStep"]:
+    ) -> AsyncItemPaged["_models.RunStep"]:
         """Gets a list of run steps from a thread run.
 
         :param thread_id: Identifier of the thread. Required.
@@ -2275,7 +2279,7 @@ class RunStepsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -2351,7 +2355,7 @@ class FilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2425,7 +2429,7 @@ class FilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2486,7 +2490,7 @@ class FilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2549,7 +2553,7 @@ class FilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2610,7 +2614,7 @@ class FilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         deserialized = response.iter_bytes()
@@ -2646,7 +2650,7 @@ class VectorStoresOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.VectorStore"]:
+    ) -> AsyncItemPaged["_models.VectorStore"]:
         """Returns a list of vector stores.
 
         :keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and
@@ -2712,7 +2716,7 @@ class VectorStoresOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -2886,7 +2890,7 @@ class VectorStoresOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -2947,7 +2951,7 @@ class VectorStoresOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3109,7 +3113,7 @@ class VectorStoresOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3173,7 +3177,7 @@ class VectorStoresOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3216,7 +3220,7 @@ class VectorStoreFilesOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.VectorStoreFile"]:
+    ) -> AsyncItemPaged["_models.VectorStoreFile"]:
         """Returns a list of vector store files.
 
         :param vector_store_id: Identifier of the vector store. Required.
@@ -3289,7 +3293,7 @@ class VectorStoreFilesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -3441,7 +3445,7 @@ class VectorStoreFilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3505,7 +3509,7 @@ class VectorStoreFilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3573,7 +3577,7 @@ class VectorStoreFilesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3751,7 +3755,7 @@ class VectorStoreFileBatchesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3815,7 +3819,7 @@ class VectorStoreFileBatchesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3880,7 +3884,7 @@ class VectorStoreFileBatchesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -3904,7 +3908,7 @@ class VectorStoreFileBatchesOperations:
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.VectorStoreFile"]:
+    ) -> AsyncItemPaged["_models.VectorStoreFile"]:
         """Returns a list of vector store files in a batch.
 
         :param vector_store_id: Identifier of the vector store. Required.
@@ -3980,7 +3984,7 @@ class VectorStoreFileBatchesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -3988,7 +3992,7 @@ class VectorStoreFileBatchesOperations:
         return AsyncItemPaged(get_next, extract_data)
 
 
-class AgentsClientOperationsMixin(
+class _AgentsClientOperationsMixin(
     ClientMixinABC[AsyncPipelineClient[HttpRequest, AsyncHttpResponse], AgentsClientConfiguration]
 ):
 
@@ -4211,7 +4215,7 @@ class AgentsClientOperationsMixin(
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -4232,7 +4236,7 @@ class AgentsClientOperationsMixin(
         order: Optional[Union[str, _models.ListSortOrder]] = None,
         before: Optional[str] = None,
         **kwargs: Any
-    ) -> AsyncIterable["_models.Agent"]:
+    ) -> AsyncItemPaged["_models.Agent"]:
         """Gets a list of agents that were previously created.
 
         :keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and
@@ -4298,7 +4302,7 @@ class AgentsClientOperationsMixin(
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+                error = _failsafe_deserialize(_models.AgentV1Error, response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
@@ -4353,7 +4357,7 @@ class AgentsClientOperationsMixin(
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -4600,7 +4604,7 @@ class AgentsClientOperationsMixin(
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -4661,7 +4665,7 @@ class AgentsClientOperationsMixin(
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
@@ -4981,7 +4985,7 @@ class AgentsClientOperationsMixin(
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.AgentV1Error, response.json())
+            error = _failsafe_deserialize(_models.AgentV1Error, response)
             raise HttpResponseError(response=response, model=error)
 
         if _stream:
