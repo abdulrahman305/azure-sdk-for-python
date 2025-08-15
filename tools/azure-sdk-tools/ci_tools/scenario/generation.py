@@ -8,12 +8,12 @@ from typing import Optional
 
 from ci_tools.environment_exclusions import is_check_enabled
 from ci_tools.variables import in_ci
-from ci_tools.parsing import ParsedSetup
 from ci_tools.functions import (
     get_config_setting,
     discover_prebuilt_package,
     pip_install,
     pip_uninstall,
+    get_pip_command,
 )
 from ci_tools.build import cleanup_build_artifacts, create_package
 from ci_tools.parsing import ParsedSetup, parse_require
@@ -51,7 +51,6 @@ def create_package_and_install(
 
     commands_options = []
     built_pkg_path = ""
-    setup_py_path = os.path.join(target_setup, "setup.py")
     additional_downloaded_reqs = []
 
     if not os.path.exists(distribution_directory):
@@ -68,11 +67,11 @@ def create_package_and_install(
     if cache_dir:
         commands_options.extend(["--cache-dir", cache_dir])
 
-    discovered_packages = discover_packages(
-        setup_py_path, distribution_directory, target_setup, package_type, force_create
-    )
+    target_package = ParsedSetup.from_path(target_setup)
 
-    target_package = ParsedSetup.from_path(setup_py_path)
+    discovered_packages = discover_packages(
+        target_setup, distribution_directory, target_setup, package_type, force_create
+    )
 
     # ensure that discovered packages are always copied to the distribution directory regardless of other factors
     for built_package in discovered_packages:
@@ -104,7 +103,7 @@ def create_package_and_install(
                 logging.info("Installing {w} from fresh built package.".format(w=built_package))
 
             if not pre_download_disabled:
-                requirements = ParsedSetup.from_path(os.path.join(os.path.abspath(target_setup), "setup.py")).requires
+                requirements = ParsedSetup.from_path(os.path.join(os.path.abspath(target_setup))).requires
                 azure_requirements = [req.split(";")[0] for req in requirements if req.startswith("azure-")]
 
                 if azure_requirements:
@@ -112,10 +111,8 @@ def create_package_and_install(
                         "Found {} azure requirement(s): {}".format(len(azure_requirements), azure_requirements)
                     )
 
-                    download_command = [
-                        python_exe,
-                        "-m",
-                        "pip",
+                    pip_cmd = get_pip_command(python_exe)
+                    download_command = pip_cmd + [
                         "download",
                         "-d",
                         tmp_dl_folder,
@@ -134,7 +131,7 @@ def create_package_and_install(
 
                         # parse the specifier
                         requirement = parse_require(req)
-                        req_name = requirement.key
+                        req_name = requirement.name
                         req_specifier = requirement.specifier if len(requirement.specifier) else None
 
                         # if we have the package already present...
@@ -163,7 +160,7 @@ def create_package_and_install(
                                 )
                             except subprocess.CalledProcessError as e:
                                 requirement = parse_require(addition)
-                                non_present_reqs.append(requirement.key)
+                                non_present_reqs.append(requirement.name)
 
                         additional_downloaded_reqs = [
                             os.path.abspath(os.path.join(tmp_dl_folder, pth)) for pth in os.listdir(tmp_dl_folder)
@@ -174,7 +171,8 @@ def create_package_and_install(
                             for package_name in non_present_reqs
                         ]
 
-            commands = [python_exe, "-m", "pip", "install", built_pkg_path]
+            pip_cmd = get_pip_command(python_exe)
+            commands = pip_cmd + ["install", built_pkg_path]
             commands.extend(additional_downloaded_reqs)
             commands.extend(commands_options)
 
@@ -207,6 +205,8 @@ def replace_dev_reqs(file: str, pkg_root: str, wheel_dir: Optional[str]) -> None
         args = [part.strip() for part in line.split() if part and not part.strip() == "-e"]
         amended_line = " ".join(args)
         extras = ""
+        # everything after # is a comment, so we will remove it. there are no special cases for this
+        amended_line = amended_line.split("#")[0].strip()
 
         if amended_line.endswith("]"):
             amended_line, extras = amended_line.rsplit("[", maxsplit=1)
@@ -291,13 +291,22 @@ def build_and_install_dev_reqs(file: str, pkg_root: str) -> None:
 
 
 def is_relative_install_path(req: str, package_path: str) -> bool:
-    possible_setup_path = os.path.join(package_path, req, "setup.py")
-
-    # blank lines are _allowed_ in a dev requirements. they should not resolve to the package_path erroneously
+    possible_setup_path = os.path.join(package_path, req)
+    # blank lines are _allowed_ in a dev requirements. they should not resolve to the existing package_path erroneously
     if not req:
         return False
 
-    return os.path.exists(possible_setup_path)
+    if not os.path.exists(possible_setup_path):
+        return False
+
+    # now we _try_ to parse the target directory as a package directory. If there is a valid setup.py or pyproject.toml,
+    # this won't throw. if it does, not a valid package path.
+    try:
+        ParsedSetup.from_path(possible_setup_path)
+    except ValueError:
+        return False
+
+    return True
 
 
 def build_whl_for_req(req: str, package_path: str, wheel_dir: Optional[str]) -> str:

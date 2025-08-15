@@ -1,6 +1,7 @@
 -e ../../../tools/azure-sdk-tools
-aiohttp>=3.0
+aiohttp>=3.12.14
 -e ../../../tools/azure-sdk-tools
 ../../core/azure-core
 azure-identity
 ../../nspkg/azure-security-nspkg
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
