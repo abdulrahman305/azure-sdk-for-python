@@ -2,5 +2,5 @@
 ../../core/azure-core
 azure-storage-blob==12.9.0
 -e ../../identity/azure-identity
-aiohttp>=3.0
+aiohttp>=3.12.14
 pytz
