@@ -3,3 +3,4 @@
 -e ../../identity/azure-identity
 aiohttp>=3.12.14
 aiodns>=2.0
+pycares>=4.9.0 # not directly required, pinned by Snyk to avoid a vulnerability
