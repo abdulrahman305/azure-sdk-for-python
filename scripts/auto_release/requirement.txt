@@ -11,3 +11,4 @@ setuptools==78.1.0
 build==1.0.3
 tomli-w==1.0.0
 tomli==2.2.1
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
