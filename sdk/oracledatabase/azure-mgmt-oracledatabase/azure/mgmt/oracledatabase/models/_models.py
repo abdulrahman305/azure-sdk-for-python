@@ -9,10 +9,10 @@
 # pylint: disable=useless-super-delegation
 
 import datetime
-from typing import Any, Literal, Mapping, Optional, TYPE_CHECKING, Union, overload
+from typing import Any, Dict, List, Literal, Mapping, Optional, TYPE_CHECKING, Union, overload
 
 from .._utils.model_base import Model as _Model, rest_discriminator, rest_field
-from ._enums import DataBaseType, DbSystemSourceType, SourceType
+from ._enums import DataBaseType, SourceType
 
 if TYPE_CHECKING:
     from .. import models as _models
@@ -44,14 +44,14 @@ class AddRemoveDbNode(_Model):
     :vartype db_servers: list[str]
     """
 
-    db_servers: list[str] = rest_field(name="dbServers", visibility=["read", "create", "update", "delete", "query"])
+    db_servers: List[str] = rest_field(name="dbServers", visibility=["read", "create", "update", "delete", "query"])
     """Db servers ocids. Required."""
 
     @overload
     def __init__(
         self,
         *,
-        db_servers: list[str],
+        db_servers: List[str],
     ) -> None: ...
 
     @overload
@@ -199,7 +199,7 @@ class TrackedResource(Resource):
     :vartype location: str
     """
 
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    tags: Optional[Dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Resource tags."""
     location: str = rest_field(visibility=["read", "create"])
     """The geo-location where the resource lives. Required."""
@@ -209,7 +209,7 @@ class TrackedResource(Resource):
         self,
         *,
         location: str,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
     ) -> None: ...
 
     @overload
@@ -224,7 +224,7 @@ class TrackedResource(Resource):
 
 
 class AutonomousDatabase(TrackedResource):
-    """Autonomous Database resource model.
+    """Autonomous Database  resource model.
 
     :ivar id: Fully qualified resource ID for the resource. Ex -
      /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
@@ -255,7 +255,7 @@ class AutonomousDatabase(TrackedResource):
         self,
         *,
         location: str,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.AutonomousDatabaseBaseProperties"] = None,
     ) -> None: ...
 
@@ -596,9 +596,8 @@ class AutonomousDatabaseBaseProperties(_Model):
      "RoleChangeInProgress", "Upgrading", "Inaccessible", and "Standby".
     :vartype lifecycle_state: str or
      ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleState
-    :ivar scheduled_operations_list: The list of scheduled operations.
-    :vartype scheduled_operations_list:
-     list[~azure.mgmt.oracledatabase.models.ScheduledOperationsType]
+    :ivar scheduled_operations: The list of scheduled operations.
+    :vartype scheduled_operations: ~azure.mgmt.oracledatabase.models.ScheduledOperationsType
     :ivar private_endpoint_ip: The private endpoint Ip address for the resource.
     :vartype private_endpoint_ip: str
     :ivar private_endpoint_label: The resource's private endpoint label.
@@ -719,7 +718,7 @@ class AutonomousDatabaseBaseProperties(_Model):
     :vartype whitelisted_ips: list[str]
     """
 
-    __mapping__: dict[str, _Model] = {}
+    __mapping__: Dict[str, _Model] = {}
     admin_password: Optional[str] = rest_field(name="adminPassword", visibility=["create", "update"])
     """Admin password."""
     data_base_type: str = rest_discriminator(name="dataBaseType", visibility=["create"])
@@ -740,7 +739,7 @@ class AutonomousDatabaseBaseProperties(_Model):
     """The compute model of the Autonomous Database. Known values are: \"ECPU\" and \"OCPU\"."""
     cpu_core_count: Optional[int] = rest_field(name="cpuCoreCount", visibility=["read", "create", "update"])
     """The number of CPU cores to be made available to the database."""
-    customer_contacts: Optional[list["_models.CustomerContact"]] = rest_field(
+    customer_contacts: Optional[List["_models.CustomerContact"]] = rest_field(
         name="customerContacts", visibility=["read", "create", "update"]
     )
     """Customer Contacts."""
@@ -769,7 +768,7 @@ class AutonomousDatabaseBaseProperties(_Model):
         name="isAutoScalingForStorageEnabled", visibility=["read", "create", "update"]
     )
     """Indicates if auto scaling is enabled for the Autonomous Database storage."""
-    peer_db_ids: Optional[list[str]] = rest_field(name="peerDbIds", visibility=["read"])
+    peer_db_ids: Optional[List[str]] = rest_field(name="peerDbIds", visibility=["read"])
     """The list of Azure resource IDs of standby databases located in Autonomous Data Guard remote
      regions that are associated with the source database. Note that for Autonomous Database
      Serverless instances, standby databases located in the same region as the source primary
@@ -835,8 +834,8 @@ class AutonomousDatabaseBaseProperties(_Model):
      \"RestoreInProgress\", \"RestoreFailed\", \"BackupInProgress\", \"ScaleInProgress\",
      \"AvailableNeedsAttention\", \"Updating\", \"MaintenanceInProgress\", \"Restarting\",
      \"Recreating\", \"RoleChangeInProgress\", \"Upgrading\", \"Inaccessible\", and \"Standby\"."""
-    scheduled_operations_list: Optional[list["_models.ScheduledOperationsType"]] = rest_field(
-        name="scheduledOperationsList", visibility=["read", "create", "update"]
+    scheduled_operations: Optional["_models.ScheduledOperationsType"] = rest_field(
+        name="scheduledOperations", visibility=["read", "create", "update"]
     )
     """The list of scheduled operations."""
     private_endpoint_ip: Optional[str] = rest_field(name="privateEndpointIp", visibility=["read", "create"])
@@ -867,7 +866,7 @@ class AutonomousDatabaseBaseProperties(_Model):
     """The amount of storage currently allocated for the database tables and billed for, rounded up."""
     apex_details: Optional["_models.ApexDetailsType"] = rest_field(name="apexDetails", visibility=["read"])
     """Information about Oracle APEX Application Development."""
-    available_upgrade_versions: Optional[list[str]] = rest_field(name="availableUpgradeVersions", visibility=["read"])
+    available_upgrade_versions: Optional[List[str]] = rest_field(name="availableUpgradeVersions", visibility=["read"])
     """List of Oracle Database versions available for a database upgrade. If there are no version
      upgrades available, this list is empty."""
     connection_strings: Optional["_models.ConnectionStringType"] = rest_field(
@@ -924,7 +923,7 @@ class AutonomousDatabaseBaseProperties(_Model):
      \"Unrestricted\"."""
     private_endpoint: Optional[str] = rest_field(name="privateEndpoint", visibility=["read"])
     """The private endpoint for the resource."""
-    provisionable_cpus: Optional[list[int]] = rest_field(name="provisionableCpus", visibility=["read"])
+    provisionable_cpus: Optional[List[int]] = rest_field(name="provisionableCpus", visibility=["read"])
     """An array of CPU values that an Autonomous Database can be scaled to."""
     role: Optional[Union[str, "_models.RoleType"]] = rest_field(visibility=["read", "update"])
     """The Data Guard role of the Autonomous Container Database or Autonomous Database, if Autonomous
@@ -934,7 +933,7 @@ class AutonomousDatabaseBaseProperties(_Model):
     """The URL of the Service Console for the Autonomous Database."""
     sql_web_developer_url: Optional[str] = rest_field(name="sqlWebDeveloperUrl", visibility=["read"])
     """The SQL Web Developer URL for the Oracle Autonomous Database."""
-    supported_regions_to_clone_to: Optional[list[str]] = rest_field(
+    supported_regions_to_clone_to: Optional[List[str]] = rest_field(
         name="supportedRegionsToCloneTo", visibility=["read"]
     )
     """The list of regions that support the creation of an Autonomous Database clone or an Autonomous
@@ -970,7 +969,7 @@ class AutonomousDatabaseBaseProperties(_Model):
         name="backupRetentionPeriodInDays", visibility=["read", "create", "update"]
     )
     """Retention period, in days, for long-term backups."""
-    whitelisted_ips: Optional[list[str]] = rest_field(name="whitelistedIps", visibility=["read", "create", "update"])
+    whitelisted_ips: Optional[List[str]] = rest_field(name="whitelistedIps", visibility=["read", "create", "update"])
     """The client IP access control list (ACL). This is an array of CIDR notations and/or IP
      addresses. Values should be separate strings, separated by commas. Example:
      ['1.1.1.1','1.1.1.0/24','1.1.2.25']."""
@@ -986,7 +985,7 @@ class AutonomousDatabaseBaseProperties(_Model):
         compute_count: Optional[float] = None,
         compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
         cpu_core_count: Optional[int] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         data_storage_size_in_tbs: Optional[int] = None,
         data_storage_size_in_gbs: Optional[int] = None,
         db_version: Optional[str] = None,
@@ -1000,7 +999,7 @@ class AutonomousDatabaseBaseProperties(_Model):
         is_preview_version_with_service_terms_accepted: Optional[bool] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
         ncharacter_set: Optional[str] = None,
-        scheduled_operations_list: Optional[list["_models.ScheduledOperationsType"]] = None,
+        scheduled_operations: Optional["_models.ScheduledOperationsType"] = None,
         private_endpoint_ip: Optional[str] = None,
         private_endpoint_label: Optional[str] = None,
         subnet_id: Optional[str] = None,
@@ -1013,7 +1012,7 @@ class AutonomousDatabaseBaseProperties(_Model):
         permission_level: Optional[Union[str, "_models.PermissionLevelType"]] = None,
         role: Optional[Union[str, "_models.RoleType"]] = None,
         backup_retention_period_in_days: Optional[int] = None,
-        whitelisted_ips: Optional[list[str]] = None,
+        whitelisted_ips: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -1190,9 +1189,8 @@ class AutonomousDatabaseCloneProperties(AutonomousDatabaseBaseProperties, discri
      "RoleChangeInProgress", "Upgrading", "Inaccessible", and "Standby".
     :vartype lifecycle_state: str or
      ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleState
-    :ivar scheduled_operations_list: The list of scheduled operations.
-    :vartype scheduled_operations_list:
-     list[~azure.mgmt.oracledatabase.models.ScheduledOperationsType]
+    :ivar scheduled_operations: The list of scheduled operations.
+    :vartype scheduled_operations: ~azure.mgmt.oracledatabase.models.ScheduledOperationsType
     :ivar private_endpoint_ip: The private endpoint Ip address for the resource.
     :vartype private_endpoint_ip: str
     :ivar private_endpoint_label: The resource's private endpoint label.
@@ -1381,7 +1379,7 @@ class AutonomousDatabaseCloneProperties(AutonomousDatabaseBaseProperties, discri
         compute_count: Optional[float] = None,
         compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
         cpu_core_count: Optional[int] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         data_storage_size_in_tbs: Optional[int] = None,
         data_storage_size_in_gbs: Optional[int] = None,
         db_version: Optional[str] = None,
@@ -1395,7 +1393,7 @@ class AutonomousDatabaseCloneProperties(AutonomousDatabaseBaseProperties, discri
         is_preview_version_with_service_terms_accepted: Optional[bool] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
         ncharacter_set: Optional[str] = None,
-        scheduled_operations_list: Optional[list["_models.ScheduledOperationsType"]] = None,
+        scheduled_operations: Optional["_models.ScheduledOperationsType"] = None,
         private_endpoint_ip: Optional[str] = None,
         private_endpoint_label: Optional[str] = None,
         subnet_id: Optional[str] = None,
@@ -1408,7 +1406,7 @@ class AutonomousDatabaseCloneProperties(AutonomousDatabaseBaseProperties, discri
         permission_level: Optional[Union[str, "_models.PermissionLevelType"]] = None,
         role: Optional[Union[str, "_models.RoleType"]] = None,
         backup_retention_period_in_days: Optional[int] = None,
-        whitelisted_ips: Optional[list[str]] = None,
+        whitelisted_ips: Optional[List[str]] = None,
         source: Optional[Union[str, "_models.SourceType"]] = None,
         refreshable_model: Optional[Union[str, "_models.RefreshableModelType"]] = None,
         time_until_reconnect_clone_enabled: Optional[str] = None,
@@ -1422,8 +1420,7 @@ class AutonomousDatabaseCloneProperties(AutonomousDatabaseBaseProperties, discri
         """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.data_base_type = DataBaseType.CLONE  # type: ignore
+        super().__init__(*args, data_base_type=DataBaseType.CLONE, **kwargs)
 
 
 class AutonomousDatabaseCrossRegionDisasterRecoveryProperties(
@@ -1522,9 +1519,8 @@ class AutonomousDatabaseCrossRegionDisasterRecoveryProperties(
      "RoleChangeInProgress", "Upgrading", "Inaccessible", and "Standby".
     :vartype lifecycle_state: str or
      ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleState
-    :ivar scheduled_operations_list: The list of scheduled operations.
-    :vartype scheduled_operations_list:
-     list[~azure.mgmt.oracledatabase.models.ScheduledOperationsType]
+    :ivar scheduled_operations: The list of scheduled operations.
+    :vartype scheduled_operations: ~azure.mgmt.oracledatabase.models.ScheduledOperationsType
     :ivar private_endpoint_ip: The private endpoint Ip address for the resource.
     :vartype private_endpoint_ip: str
     :ivar private_endpoint_label: The resource's private endpoint label.
@@ -1707,7 +1703,7 @@ class AutonomousDatabaseCrossRegionDisasterRecoveryProperties(
         compute_count: Optional[float] = None,
         compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
         cpu_core_count: Optional[int] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         data_storage_size_in_tbs: Optional[int] = None,
         data_storage_size_in_gbs: Optional[int] = None,
         db_version: Optional[str] = None,
@@ -1721,7 +1717,7 @@ class AutonomousDatabaseCrossRegionDisasterRecoveryProperties(
         is_preview_version_with_service_terms_accepted: Optional[bool] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
         ncharacter_set: Optional[str] = None,
-        scheduled_operations_list: Optional[list["_models.ScheduledOperationsType"]] = None,
+        scheduled_operations: Optional["_models.ScheduledOperationsType"] = None,
         private_endpoint_ip: Optional[str] = None,
         private_endpoint_label: Optional[str] = None,
         subnet_id: Optional[str] = None,
@@ -1734,7 +1730,7 @@ class AutonomousDatabaseCrossRegionDisasterRecoveryProperties(
         permission_level: Optional[Union[str, "_models.PermissionLevelType"]] = None,
         role: Optional[Union[str, "_models.RoleType"]] = None,
         backup_retention_period_in_days: Optional[int] = None,
-        whitelisted_ips: Optional[list[str]] = None,
+        whitelisted_ips: Optional[List[str]] = None,
         source_location: Optional[str] = None,
         source_ocid: Optional[str] = None,
         is_replicate_automatic_backups: Optional[bool] = None,
@@ -1748,8 +1744,7 @@ class AutonomousDatabaseCrossRegionDisasterRecoveryProperties(
         """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.data_base_type = DataBaseType.CROSS_REGION_DISASTER_RECOVERY  # type: ignore
+        super().__init__(*args, data_base_type=DataBaseType.CROSS_REGION_DISASTER_RECOVERY, **kwargs)
 
 
 class AutonomousDatabaseFromBackupTimestampProperties(
@@ -1848,9 +1843,8 @@ class AutonomousDatabaseFromBackupTimestampProperties(
      "RoleChangeInProgress", "Upgrading", "Inaccessible", and "Standby".
     :vartype lifecycle_state: str or
      ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleState
-    :ivar scheduled_operations_list: The list of scheduled operations.
-    :vartype scheduled_operations_list:
-     list[~azure.mgmt.oracledatabase.models.ScheduledOperationsType]
+    :ivar scheduled_operations: The list of scheduled operations.
+    :vartype scheduled_operations: ~azure.mgmt.oracledatabase.models.ScheduledOperationsType
     :ivar private_endpoint_ip: The private endpoint Ip address for the resource.
     :vartype private_endpoint_ip: str
     :ivar private_endpoint_label: The resource's private endpoint label.
@@ -2016,7 +2010,7 @@ class AutonomousDatabaseFromBackupTimestampProperties(
         compute_count: Optional[float] = None,
         compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
         cpu_core_count: Optional[int] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         data_storage_size_in_tbs: Optional[int] = None,
         data_storage_size_in_gbs: Optional[int] = None,
         db_version: Optional[str] = None,
@@ -2030,7 +2024,7 @@ class AutonomousDatabaseFromBackupTimestampProperties(
         is_preview_version_with_service_terms_accepted: Optional[bool] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
         ncharacter_set: Optional[str] = None,
-        scheduled_operations_list: Optional[list["_models.ScheduledOperationsType"]] = None,
+        scheduled_operations: Optional["_models.ScheduledOperationsType"] = None,
         private_endpoint_ip: Optional[str] = None,
         private_endpoint_label: Optional[str] = None,
         subnet_id: Optional[str] = None,
@@ -2043,7 +2037,7 @@ class AutonomousDatabaseFromBackupTimestampProperties(
         permission_level: Optional[Union[str, "_models.PermissionLevelType"]] = None,
         role: Optional[Union[str, "_models.RoleType"]] = None,
         backup_retention_period_in_days: Optional[int] = None,
-        whitelisted_ips: Optional[list[str]] = None,
+        whitelisted_ips: Optional[List[str]] = None,
         timestamp: Optional[datetime.datetime] = None,
         use_latest_available_backup_time_stamp: Optional[bool] = None,
     ) -> None: ...
@@ -2056,40 +2050,7 @@ class AutonomousDatabaseFromBackupTimestampProperties(
         """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.data_base_type = DataBaseType.CLONE_FROM_BACKUP_TIMESTAMP  # type: ignore
-
-
-class AutonomousDatabaseLifecycleAction(_Model):
-    """Autonomous Database Action Object.
-
-    :ivar action: Autonomous Database lifecycle action. Required. Known values are: "Start",
-     "Stop", and "Restart".
-    :vartype action: str or ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleActionEnum
-    """
-
-    action: Union[str, "_models.AutonomousDatabaseLifecycleActionEnum"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """Autonomous Database lifecycle action. Required. Known values are: \"Start\", \"Stop\", and
-     \"Restart\"."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        action: Union[str, "_models.AutonomousDatabaseLifecycleActionEnum"],
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, data_base_type=DataBaseType.CLONE_FROM_BACKUP_TIMESTAMP, **kwargs)
 
 
 class AutonomousDatabaseNationalCharacterSet(ProxyResource):
@@ -2257,9 +2218,8 @@ class AutonomousDatabaseProperties(AutonomousDatabaseBaseProperties, discriminat
      "RoleChangeInProgress", "Upgrading", "Inaccessible", and "Standby".
     :vartype lifecycle_state: str or
      ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleState
-    :ivar scheduled_operations_list: The list of scheduled operations.
-    :vartype scheduled_operations_list:
-     list[~azure.mgmt.oracledatabase.models.ScheduledOperationsType]
+    :ivar scheduled_operations: The list of scheduled operations.
+    :vartype scheduled_operations: ~azure.mgmt.oracledatabase.models.ScheduledOperationsType
     :ivar private_endpoint_ip: The private endpoint Ip address for the resource.
     :vartype private_endpoint_ip: str
     :ivar private_endpoint_label: The resource's private endpoint label.
@@ -2395,7 +2355,7 @@ class AutonomousDatabaseProperties(AutonomousDatabaseBaseProperties, discriminat
         compute_count: Optional[float] = None,
         compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
         cpu_core_count: Optional[int] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         data_storage_size_in_tbs: Optional[int] = None,
         data_storage_size_in_gbs: Optional[int] = None,
         db_version: Optional[str] = None,
@@ -2409,7 +2369,7 @@ class AutonomousDatabaseProperties(AutonomousDatabaseBaseProperties, discriminat
         is_preview_version_with_service_terms_accepted: Optional[bool] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
         ncharacter_set: Optional[str] = None,
-        scheduled_operations_list: Optional[list["_models.ScheduledOperationsType"]] = None,
+        scheduled_operations: Optional["_models.ScheduledOperationsType"] = None,
         private_endpoint_ip: Optional[str] = None,
         private_endpoint_label: Optional[str] = None,
         subnet_id: Optional[str] = None,
@@ -2422,7 +2382,7 @@ class AutonomousDatabaseProperties(AutonomousDatabaseBaseProperties, discriminat
         permission_level: Optional[Union[str, "_models.PermissionLevelType"]] = None,
         role: Optional[Union[str, "_models.RoleType"]] = None,
         backup_retention_period_in_days: Optional[int] = None,
-        whitelisted_ips: Optional[list[str]] = None,
+        whitelisted_ips: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -2433,8 +2393,7 @@ class AutonomousDatabaseProperties(AutonomousDatabaseBaseProperties, discriminat
         """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.data_base_type = DataBaseType.REGULAR  # type: ignore
+        super().__init__(*args, data_base_type=DataBaseType.REGULAR, **kwargs)
 
 
 class AutonomousDatabaseStandbySummary(_Model):
@@ -2520,7 +2479,7 @@ class AutonomousDatabaseUpdate(_Model):
     :vartype properties: ~azure.mgmt.oracledatabase.models.AutonomousDatabaseUpdateProperties
     """
 
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    tags: Optional[Dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Resource tags."""
     properties: Optional["_models.AutonomousDatabaseUpdateProperties"] = rest_field(
         visibility=["read", "create", "update", "delete", "query"]
@@ -2531,7 +2490,7 @@ class AutonomousDatabaseUpdate(_Model):
     def __init__(
         self,
         *,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.AutonomousDatabaseUpdateProperties"] = None,
     ) -> None: ...
 
@@ -2586,9 +2545,8 @@ class AutonomousDatabaseUpdateProperties(_Model):
     :ivar license_model: The Oracle license model that applies to the Oracle Autonomous Database.
      The default is LICENSE_INCLUDED. Known values are: "LicenseIncluded" and "BringYourOwnLicense".
     :vartype license_model: str or ~azure.mgmt.oracledatabase.models.LicenseModel
-    :ivar scheduled_operations_list: The list of scheduled operations.
-    :vartype scheduled_operations_list:
-     list[~azure.mgmt.oracledatabase.models.ScheduledOperationsTypeUpdate]
+    :ivar scheduled_operations: The list of scheduled operations.
+    :vartype scheduled_operations: ~azure.mgmt.oracledatabase.models.ScheduledOperationsTypeUpdate
     :ivar database_edition: The Oracle Database Edition that applies to the Autonomous databases.
      Known values are: "StandardEdition" and "EnterpriseEdition".
     :vartype database_edition: str or ~azure.mgmt.oracledatabase.models.DatabaseEditionType
@@ -2628,7 +2586,7 @@ class AutonomousDatabaseUpdateProperties(_Model):
     """The compute amount (CPUs) available to the database."""
     cpu_core_count: Optional[int] = rest_field(name="cpuCoreCount", visibility=["read", "create", "update"])
     """The number of CPU cores to be made available to the database."""
-    customer_contacts: Optional[list["_models.CustomerContact"]] = rest_field(
+    customer_contacts: Optional[List["_models.CustomerContact"]] = rest_field(
         name="customerContacts", visibility=["read", "create", "update"]
     )
     """Customer Contacts."""
@@ -2666,8 +2624,8 @@ class AutonomousDatabaseUpdateProperties(_Model):
     )
     """The Oracle license model that applies to the Oracle Autonomous Database. The default is
      LICENSE_INCLUDED. Known values are: \"LicenseIncluded\" and \"BringYourOwnLicense\"."""
-    scheduled_operations_list: Optional[list["_models.ScheduledOperationsTypeUpdate"]] = rest_field(
-        name="scheduledOperationsList", visibility=["read", "create", "update"]
+    scheduled_operations: Optional["_models.ScheduledOperationsTypeUpdate"] = rest_field(
+        name="scheduledOperations", visibility=["read", "create", "update"]
     )
     """The list of scheduled operations."""
     database_edition: Optional[Union[str, "_models.DatabaseEditionType"]] = rest_field(
@@ -2699,7 +2657,7 @@ class AutonomousDatabaseUpdateProperties(_Model):
         name="backupRetentionPeriodInDays", visibility=["read", "create", "update"]
     )
     """Retention period, in days, for long-term backups."""
-    whitelisted_ips: Optional[list[str]] = rest_field(name="whitelistedIps", visibility=["read", "create", "update"])
+    whitelisted_ips: Optional[List[str]] = rest_field(name="whitelistedIps", visibility=["read", "create", "update"])
     """The client IP access control list (ACL). This is an array of CIDR notations and/or IP
      addresses. Values should be separate strings, separated by commas. Example:
      ['1.1.1.1','1.1.1.0/24','1.1.2.25']."""
@@ -2712,7 +2670,7 @@ class AutonomousDatabaseUpdateProperties(_Model):
         autonomous_maintenance_schedule_type: Optional[Union[str, "_models.AutonomousMaintenanceScheduleType"]] = None,
         compute_count: Optional[float] = None,
         cpu_core_count: Optional[int] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         data_storage_size_in_tbs: Optional[int] = None,
         data_storage_size_in_gbs: Optional[int] = None,
         display_name: Optional[str] = None,
@@ -2722,7 +2680,7 @@ class AutonomousDatabaseUpdateProperties(_Model):
         is_local_data_guard_enabled: Optional[bool] = None,
         is_mtls_connection_required: Optional[bool] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
-        scheduled_operations_list: Optional[list["_models.ScheduledOperationsTypeUpdate"]] = None,
+        scheduled_operations: Optional["_models.ScheduledOperationsTypeUpdate"] = None,
         database_edition: Optional[Union[str, "_models.DatabaseEditionType"]] = None,
         long_term_backup_schedule: Optional["_models.LongTermBackUpScheduleDetails"] = None,
         local_adg_auto_failover_max_data_loss_limit: Optional[int] = None,
@@ -2730,7 +2688,7 @@ class AutonomousDatabaseUpdateProperties(_Model):
         permission_level: Optional[Union[str, "_models.PermissionLevelType"]] = None,
         role: Optional[Union[str, "_models.RoleType"]] = None,
         backup_retention_period_in_days: Optional[int] = None,
-        whitelisted_ips: Optional[list[str]] = None,
+        whitelisted_ips: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -2890,7 +2848,7 @@ class AzureSubscriptions(_Model):
     :vartype azure_subscription_ids: list[str]
     """
 
-    azure_subscription_ids: list[str] = rest_field(
+    azure_subscription_ids: List[str] = rest_field(
         name="azureSubscriptionIds", visibility=["read", "create", "update", "delete", "query"]
     )
     """Azure Subscription Ids to be updated. Required."""
@@ -2899,7 +2857,7 @@ class AzureSubscriptions(_Model):
     def __init__(
         self,
         *,
-        azure_subscription_ids: list[str],
+        azure_subscription_ids: List[str],
     ) -> None: ...
 
     @overload
@@ -2956,7 +2914,7 @@ class CloudExadataInfrastructure(TrackedResource):
         visibility=["read", "create", "update", "delete", "query"]
     )
     """The resource-specific properties for this resource."""
-    zones: list[str] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    zones: List[str] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """CloudExadataInfrastructure zones. Required."""
 
     @overload
@@ -2964,8 +2922,8 @@ class CloudExadataInfrastructure(TrackedResource):
         self,
         *,
         location: str,
-        zones: list[str],
-        tags: Optional[dict[str, str]] = None,
+        zones: List[str],
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.CloudExadataInfrastructureProperties"] = None,
     ) -> None: ...
 
@@ -3073,11 +3031,9 @@ class CloudExadataInfrastructureProperties(_Model):
     :ivar compute_model: The compute model of the Exadata Infrastructure. Known values are: "ECPU"
      and "OCPU".
     :vartype compute_model: str or ~azure.mgmt.oracledatabase.models.ComputeModel
-    :ivar exascale_config: The exascale config details for the cloud Exadata infrastructure.
-    :vartype exascale_config: ~azure.mgmt.oracledatabase.models.ExascaleConfigDetails
     """
 
-    defined_file_system_configuration: Optional[list["_models.DefinedFileSystemConfiguration"]] = rest_field(
+    defined_file_system_configuration: Optional[List["_models.DefinedFileSystemConfiguration"]] = rest_field(
         name="definedFileSystemConfiguration", visibility=["read"]
     )
     """Defined file system configurations."""
@@ -3105,7 +3061,7 @@ class CloudExadataInfrastructureProperties(_Model):
     )
     """The estimated total time required in minutes for all patching operations (database server,
      storage server, and network switch patching)."""
-    customer_contacts: Optional[list["_models.CustomerContact"]] = rest_field(
+    customer_contacts: Optional[List["_models.CustomerContact"]] = rest_field(
         name="customerContacts", visibility=["read", "create", "update"]
     )
     """The list of customer email addresses that receive information from Oracle about the specified
@@ -3167,8 +3123,6 @@ class CloudExadataInfrastructureProperties(_Model):
     """The storage server model type of the cloud Exadata infrastructure resource."""
     compute_model: Optional[Union[str, "_models.ComputeModel"]] = rest_field(name="computeModel", visibility=["read"])
     """The compute model of the Exadata Infrastructure. Known values are: \"ECPU\" and \"OCPU\"."""
-    exascale_config: Optional["_models.ExascaleConfigDetails"] = rest_field(name="exascaleConfig", visibility=["read"])
-    """The exascale config details for the cloud Exadata infrastructure."""
 
     @overload
     def __init__(  # pylint: disable=too-many-locals
@@ -3179,7 +3133,7 @@ class CloudExadataInfrastructureProperties(_Model):
         compute_count: Optional[int] = None,
         storage_count: Optional[int] = None,
         maintenance_window: Optional["_models.MaintenanceWindow"] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         database_server_type: Optional[str] = None,
         storage_server_type: Optional[str] = None,
     ) -> None: ...
@@ -3207,9 +3161,9 @@ class CloudExadataInfrastructureUpdate(_Model):
      ~azure.mgmt.oracledatabase.models.CloudExadataInfrastructureUpdateProperties
     """
 
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    zones: Optional[List[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """CloudExadataInfrastructure zones."""
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    tags: Optional[Dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Resource tags."""
     properties: Optional["_models.CloudExadataInfrastructureUpdateProperties"] = rest_field(
         visibility=["read", "create", "update", "delete", "query"]
@@ -3220,8 +3174,8 @@ class CloudExadataInfrastructureUpdate(_Model):
     def __init__(
         self,
         *,
-        zones: Optional[list[str]] = None,
-        tags: Optional[dict[str, str]] = None,
+        zones: Optional[List[str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.CloudExadataInfrastructureUpdateProperties"] = None,
     ) -> None: ...
 
@@ -3263,7 +3217,7 @@ class CloudExadataInfrastructureUpdateProperties(_Model):  # pylint: disable=nam
         name="maintenanceWindow", visibility=["read", "create", "update"]
     )
     """maintenanceWindow property."""
-    customer_contacts: Optional[list["_models.CustomerContact"]] = rest_field(
+    customer_contacts: Optional[List["_models.CustomerContact"]] = rest_field(
         name="customerContacts", visibility=["read", "create", "update"]
     )
     """The list of customer email addresses that receive information from Oracle about the specified
@@ -3281,7 +3235,7 @@ class CloudExadataInfrastructureUpdateProperties(_Model):  # pylint: disable=nam
         compute_count: Optional[int] = None,
         storage_count: Optional[int] = None,
         maintenance_window: Optional["_models.MaintenanceWindow"] = None,
-        customer_contacts: Optional[list["_models.CustomerContact"]] = None,
+        customer_contacts: Optional[List["_models.CustomerContact"]] = None,
         display_name: Optional[str] = None,
     ) -> None: ...
 
@@ -3328,7 +3282,7 @@ class CloudVmCluster(TrackedResource):
         self,
         *,
         location: str,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.CloudVmClusterProperties"] = None,
     ) -> None: ...
 
@@ -3478,12 +3432,6 @@ class CloudVmClusterProperties(_Model):
     :vartype subnet_ocid: str
     :ivar compute_model: The compute model of the VM Cluster. Known values are: "ECPU" and "OCPU".
     :vartype compute_model: str or ~azure.mgmt.oracledatabase.models.ComputeModel
-    :ivar exascale_db_storage_vault_id: Exadata Database Storage Vault ID.
-    :vartype exascale_db_storage_vault_id: str
-    :ivar storage_management_type: Specifies whether the type of storage management for the VM
-     cluster is ASM or Exascale. Known values are: "ASM" and "Exascale".
-    :vartype storage_management_type: str or
-     ~azure.mgmt.oracledatabase.models.ExadataVmClusterStorageManagementType
     """
 
     ocid: Optional[str] = rest_field(visibility=["read"])
@@ -3494,7 +3442,7 @@ class CloudVmClusterProperties(_Model):
     """The number of nodes in the cloud VM cluster."""
     storage_size_in_gbs: Optional[int] = rest_field(name="storageSizeInGbs", visibility=["read", "update"])
     """The data disk group size to be allocated in GBs per VM."""
-    file_system_configuration_details: Optional[list["_models.FileSystemConfigurationDetails"]] = rest_field(
+    file_system_configuration_details: Optional[List["_models.FileSystemConfigurationDetails"]] = rest_field(
         name="fileSystemConfigurationDetails", visibility=["read", "update"]
     )
     """Array of mount path and size."""
@@ -3554,7 +3502,7 @@ class CloudVmClusterProperties(_Model):
      is not created."""
     system_version: Optional[str] = rest_field(name="systemVersion", visibility=["read", "create"])
     """Operating system version of the image."""
-    ssh_public_keys: list[str] = rest_field(
+    ssh_public_keys: List[str] = rest_field(
         name="sshPublicKeys", visibility=["read", "create", "update", "delete", "query"]
     )
     """The public key portion of one or more key pairs used for SSH access to the cloud VM cluster.
@@ -3569,12 +3517,12 @@ class CloudVmClusterProperties(_Model):
     )
     """The type of redundancy configured for the cloud Vm cluster. NORMAL is 2-way redundancy. HIGH is
      3-way redundancy. Known values are: \"High\" and \"Normal\"."""
-    scan_ip_ids: Optional[list[str]] = rest_field(name="scanIpIds", visibility=["read"])
+    scan_ip_ids: Optional[List[str]] = rest_field(name="scanIpIds", visibility=["read"])
     """The Single Client Access Name (SCAN) IP addresses associated with the cloud VM cluster. SCAN IP
      addresses are typically used for load balancing and are not assigned to any interface. Oracle
      Clusterware directs the requests to the appropriate nodes in the cluster. **Note:** For a
      single-node DB system, this list is empty."""
-    vip_ids: Optional[list[str]] = rest_field(name="vipIds", visibility=["read"])
+    vip_ids: Optional[List[str]] = rest_field(name="vipIds", visibility=["read"])
     """The virtual IP (VIP) addresses associated with the cloud VM cluster. The Cluster Ready Services
      (CRS) creates and maintains one VIP address for each node in the Exadata Cloud Service instance
      to enable failover. If one node fails, the VIP is reassigned to another active node in the
@@ -3613,7 +3561,7 @@ class CloudVmClusterProperties(_Model):
     """Client subnet. Required."""
     backup_subnet_cidr: Optional[str] = rest_field(name="backupSubnetCidr", visibility=["read", "create"])
     """Client OCI backup subnet CIDR, default is 192.168.252.0/22."""
-    nsg_cidrs: Optional[list["_models.NsgCidr"]] = rest_field(name="nsgCidrs", visibility=["read", "create"])
+    nsg_cidrs: Optional[List["_models.NsgCidr"]] = rest_field(name="nsgCidrs", visibility=["read", "create"])
     """CIDR blocks for additional NSG ingress rules. The VNET CIDRs used to provision the VM Cluster
      will be added by default."""
     data_collection_options: Optional["_models.DataCollectionOptions"] = rest_field(
@@ -3623,13 +3571,13 @@ class CloudVmClusterProperties(_Model):
      cluster/Cloud VM cluster/VMBM DBCS."""
     display_name: str = rest_field(name="displayName", visibility=["read", "create", "update", "delete", "query"])
     """Display Name. Required."""
-    compute_nodes: Optional[list[str]] = rest_field(name="computeNodes", visibility=["update"])
+    compute_nodes: Optional[List[str]] = rest_field(name="computeNodes", visibility=["update"])
     """The list of compute servers to be added to the cloud VM cluster."""
     iorm_config_cache: Optional["_models.ExadataIormConfig"] = rest_field(name="iormConfigCache", visibility=["read"])
     """iormConfigCache details for cloud VM cluster."""
     last_update_history_entry_id: Optional[str] = rest_field(name="lastUpdateHistoryEntryId", visibility=["read"])
     """The OCID of the last maintenance update history entry."""
-    db_servers: Optional[list[str]] = rest_field(name="dbServers", visibility=["read", "create"])
+    db_servers: Optional[List[str]] = rest_field(name="dbServers", visibility=["read", "create"])
     """The list of DB servers."""
     compartment_id: Optional[str] = rest_field(name="compartmentId", visibility=["read"])
     """Cluster compartmentId."""
@@ -3637,15 +3585,6 @@ class CloudVmClusterProperties(_Model):
     """Cluster subnet ocid."""
     compute_model: Optional[Union[str, "_models.ComputeModel"]] = rest_field(name="computeModel", visibility=["read"])
     """The compute model of the VM Cluster. Known values are: \"ECPU\" and \"OCPU\"."""
-    exascale_db_storage_vault_id: Optional[str] = rest_field(
-        name="exascaleDbStorageVaultId", visibility=["read", "create"]
-    )
-    """Exadata Database Storage Vault ID."""
-    storage_management_type: Optional[Union[str, "_models.ExadataVmClusterStorageManagementType"]] = rest_field(
-        name="storageManagementType", visibility=["read"]
-    )
-    """Specifies whether the type of storage management for the VM cluster is ASM or Exascale. Known
-     values are: \"ASM\" and \"Exascale\"."""
 
     @overload
     def __init__(  # pylint: disable=too-many-locals
@@ -3654,13 +3593,13 @@ class CloudVmClusterProperties(_Model):
         hostname: str,
         cpu_core_count: int,
         cloud_exadata_infrastructure_id: str,
-        ssh_public_keys: list[str],
+        ssh_public_keys: List[str],
         vnet_id: str,
         gi_version: str,
         subnet_id: str,
         display_name: str,
         storage_size_in_gbs: Optional[int] = None,
-        file_system_configuration_details: Optional[list["_models.FileSystemConfigurationDetails"]] = None,
+        file_system_configuration_details: Optional[List["_models.FileSystemConfigurationDetails"]] = None,
         data_storage_size_in_tbs: Optional[float] = None,
         db_node_storage_size_in_gbs: Optional[int] = None,
         memory_size_in_gbs: Optional[int] = None,
@@ -3677,11 +3616,10 @@ class CloudVmClusterProperties(_Model):
         scan_listener_port_tcp: Optional[int] = None,
         scan_listener_port_tcp_ssl: Optional[int] = None,
         backup_subnet_cidr: Optional[str] = None,
-        nsg_cidrs: Optional[list["_models.NsgCidr"]] = None,
+        nsg_cidrs: Optional[List["_models.NsgCidr"]] = None,
         data_collection_options: Optional["_models.DataCollectionOptions"] = None,
-        compute_nodes: Optional[list[str]] = None,
-        db_servers: Optional[list[str]] = None,
-        exascale_db_storage_vault_id: Optional[str] = None,
+        compute_nodes: Optional[List[str]] = None,
+        db_servers: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -3704,7 +3642,7 @@ class CloudVmClusterUpdate(_Model):
     :vartype properties: ~azure.mgmt.oracledatabase.models.CloudVmClusterUpdateProperties
     """
 
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    tags: Optional[Dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Resource tags."""
     properties: Optional["_models.CloudVmClusterUpdateProperties"] = rest_field(
         visibility=["read", "create", "update", "delete", "query"]
@@ -3715,7 +3653,7 @@ class CloudVmClusterUpdate(_Model):
     def __init__(
         self,
         *,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.CloudVmClusterUpdateProperties"] = None,
     ) -> None: ...
 
@@ -3766,7 +3704,7 @@ class CloudVmClusterUpdateProperties(_Model):
 
     storage_size_in_gbs: Optional[int] = rest_field(name="storageSizeInGbs", visibility=["read", "update"])
     """The data disk group size to be allocated in GBs per VM."""
-    file_system_configuration_details: Optional[list["_models.FileSystemConfigurationDetails"]] = rest_field(
+    file_system_configuration_details: Optional[List["_models.FileSystemConfigurationDetails"]] = rest_field(
         name="fileSystemConfigurationDetails", visibility=["read", "update"]
     )
     """Array of mount path and size."""
@@ -3791,7 +3729,7 @@ class CloudVmClusterUpdateProperties(_Model):
     )
     """The number of OCPU cores to enable on the cloud VM cluster. Only 1 decimal place is allowed for
      the fractional part."""
-    ssh_public_keys: Optional[list[str]] = rest_field(
+    ssh_public_keys: Optional[List[str]] = rest_field(
         name="sshPublicKeys", visibility=["read", "create", "update", "delete", "query"]
     )
     """The public key portion of one or more key pairs used for SSH access to the cloud VM cluster."""
@@ -3809,7 +3747,7 @@ class CloudVmClusterUpdateProperties(_Model):
         name="displayName", visibility=["read", "create", "update", "delete", "query"]
     )
     """Display Name."""
-    compute_nodes: Optional[list[str]] = rest_field(name="computeNodes", visibility=["update"])
+    compute_nodes: Optional[List[str]] = rest_field(name="computeNodes", visibility=["update"])
     """The list of compute servers to be added to the cloud VM cluster."""
 
     @overload
@@ -3817,47 +3755,17 @@ class CloudVmClusterUpdateProperties(_Model):
         self,
         *,
         storage_size_in_gbs: Optional[int] = None,
-        file_system_configuration_details: Optional[list["_models.FileSystemConfigurationDetails"]] = None,
+        file_system_configuration_details: Optional[List["_models.FileSystemConfigurationDetails"]] = None,
         data_storage_size_in_tbs: Optional[float] = None,
         db_node_storage_size_in_gbs: Optional[int] = None,
         memory_size_in_gbs: Optional[int] = None,
         cpu_core_count: Optional[int] = None,
         ocpu_count: Optional[float] = None,
-        ssh_public_keys: Optional[list[str]] = None,
+        ssh_public_keys: Optional[List[str]] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
         data_collection_options: Optional["_models.DataCollectionOptions"] = None,
         display_name: Optional[str] = None,
-        compute_nodes: Optional[list[str]] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class ConfigureExascaleCloudExadataInfrastructureDetails(_Model):  # pylint: disable=name-too-long
-    """The exascale config request details for the Cloud Exadata infrastructure.
-
-    :ivar total_storage_in_gbs: Storage size needed for Exascale in GBs. Required.
-    :vartype total_storage_in_gbs: int
-    """
-
-    total_storage_in_gbs: int = rest_field(
-        name="totalStorageInGbs", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """Storage size needed for Exascale in GBs. Required."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        total_storage_in_gbs: int,
+        compute_nodes: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -3914,7 +3822,7 @@ class ConnectionStringType(_Model):
     """The Medium database service provides a lower level of resources to each SQL statement
      potentially resulting a lower level of performance, but supports more concurrent SQL
      statements."""
-    profiles: Optional[list["_models.ProfileType"]] = rest_field(
+    profiles: Optional[List["_models.ProfileType"]] = rest_field(
         visibility=["read", "create", "update", "delete", "query"]
     )
     """A list of connection string profiles to allow clients to group, filter and select connection
@@ -3929,7 +3837,7 @@ class ConnectionStringType(_Model):
         high: Optional[str] = None,
         low: Optional[str] = None,
         medium: Optional[str] = None,
-        profiles: Optional[list["_models.ProfileType"]] = None,
+        profiles: Optional[List["_models.ProfileType"]] = None,
     ) -> None: ...
 
     @overload
@@ -4127,22 +4035,20 @@ class DayOfWeek(_Model):
 class DayOfWeekUpdate(_Model):
     """DayOfWeek resource properties.
 
-    :ivar name: Name of the day of the week. Known values are: "Monday", "Tuesday", "Wednesday",
-     "Thursday", "Friday", "Saturday", and "Sunday".
+    :ivar name: Name of the day of the week. Required. Known values are: "Monday", "Tuesday",
+     "Wednesday", "Thursday", "Friday", "Saturday", and "Sunday".
     :vartype name: str or ~azure.mgmt.oracledatabase.models.DayOfWeekName
     """
 
-    name: Optional[Union[str, "_models.DayOfWeekName"]] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """Name of the day of the week. Known values are: \"Monday\", \"Tuesday\", \"Wednesday\",
-     \"Thursday\", \"Friday\", \"Saturday\", and \"Sunday\"."""
+    name: Union[str, "_models.DayOfWeekName"] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    """Name of the day of the week. Required. Known values are: \"Monday\", \"Tuesday\",
+     \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\", and \"Sunday\"."""
 
     @overload
     def __init__(
         self,
         *,
-        name: Optional[Union[str, "_models.DayOfWeekName"]] = None,
+        name: Union[str, "_models.DayOfWeekName"],
     ) -> None: ...
 
     @overload
@@ -4653,9 +4559,9 @@ class DbServerProperties(_Model):
     """The total memory available in GBs."""
     db_node_storage_size_in_gbs: Optional[int] = rest_field(name="dbNodeStorageSizeInGbs", visibility=["read"])
     """The allocated local node storage in GBs on the Db server."""
-    vm_cluster_ids: Optional[list[str]] = rest_field(name="vmClusterIds", visibility=["read"])
+    vm_cluster_ids: Optional[List[str]] = rest_field(name="vmClusterIds", visibility=["read"])
     """The OCID of the VM Clusters associated with the Db server."""
-    db_node_ids: Optional[list[str]] = rest_field(name="dbNodeIds", visibility=["read"])
+    db_node_ids: Optional[List[str]] = rest_field(name="dbNodeIds", visibility=["read"])
     """The OCID of the Db nodes associated with the Db server."""
     lifecycle_details: Optional[str] = rest_field(name="lifecycleDetails", visibility=["read"])
     """Lifecycle details of dbServer."""
@@ -4666,9 +4572,9 @@ class DbServerProperties(_Model):
      \"Deleting\", \"Deleted\", and \"MaintenanceInProgress\"."""
     max_cpu_count: Optional[int] = rest_field(name="maxCpuCount", visibility=["read"])
     """The total number of CPU cores available."""
-    autonomous_vm_cluster_ids: Optional[list[str]] = rest_field(name="autonomousVmClusterIds", visibility=["read"])
+    autonomous_vm_cluster_ids: Optional[List[str]] = rest_field(name="autonomousVmClusterIds", visibility=["read"])
     """The list of OCIDs of the Autonomous VM Clusters associated with the Db server."""
-    autonomous_virtual_machine_ids: Optional[list[str]] = rest_field(
+    autonomous_virtual_machine_ids: Optional[List[str]] = rest_field(
         name="autonomousVirtualMachineIds", visibility=["read"]
     )
     """The list of OCIDs of the Autonomous Virtual Machines associated with the Db server."""
@@ -4688,500 +4594,6 @@ class DbServerProperties(_Model):
      \"Canceled\"."""
     compute_model: Optional[Union[str, "_models.ComputeModel"]] = rest_field(name="computeModel", visibility=["read"])
     """The compute model of the Exadata Infrastructure. Known values are: \"ECPU\" and \"OCPU\"."""
-
-
-class DbSystem(TrackedResource):
-    """DbSystem resource definition.
-
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
-    :vartype id: str
-    :ivar name: The name of the resource.
-    :vartype name: str
-    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
-     "Microsoft.Storage/storageAccounts".
-    :vartype type: str
-    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
-     information.
-    :vartype system_data: ~azure.mgmt.oracledatabase.models.SystemData
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
-    :ivar location: The geo-location where the resource lives. Required.
-    :vartype location: str
-    :ivar properties: The resource-specific properties for this resource.
-    :vartype properties: ~azure.mgmt.oracledatabase.models.DbSystemProperties
-    :ivar zones: The availability zones.
-    :vartype zones: list[str]
-    """
-
-    properties: Optional["_models.DbSystemProperties"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The resource-specific properties for this resource."""
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """The availability zones."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        location: str,
-        tags: Optional[dict[str, str]] = None,
-        properties: Optional["_models.DbSystemProperties"] = None,
-        zones: Optional[list[str]] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbSystemBaseProperties(_Model):
-    """DbSystem resource base model.
-
-    You probably want to use the sub-classes and not this class directly. Known sub-classes are:
-    DbSystemProperties
-
-    :ivar source: The source of the database: Use ``None`` for creating a new database. The default
-     is ``None``. "None"
-    :vartype source: str or ~azure.mgmt.oracledatabase.models.DbSystemSourceType
-    :ivar provisioning_state: dbSystem provisioning state. Known values are: "Succeeded", "Failed",
-     "Canceled", and "Provisioning".
-    :vartype provisioning_state: str or
-     ~azure.mgmt.oracledatabase.models.AzureResourceProvisioningState
-    :ivar oci_url: HTTPS link to OCI resources exposed to Azure Customer via Azure Interface.
-    :vartype oci_url: str
-    :ivar resource_anchor_id: Azure Resource Anchor ID. Required.
-    :vartype resource_anchor_id: str
-    :ivar network_anchor_id: Azure Network Anchor ID. Required.
-    :vartype network_anchor_id: str
-    :ivar cluster_name: The cluster name for Exadata and 2-node RAC virtual machine DB systems. The
-     cluster name must begin with an alphabetic character, and may contain hyphens (-). Underscores
-     (_) are not permitted. The cluster name can be no longer than 11 characters and is not case
-     sensitive.
-    :vartype cluster_name: str
-    :ivar display_name: The user-friendly name for the DB system. The name does not have to be
-     unique.
-    :vartype display_name: str
-    :ivar initial_data_storage_size_in_gb: Size in GB of the initial data volume that will be
-     created and attached to a virtual machine DB system. You can scale up storage after
-     provisioning, as needed. Note that the total storage size attached will be more than the amount
-     you specify to allow for REDO/RECO space and software volume.
-    :vartype initial_data_storage_size_in_gb: int
-    :ivar data_storage_size_in_gbs: The data storage size, in gigabytes, that is currently
-     available to the DB system. Applies only for virtual machine DB systems.
-    :vartype data_storage_size_in_gbs: int
-    :ivar db_system_options: The DB system options.
-    :vartype db_system_options: ~azure.mgmt.oracledatabase.models.DbSystemOptions
-    :ivar disk_redundancy: The type of redundancy configured for the DB system. NORMAL is 2-way
-     redundancy. HIGH is 3-way redundancy. Known values are: "High" and "Normal".
-    :vartype disk_redundancy: str or ~azure.mgmt.oracledatabase.models.DiskRedundancyType
-    :ivar domain_v2: The domain name for the DB system.
-    :vartype domain_v2: str
-    :ivar grid_image_ocid: The OCID of a grid infrastructure software image. This is a database
-     software image of the type GRID_IMAGE.
-    :vartype grid_image_ocid: str
-    :ivar hostname: The hostname for the DB system. Required.
-    :vartype hostname: str
-    :ivar ocid: The OCID of the DB system.
-    :vartype ocid: str
-    :ivar license_model_v2: The Oracle license model that applies to all the databases on the DB
-     system. The default is LicenseIncluded. Known values are: "LicenseIncluded" and
-     "BringYourOwnLicense".
-    :vartype license_model_v2: str or ~azure.mgmt.oracledatabase.models.LicenseModel
-    :ivar lifecycle_details: Additional information about the current lifecycle state.
-    :vartype lifecycle_details: str
-    :ivar lifecycle_state: The current state of the DB system. Known values are: "Provisioning",
-     "Available", "Updating", "Terminating", "Terminated", "Failed", "Migrated",
-     "MaintenanceInProgress", "NeedsAttention", and "Upgrading".
-    :vartype lifecycle_state: str or ~azure.mgmt.oracledatabase.models.DbSystemLifecycleState
-    :ivar listener_port: The port number configured for the listener on the DB system.
-    :vartype listener_port: int
-    :ivar memory_size_in_gbs: Memory allocated to the DB system, in gigabytes.
-    :vartype memory_size_in_gbs: int
-    :ivar node_count: The number of nodes in the DB system. For RAC DB systems, the value is
-     greater than 1.
-    :vartype node_count: int
-    :ivar scan_dns_name: The FQDN of the DNS record for the SCAN IP addresses that are associated
-     with the DB system.
-    :vartype scan_dns_name: str
-    :ivar scan_ips: The list of Single Client Access Name (SCAN) IP addresses associated with the
-     DB system. SCAN IP addresses are typically used for load balancing and are not assigned to any
-     interface. Oracle Clusterware directs the requests to the appropriate nodes in the cluster.
-     Note: For a single-node DB system, this list is empty.
-    :vartype scan_ips: list[str]
-    :ivar shape: The shape of the DB system. The shape determines resources to allocate to the DB
-     system. For virtual machine shapes, the number of CPU cores and memory. For bare metal and
-     Exadata shapes, the number of CPU cores, storage, and memory. Required.
-    :vartype shape: str
-    :ivar ssh_public_keys: The public key portion of one or more key pairs used for SSH access to
-     the DB system. Required.
-    :vartype ssh_public_keys: list[str]
-    :ivar storage_volume_performance_mode: The block storage volume performance level. Valid values
-     are Balanced and HighPerformance. See `Block Volume Performance
-     </Content/Block/Concepts/blockvolumeperformance.htm>`_ for more information. Known values are:
-     "Balanced" and "HighPerformance".
-    :vartype storage_volume_performance_mode: str or
-     ~azure.mgmt.oracledatabase.models.StorageVolumePerformanceMode
-    :ivar time_zone: The time zone of the DB system, e.g., UTC, to set the timeZone as UTC.
-    :vartype time_zone: str
-    :ivar version: The Oracle Database version of the DB system.
-    :vartype version: str
-    :ivar compute_model: The compute model for Base Database Service. This is required if using the
-     ``computeCount`` parameter. If using ``cpuCoreCount`` then it is an error to specify
-     ``computeModel`` to a non-null value. The ECPU compute model is the recommended model, and the
-     OCPU compute model is legacy. Known values are: "ECPU" and "OCPU".
-    :vartype compute_model: str or ~azure.mgmt.oracledatabase.models.ComputeModel
-    :ivar compute_count: The number of compute servers for the DB system.
-    :vartype compute_count: int
-    """
-
-    __mapping__: dict[str, _Model] = {}
-    source: str = rest_discriminator(name="source", visibility=["read", "create"])
-    """The source of the database: Use ``None`` for creating a new database. The default is ``None``.
-     \"None\""""
-    provisioning_state: Optional[Union[str, "_models.AzureResourceProvisioningState"]] = rest_field(
-        name="provisioningState", visibility=["read"]
-    )
-    """dbSystem provisioning state. Known values are: \"Succeeded\", \"Failed\", \"Canceled\", and
-     \"Provisioning\"."""
-    oci_url: Optional[str] = rest_field(name="ociUrl", visibility=["read"])
-    """HTTPS link to OCI resources exposed to Azure Customer via Azure Interface."""
-    resource_anchor_id: str = rest_field(name="resourceAnchorId", visibility=["read", "create"])
-    """Azure Resource Anchor ID. Required."""
-    network_anchor_id: str = rest_field(name="networkAnchorId", visibility=["read", "create"])
-    """Azure Network Anchor ID. Required."""
-    cluster_name: Optional[str] = rest_field(name="clusterName", visibility=["read", "create"])
-    """The cluster name for Exadata and 2-node RAC virtual machine DB systems. The cluster name must
-     begin with an alphabetic character, and may contain hyphens (-). Underscores (_) are not
-     permitted. The cluster name can be no longer than 11 characters and is not case sensitive."""
-    display_name: Optional[str] = rest_field(name="displayName", visibility=["read", "create"])
-    """The user-friendly name for the DB system. The name does not have to be unique."""
-    initial_data_storage_size_in_gb: Optional[int] = rest_field(
-        name="initialDataStorageSizeInGb", visibility=["create"]
-    )
-    """Size in GB of the initial data volume that will be created and attached to a virtual machine DB
-     system. You can scale up storage after provisioning, as needed. Note that the total storage
-     size attached will be more than the amount you specify to allow for REDO/RECO space and
-     software volume."""
-    data_storage_size_in_gbs: Optional[int] = rest_field(name="dataStorageSizeInGbs", visibility=["read"])
-    """The data storage size, in gigabytes, that is currently available to the DB system. Applies only
-     for virtual machine DB systems."""
-    db_system_options: Optional["_models.DbSystemOptions"] = rest_field(
-        name="dbSystemOptions", visibility=["read", "create"]
-    )
-    """The DB system options."""
-    disk_redundancy: Optional[Union[str, "_models.DiskRedundancyType"]] = rest_field(
-        name="diskRedundancy", visibility=["read", "create"]
-    )
-    """The type of redundancy configured for the DB system. NORMAL is 2-way redundancy. HIGH is 3-way
-     redundancy. Known values are: \"High\" and \"Normal\"."""
-    domain_v2: Optional[str] = rest_field(name="domain", visibility=["read", "create"])
-    """The domain name for the DB system."""
-    grid_image_ocid: Optional[str] = rest_field(name="gridImageOcid", visibility=["read"])
-    """The OCID of a grid infrastructure software image. This is a database software image of the type
-     GRID_IMAGE."""
-    hostname: str = rest_field(visibility=["read", "create"])
-    """The hostname for the DB system. Required."""
-    ocid: Optional[str] = rest_field(visibility=["read"])
-    """The OCID of the DB system."""
-    license_model_v2: Optional[Union[str, "_models.LicenseModel"]] = rest_field(
-        name="licenseModel", visibility=["read", "create"]
-    )
-    """The Oracle license model that applies to all the databases on the DB system. The default is
-     LicenseIncluded. Known values are: \"LicenseIncluded\" and \"BringYourOwnLicense\"."""
-    lifecycle_details: Optional[str] = rest_field(name="lifecycleDetails", visibility=["read"])
-    """Additional information about the current lifecycle state."""
-    lifecycle_state: Optional[Union[str, "_models.DbSystemLifecycleState"]] = rest_field(
-        name="lifecycleState", visibility=["read"]
-    )
-    """The current state of the DB system. Known values are: \"Provisioning\", \"Available\",
-     \"Updating\", \"Terminating\", \"Terminated\", \"Failed\", \"Migrated\",
-     \"MaintenanceInProgress\", \"NeedsAttention\", and \"Upgrading\"."""
-    listener_port: Optional[int] = rest_field(name="listenerPort", visibility=["read"])
-    """The port number configured for the listener on the DB system."""
-    memory_size_in_gbs: Optional[int] = rest_field(name="memorySizeInGbs", visibility=["read"])
-    """Memory allocated to the DB system, in gigabytes."""
-    node_count: Optional[int] = rest_field(name="nodeCount", visibility=["read", "create"])
-    """The number of nodes in the DB system. For RAC DB systems, the value is greater than 1."""
-    scan_dns_name: Optional[str] = rest_field(name="scanDnsName", visibility=["read"])
-    """The FQDN of the DNS record for the SCAN IP addresses that are associated with the DB system."""
-    scan_ips: Optional[list[str]] = rest_field(name="scanIps", visibility=["read"])
-    """The list of Single Client Access Name (SCAN) IP addresses associated with the DB system. SCAN
-     IP addresses are typically used for load balancing and are not assigned to any interface.
-     Oracle Clusterware directs the requests to the appropriate nodes in the cluster. Note: For a
-     single-node DB system, this list is empty."""
-    shape: str = rest_field(visibility=["read", "create"])
-    """The shape of the DB system. The shape determines resources to allocate to the DB system. For
-     virtual machine shapes, the number of CPU cores and memory. For bare metal and Exadata shapes,
-     the number of CPU cores, storage, and memory. Required."""
-    ssh_public_keys: list[str] = rest_field(name="sshPublicKeys", visibility=["read", "create"])
-    """The public key portion of one or more key pairs used for SSH access to the DB system. Required."""
-    storage_volume_performance_mode: Optional[Union[str, "_models.StorageVolumePerformanceMode"]] = rest_field(
-        name="storageVolumePerformanceMode", visibility=["read", "create"]
-    )
-    """The block storage volume performance level. Valid values are Balanced and HighPerformance. See
-     `Block Volume Performance </Content/Block/Concepts/blockvolumeperformance.htm>`_ for more
-     information. Known values are: \"Balanced\" and \"HighPerformance\"."""
-    time_zone: Optional[str] = rest_field(name="timeZone", visibility=["read", "create"])
-    """The time zone of the DB system, e.g., UTC, to set the timeZone as UTC."""
-    version: Optional[str] = rest_field(visibility=["read"])
-    """The Oracle Database version of the DB system."""
-    compute_model: Optional[Union[str, "_models.ComputeModel"]] = rest_field(
-        name="computeModel", visibility=["read", "create"]
-    )
-    """The compute model for Base Database Service. This is required if using the ``computeCount``
-     parameter. If using ``cpuCoreCount`` then it is an error to specify ``computeModel`` to a
-     non-null value. The ECPU compute model is the recommended model, and the OCPU compute model is
-     legacy. Known values are: \"ECPU\" and \"OCPU\"."""
-    compute_count: Optional[int] = rest_field(name="computeCount", visibility=["read", "create"])
-    """The number of compute servers for the DB system."""
-
-    @overload
-    def __init__(  # pylint: disable=too-many-locals
-        self,
-        *,
-        resource_anchor_id: str,
-        network_anchor_id: str,
-        hostname: str,
-        shape: str,
-        ssh_public_keys: list[str],
-        source: str = None,
-        cluster_name: Optional[str] = None,
-        display_name: Optional[str] = None,
-        initial_data_storage_size_in_gb: Optional[int] = None,
-        db_system_options: Optional["_models.DbSystemOptions"] = None,
-        disk_redundancy: Optional[Union[str, "_models.DiskRedundancyType"]] = None,
-        domain_v2: Optional[str] = None,
-        license_model_v2: Optional[Union[str, "_models.LicenseModel"]] = None,
-        node_count: Optional[int] = None,
-        storage_volume_performance_mode: Optional[Union[str, "_models.StorageVolumePerformanceMode"]] = None,
-        time_zone: Optional[str] = None,
-        compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
-        compute_count: Optional[int] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbSystemOptions(_Model):
-    """DbSystemOptions resource properties.
-
-    :ivar storage_management: The storage option used in DB system. ASM - Automatic storage
-     management, LVM - Logical Volume management. "LVM"
-    :vartype storage_management: str or ~azure.mgmt.oracledatabase.models.StorageManagementType
-    """
-
-    storage_management: Optional[Union[str, "_models.StorageManagementType"]] = rest_field(
-        name="storageManagement", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The storage option used in DB system. ASM - Automatic storage management, LVM - Logical Volume
-     management. \"LVM\""""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        storage_management: Optional[Union[str, "_models.StorageManagementType"]] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbSystemProperties(DbSystemBaseProperties, discriminator="None"):
-    """DbSystem resource model.
-
-    :ivar provisioning_state: dbSystem provisioning state. Known values are: "Succeeded", "Failed",
-     "Canceled", and "Provisioning".
-    :vartype provisioning_state: str or
-     ~azure.mgmt.oracledatabase.models.AzureResourceProvisioningState
-    :ivar oci_url: HTTPS link to OCI resources exposed to Azure Customer via Azure Interface.
-    :vartype oci_url: str
-    :ivar resource_anchor_id: Azure Resource Anchor ID. Required.
-    :vartype resource_anchor_id: str
-    :ivar network_anchor_id: Azure Network Anchor ID. Required.
-    :vartype network_anchor_id: str
-    :ivar cluster_name: The cluster name for Exadata and 2-node RAC virtual machine DB systems. The
-     cluster name must begin with an alphabetic character, and may contain hyphens (-). Underscores
-     (_) are not permitted. The cluster name can be no longer than 11 characters and is not case
-     sensitive.
-    :vartype cluster_name: str
-    :ivar display_name: The user-friendly name for the DB system. The name does not have to be
-     unique.
-    :vartype display_name: str
-    :ivar initial_data_storage_size_in_gb: Size in GB of the initial data volume that will be
-     created and attached to a virtual machine DB system. You can scale up storage after
-     provisioning, as needed. Note that the total storage size attached will be more than the amount
-     you specify to allow for REDO/RECO space and software volume.
-    :vartype initial_data_storage_size_in_gb: int
-    :ivar data_storage_size_in_gbs: The data storage size, in gigabytes, that is currently
-     available to the DB system. Applies only for virtual machine DB systems.
-    :vartype data_storage_size_in_gbs: int
-    :ivar db_system_options: The DB system options.
-    :vartype db_system_options: ~azure.mgmt.oracledatabase.models.DbSystemOptions
-    :ivar disk_redundancy: The type of redundancy configured for the DB system. NORMAL is 2-way
-     redundancy. HIGH is 3-way redundancy. Known values are: "High" and "Normal".
-    :vartype disk_redundancy: str or ~azure.mgmt.oracledatabase.models.DiskRedundancyType
-    :ivar domain_v2: The domain name for the DB system.
-    :vartype domain_v2: str
-    :ivar grid_image_ocid: The OCID of a grid infrastructure software image. This is a database
-     software image of the type GRID_IMAGE.
-    :vartype grid_image_ocid: str
-    :ivar hostname: The hostname for the DB system. Required.
-    :vartype hostname: str
-    :ivar ocid: The OCID of the DB system.
-    :vartype ocid: str
-    :ivar license_model_v2: The Oracle license model that applies to all the databases on the DB
-     system. The default is LicenseIncluded. Known values are: "LicenseIncluded" and
-     "BringYourOwnLicense".
-    :vartype license_model_v2: str or ~azure.mgmt.oracledatabase.models.LicenseModel
-    :ivar lifecycle_details: Additional information about the current lifecycle state.
-    :vartype lifecycle_details: str
-    :ivar lifecycle_state: The current state of the DB system. Known values are: "Provisioning",
-     "Available", "Updating", "Terminating", "Terminated", "Failed", "Migrated",
-     "MaintenanceInProgress", "NeedsAttention", and "Upgrading".
-    :vartype lifecycle_state: str or ~azure.mgmt.oracledatabase.models.DbSystemLifecycleState
-    :ivar listener_port: The port number configured for the listener on the DB system.
-    :vartype listener_port: int
-    :ivar memory_size_in_gbs: Memory allocated to the DB system, in gigabytes.
-    :vartype memory_size_in_gbs: int
-    :ivar node_count: The number of nodes in the DB system. For RAC DB systems, the value is
-     greater than 1.
-    :vartype node_count: int
-    :ivar scan_dns_name: The FQDN of the DNS record for the SCAN IP addresses that are associated
-     with the DB system.
-    :vartype scan_dns_name: str
-    :ivar scan_ips: The list of Single Client Access Name (SCAN) IP addresses associated with the
-     DB system. SCAN IP addresses are typically used for load balancing and are not assigned to any
-     interface. Oracle Clusterware directs the requests to the appropriate nodes in the cluster.
-     Note: For a single-node DB system, this list is empty.
-    :vartype scan_ips: list[str]
-    :ivar shape: The shape of the DB system. The shape determines resources to allocate to the DB
-     system. For virtual machine shapes, the number of CPU cores and memory. For bare metal and
-     Exadata shapes, the number of CPU cores, storage, and memory. Required.
-    :vartype shape: str
-    :ivar ssh_public_keys: The public key portion of one or more key pairs used for SSH access to
-     the DB system. Required.
-    :vartype ssh_public_keys: list[str]
-    :ivar storage_volume_performance_mode: The block storage volume performance level. Valid values
-     are Balanced and HighPerformance. See `Block Volume Performance
-     </Content/Block/Concepts/blockvolumeperformance.htm>`_ for more information. Known values are:
-     "Balanced" and "HighPerformance".
-    :vartype storage_volume_performance_mode: str or
-     ~azure.mgmt.oracledatabase.models.StorageVolumePerformanceMode
-    :ivar time_zone: The time zone of the DB system, e.g., UTC, to set the timeZone as UTC.
-    :vartype time_zone: str
-    :ivar version: The Oracle Database version of the DB system.
-    :vartype version: str
-    :ivar compute_model: The compute model for Base Database Service. This is required if using the
-     ``computeCount`` parameter. If using ``cpuCoreCount`` then it is an error to specify
-     ``computeModel`` to a non-null value. The ECPU compute model is the recommended model, and the
-     OCPU compute model is legacy. Known values are: "ECPU" and "OCPU".
-    :vartype compute_model: str or ~azure.mgmt.oracledatabase.models.ComputeModel
-    :ivar compute_count: The number of compute servers for the DB system.
-    :vartype compute_count: int
-    :ivar source: The source of the database for creating a new database. Required. for creating a
-     new database.
-    :vartype source: str or ~azure.mgmt.oracledatabase.models.NONE
-    :ivar database_edition: The Oracle Database Edition that applies to all the databases on the DB
-     system. Exadata DB systems and 2-node RAC DB systems require
-     EnterpriseEditionExtremePerformance. Required. Known values are: "StandardEdition",
-     "EnterpriseEdition", "EnterpriseEditionHighPerformance", "EnterpriseEditionExtreme", and
-     "EnterpriseEditionDeveloper".
-    :vartype database_edition: str or ~azure.mgmt.oracledatabase.models.DbSystemDatabaseEditionType
-    :ivar admin_password: A strong password for SYS, SYSTEM, and PDB Admin. The password must be at
-     least nine characters and contain at least two uppercase, two lowercase, two numbers, and two
-     special characters. The special characters must be _, #, or -.
-    :vartype admin_password: str
-    :ivar db_version: A valid Oracle Database version. For a list of supported versions, use the
-     ListDbVersions operation. Required.
-    :vartype db_version: str
-    :ivar pdb_name: The name of the pluggable database. The name must begin with an alphabetic
-     character and can contain a maximum of thirty alphanumeric characters. Special characters are
-     not permitted. Pluggable database should not be same as database name.
-    :vartype pdb_name: str
-    """
-
-    source: Literal[DbSystemSourceType.NONE] = rest_discriminator(name="source", visibility=["read", "create", "update", "delete", "query"])  # type: ignore
-    """The source of the database for creating a new database. Required. for creating a new database."""
-    database_edition: Union[str, "_models.DbSystemDatabaseEditionType"] = rest_field(
-        name="databaseEdition", visibility=["read", "create"]
-    )
-    """The Oracle Database Edition that applies to all the databases on the DB system. Exadata DB
-     systems and 2-node RAC DB systems require EnterpriseEditionExtremePerformance. Required. Known
-     values are: \"StandardEdition\", \"EnterpriseEdition\", \"EnterpriseEditionHighPerformance\",
-     \"EnterpriseEditionExtreme\", and \"EnterpriseEditionDeveloper\"."""
-    admin_password: Optional[str] = rest_field(name="adminPassword", visibility=["create"])
-    """A strong password for SYS, SYSTEM, and PDB Admin. The password must be at least nine characters
-     and contain at least two uppercase, two lowercase, two numbers, and two special characters. The
-     special characters must be _, #, or -."""
-    db_version: str = rest_field(name="dbVersion", visibility=["read", "create"])
-    """A valid Oracle Database version. For a list of supported versions, use the ListDbVersions
-     operation. Required."""
-    pdb_name: Optional[str] = rest_field(name="pdbName", visibility=["create"])
-    """The name of the pluggable database. The name must begin with an alphabetic character and can
-     contain a maximum of thirty alphanumeric characters. Special characters are not permitted.
-     Pluggable database should not be same as database name."""
-
-    @overload
-    def __init__(  # pylint: disable=too-many-locals
-        self,
-        *,
-        resource_anchor_id: str,
-        network_anchor_id: str,
-        hostname: str,
-        shape: str,
-        ssh_public_keys: list[str],
-        database_edition: Union[str, "_models.DbSystemDatabaseEditionType"],
-        db_version: str,
-        cluster_name: Optional[str] = None,
-        display_name: Optional[str] = None,
-        initial_data_storage_size_in_gb: Optional[int] = None,
-        db_system_options: Optional["_models.DbSystemOptions"] = None,
-        disk_redundancy: Optional[Union[str, "_models.DiskRedundancyType"]] = None,
-        domain_v2: Optional[str] = None,
-        license_model_v2: Optional[Union[str, "_models.LicenseModel"]] = None,
-        node_count: Optional[int] = None,
-        storage_volume_performance_mode: Optional[Union[str, "_models.StorageVolumePerformanceMode"]] = None,
-        time_zone: Optional[str] = None,
-        compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
-        compute_count: Optional[int] = None,
-        admin_password: Optional[str] = None,
-        pdb_name: Optional[str] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.source = DbSystemSourceType.NONE  # type: ignore
 
 
 class DbSystemShape(ProxyResource):
@@ -5293,8 +4705,6 @@ class DbSystemShapeProperties(_Model):
     :vartype are_server_types_supported: bool
     :ivar display_name: The display name of the shape used for the DB system.
     :vartype display_name: str
-    :ivar shape_attributes: The shapeAttributes of the DB system shape..
-    :vartype shape_attributes: list[str]
     """
 
     shape_family: Optional[str] = rest_field(
@@ -5395,8 +4805,6 @@ class DbSystemShapeProperties(_Model):
         name="displayName", visibility=["read", "create", "update", "delete", "query"]
     )
     """The display name of the shape used for the DB system."""
-    shape_attributes: Optional[list[str]] = rest_field(name="shapeAttributes", visibility=["read", "create"])
-    """The shapeAttributes of the DB system shape.."""
 
     @overload
     def __init__(  # pylint: disable=too-many-locals
@@ -5426,179 +4834,6 @@ class DbSystemShapeProperties(_Model):
         compute_model: Optional[Union[str, "_models.ComputeModel"]] = None,
         are_server_types_supported: Optional[bool] = None,
         display_name: Optional[str] = None,
-        shape_attributes: Optional[list[str]] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbSystemUpdate(_Model):
-    """The type used for update operations of the DbSystem.
-
-    :ivar zones: The availability zones.
-    :vartype zones: list[str]
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
-    :ivar properties: The resource-specific properties for this resource.
-    :vartype properties: ~azure.mgmt.oracledatabase.models.DbSystemUpdateProperties
-    """
-
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """The availability zones."""
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """Resource tags."""
-    properties: Optional["_models.DbSystemUpdateProperties"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The resource-specific properties for this resource."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        zones: Optional[list[str]] = None,
-        tags: Optional[dict[str, str]] = None,
-        properties: Optional["_models.DbSystemUpdateProperties"] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbSystemUpdateProperties(_Model):
-    """The updatable properties of the DbSystem.
-
-    :ivar source: The source of the database for creating a new database. for creating a new
-     database.
-    :vartype source: str or ~azure.mgmt.oracledatabase.models.NONE
-    """
-
-    source: Optional[Literal[DbSystemSourceType.NONE]] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The source of the database for creating a new database. for creating a new database."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        source: Optional[Literal[DbSystemSourceType.NONE]] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbVersion(ProxyResource):
-    """Oracle Database DbVersion resource definition.
-
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
-    :vartype id: str
-    :ivar name: The name of the resource.
-    :vartype name: str
-    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
-     "Microsoft.Storage/storageAccounts".
-    :vartype type: str
-    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
-     information.
-    :vartype system_data: ~azure.mgmt.oracledatabase.models.SystemData
-    :ivar properties: The resource-specific properties for this resource.
-    :vartype properties: ~azure.mgmt.oracledatabase.models.DbVersionProperties
-    """
-
-    properties: Optional["_models.DbVersionProperties"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The resource-specific properties for this resource."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        properties: Optional["_models.DbVersionProperties"] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DbVersionProperties(_Model):
-    """DbVersion resource model.
-
-    :ivar version: A valid Oracle Database version. Required.
-    :vartype version: str
-    :ivar is_latest_for_major_version: True if this version of the Oracle Database software is the
-     latest version for a release.
-    :vartype is_latest_for_major_version: bool
-    :ivar is_preview_db_version: True if this version of the Oracle Database software is the
-     preview version.
-    :vartype is_preview_db_version: bool
-    :ivar is_upgrade_supported: True if this version of the Oracle Database software is supported
-     for Upgrade.
-    :vartype is_upgrade_supported: bool
-    :ivar supports_pdb: True if this version of the Oracle Database software supports pluggable
-     databases.
-    :vartype supports_pdb: bool
-    """
-
-    version: str = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """A valid Oracle Database version. Required."""
-    is_latest_for_major_version: Optional[bool] = rest_field(
-        name="isLatestForMajorVersion", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """True if this version of the Oracle Database software is the latest version for a release."""
-    is_preview_db_version: Optional[bool] = rest_field(
-        name="isPreviewDbVersion", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """True if this version of the Oracle Database software is the preview version."""
-    is_upgrade_supported: Optional[bool] = rest_field(
-        name="isUpgradeSupported", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """True if this version of the Oracle Database software is supported for Upgrade."""
-    supports_pdb: Optional[bool] = rest_field(
-        name="supportsPdb", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """True if this version of the Oracle Database software supports pluggable databases."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        version: str,
-        is_latest_for_major_version: Optional[bool] = None,
-        is_preview_db_version: Optional[bool] = None,
-        is_upgrade_supported: Optional[bool] = None,
-        supports_pdb: Optional[bool] = None,
     ) -> None: ...
 
     @overload
@@ -5722,39 +4957,6 @@ class DisasterRecoveryConfigurationDetails(_Model):
         time_snapshot_standby_enabled_till: Optional[datetime.datetime] = None,
         is_snapshot_standby: Optional[bool] = None,
         is_replicate_automatic_backups: Optional[bool] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class DnsForwardingRule(_Model):
-    """DNS forwarding rule properties.
-
-    :ivar domain_names: Comma-separated domain names. Required.
-    :vartype domain_names: str
-    :ivar forwarding_ip_address: Forwarding ip address. Required.
-    :vartype forwarding_ip_address: str
-    """
-
-    domain_names: str = rest_field(name="domainNames", visibility=["create"])
-    """Comma-separated domain names. Required."""
-    forwarding_ip_address: str = rest_field(name="forwardingIpAddress", visibility=["create"])
-    """Forwarding ip address. Required."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        domain_names: str,
-        forwarding_ip_address: str,
     ) -> None: ...
 
     @overload
@@ -6056,9 +5258,9 @@ class ErrorDetail(_Model):
     """The error message."""
     target: Optional[str] = rest_field(visibility=["read"])
     """The error target."""
-    details: Optional[list["_models.ErrorDetail"]] = rest_field(visibility=["read"])
+    details: Optional[List["_models.ErrorDetail"]] = rest_field(visibility=["read"])
     """The error details."""
-    additional_info: Optional[list["_models.ErrorAdditionalInfo"]] = rest_field(
+    additional_info: Optional[List["_models.ErrorAdditionalInfo"]] = rest_field(
         name="additionalInfo", visibility=["read"]
     )
     """The error additional info."""
@@ -6141,7 +5343,7 @@ class ExadataIormConfig(_Model):
     :vartype objective: str or ~azure.mgmt.oracledatabase.models.Objective
     """
 
-    db_plans: Optional[list["_models.DbIormConfig"]] = rest_field(
+    db_plans: Optional[List["_models.DbIormConfig"]] = rest_field(
         name="dbPlans", visibility=["read", "create", "update", "delete", "query"]
     )
     """An array of IORM settings for all the database in the Exadata DB system."""
@@ -6164,7 +5366,7 @@ class ExadataIormConfig(_Model):
     def __init__(
         self,
         *,
-        db_plans: Optional[list["_models.DbIormConfig"]] = None,
+        db_plans: Optional[List["_models.DbIormConfig"]] = None,
         lifecycle_details: Optional[str] = None,
         lifecycle_state: Optional[Union[str, "_models.IormLifecycleState"]] = None,
         objective: Optional[Union[str, "_models.Objective"]] = None,
@@ -6209,7 +5411,7 @@ class ExadbVmCluster(TrackedResource):
         visibility=["read", "create", "update", "delete", "query"]
     )
     """The resource-specific properties for this resource."""
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    zones: Optional[List[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """The availability zones."""
 
     @overload
@@ -6217,9 +5419,9 @@ class ExadbVmCluster(TrackedResource):
         self,
         *,
         location: str,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.ExadbVmClusterProperties"] = None,
-        zones: Optional[list[str]] = None,
+        zones: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -6359,9 +5561,6 @@ class ExadbVmClusterProperties(_Model):
     :vartype backup_subnet_ocid: str
     :ivar subnet_ocid: Cluster subnet ocid.
     :vartype subnet_ocid: str
-    :ivar shape_attribute: The type of Exascale storage used for Exadata VM cluster. Known values
-     are: "SMART_STORAGE" and "BLOCK_STORAGE".
-    :vartype shape_attribute: str or ~azure.mgmt.oracledatabase.models.ShapeAttribute
     """
 
     ocid: Optional[str] = rest_field(visibility=["read"])
@@ -6421,7 +5620,7 @@ class ExadbVmClusterProperties(_Model):
      core reserved."""
     node_count: int = rest_field(name="nodeCount", visibility=["read", "create", "update"])
     """The number of nodes in the Exadata VM cluster on Exascale Infrastructure. Required."""
-    nsg_cidrs: Optional[list["_models.NsgCidr"]] = rest_field(name="nsgCidrs", visibility=["read", "create"])
+    nsg_cidrs: Optional[List["_models.NsgCidr"]] = rest_field(name="nsgCidrs", visibility=["read", "create"])
     """CIDR blocks for additional NSG ingress rules. The VNET CIDRs used to provision the VM Cluster
      will be added by default."""
     zone_ocid: Optional[str] = rest_field(name="zoneOcid", visibility=["read"])
@@ -6437,7 +5636,7 @@ class ExadbVmClusterProperties(_Model):
      Infrastructure."""
     shape: str = rest_field(visibility=["read", "create"])
     """The shape of the Exadata VM cluster on Exascale Infrastructure resource. Required."""
-    ssh_public_keys: list[str] = rest_field(name="sshPublicKeys", visibility=["read", "create"])
+    ssh_public_keys: List[str] = rest_field(name="sshPublicKeys", visibility=["read", "create"])
     """The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster
      on Exascale Infrastructure. Required."""
     system_version: Optional[str] = rest_field(name="systemVersion", visibility=["read", "create"])
@@ -6456,7 +5655,7 @@ class ExadbVmClusterProperties(_Model):
     scan_dns_name: Optional[str] = rest_field(name="scanDnsName", visibility=["read"])
     """The FQDN of the DNS record for the SCAN IP addresses that are associated with the Exadata VM
      cluster on Exascale Infrastructure."""
-    scan_ip_ids: Optional[list[str]] = rest_field(name="scanIpIds", visibility=["read"])
+    scan_ip_ids: Optional[List[str]] = rest_field(name="scanIpIds", visibility=["read"])
     """The Single Client Access Name (SCAN) IP addresses associated with the Exadata VM cluster on
      Exascale Infrastructure. SCAN IP addresses are typically used for load balancing and are not
      assigned to any interface. Oracle Clusterware directs the requests to the appropriate nodes in
@@ -6472,7 +5671,7 @@ class ExadbVmClusterProperties(_Model):
         name="totalFileSystemStorage", visibility=["read"]
     )
     """Total file system storage details."""
-    vip_ids: Optional[list[str]] = rest_field(name="vipIds", visibility=["read"])
+    vip_ids: Optional[List[str]] = rest_field(name="vipIds", visibility=["read"])
     """The virtual IP (VIP) addresses associated with the Exadata VM cluster on Exascale
      Infrastructure. The Cluster Ready Services (CRS) creates and maintains one VIP address for each
      node in the Exadata Cloud Service instance to enable failover. If one node fails, the VIP is
@@ -6486,11 +5685,6 @@ class ExadbVmClusterProperties(_Model):
     """Cluster backup subnet ocid."""
     subnet_ocid: Optional[str] = rest_field(name="subnetOcid", visibility=["read"])
     """Cluster subnet ocid."""
-    shape_attribute: Optional[Union[str, "_models.ShapeAttribute"]] = rest_field(
-        name="shapeAttribute", visibility=["read", "create"]
-    )
-    """The type of Exascale storage used for Exadata VM cluster. Known values are: \"SMART_STORAGE\"
-     and \"BLOCK_STORAGE\"."""
 
     @overload
     def __init__(  # pylint: disable=too-many-locals
@@ -6504,7 +5698,7 @@ class ExadbVmClusterProperties(_Model):
         hostname: str,
         node_count: int,
         shape: str,
-        ssh_public_keys: list[str],
+        ssh_public_keys: List[str],
         total_ecpu_count: int,
         vm_file_system_storage: "_models.ExadbVmClusterStorageDetails",
         cluster_name: Optional[str] = None,
@@ -6513,13 +5707,12 @@ class ExadbVmClusterProperties(_Model):
         domain: Optional[str] = None,
         grid_image_ocid: Optional[str] = None,
         license_model: Optional[Union[str, "_models.LicenseModel"]] = None,
-        nsg_cidrs: Optional[list["_models.NsgCidr"]] = None,
+        nsg_cidrs: Optional[List["_models.NsgCidr"]] = None,
         private_zone_ocid: Optional[str] = None,
         scan_listener_port_tcp: Optional[int] = None,
         scan_listener_port_tcp_ssl: Optional[int] = None,
         system_version: Optional[str] = None,
         time_zone: Optional[str] = None,
-        shape_attribute: Optional[Union[str, "_models.ShapeAttribute"]] = None,
     ) -> None: ...
 
     @overload
@@ -6574,9 +5767,9 @@ class ExadbVmClusterUpdate(_Model):
     :vartype properties: ~azure.mgmt.oracledatabase.models.ExadbVmClusterUpdateProperties
     """
 
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    zones: Optional[List[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """The availability zones."""
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    tags: Optional[Dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Resource tags."""
     properties: Optional["_models.ExadbVmClusterUpdateProperties"] = rest_field(
         visibility=["read", "create", "update", "delete", "query"]
@@ -6587,8 +5780,8 @@ class ExadbVmClusterUpdate(_Model):
     def __init__(
         self,
         *,
-        zones: Optional[list[str]] = None,
-        tags: Optional[dict[str, str]] = None,
+        zones: Optional[List[str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.ExadbVmClusterUpdateProperties"] = None,
     ) -> None: ...
 
@@ -6618,43 +5811,6 @@ class ExadbVmClusterUpdateProperties(_Model):
         self,
         *,
         node_count: Optional[int] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class ExascaleConfigDetails(_Model):
-    """The exascale config response details for the cloud Exadata infrastructure.
-
-    :ivar total_storage_in_gbs: Storage size needed for Exascale in GBs. Required.
-    :vartype total_storage_in_gbs: int
-    :ivar available_storage_in_gbs: Available storage size for Exascale in GBs.
-    :vartype available_storage_in_gbs: int
-    """
-
-    total_storage_in_gbs: int = rest_field(
-        name="totalStorageInGbs", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """Storage size needed for Exascale in GBs. Required."""
-    available_storage_in_gbs: Optional[int] = rest_field(
-        name="availableStorageInGbs", visibility=["read", "create", "update", "delete", "query"]
-    )
-    """Available storage size for Exascale in GBs."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        total_storage_in_gbs: int,
-        available_storage_in_gbs: Optional[int] = None,
     ) -> None: ...
 
     @overload
@@ -6920,7 +6076,7 @@ class ExascaleDbStorageVault(TrackedResource):
         visibility=["read", "create", "update", "delete", "query"]
     )
     """The resource-specific properties for this resource."""
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    zones: Optional[List[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """The availability zones."""
 
     @overload
@@ -6928,9 +6084,9 @@ class ExascaleDbStorageVault(TrackedResource):
         self,
         *,
         location: str,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
         properties: Optional["_models.ExascaleDbStorageVaultProperties"] = None,
-        zones: Optional[list[str]] = None,
+        zones: Optional[List[str]] = None,
     ) -> None: ...
 
     @overload
@@ -6980,12 +6136,6 @@ class ExascaleDbStorageVaultProperties(_Model):
     :vartype ocid: str
     :ivar oci_url: HTTPS link to OCI resources exposed to Azure Customer via Azure Interface.
     :vartype oci_url: str
-    :ivar exadata_infrastructure_id: Cloud Exadata infrastructure ID.
-    :vartype exadata_infrastructure_id: str
-    :ivar attached_shape_attributes: The shapeAttribute of the Exadata VM cluster(s) associated
-     with the Exadata Database Storage Vault.
-    :vartype attached_shape_attributes: list[str or
-     ~azure.mgmt.oracledatabase.models.ShapeAttribute]
     """
 
     additional_flash_cache_in_percent: Optional[int] = rest_field(
@@ -7025,13 +6175,6 @@ class ExascaleDbStorageVaultProperties(_Model):
     """The OCID of the Exadata Database Storage Vault."""
     oci_url: Optional[str] = rest_field(name="ociUrl", visibility=["read"])
     """HTTPS link to OCI resources exposed to Azure Customer via Azure Interface."""
-    exadata_infrastructure_id: Optional[str] = rest_field(name="exadataInfrastructureId", visibility=["read", "create"])
-    """Cloud Exadata infrastructure ID."""
-    attached_shape_attributes: Optional[list[Union[str, "_models.ShapeAttribute"]]] = rest_field(
-        name="attachedShapeAttributes", visibility=["read"]
-    )
-    """The shapeAttribute of the Exadata VM cluster(s) associated with the Exadata Database Storage
-     Vault."""
 
     @overload
     def __init__(
@@ -7042,7 +6185,6 @@ class ExascaleDbStorageVaultProperties(_Model):
         additional_flash_cache_in_percent: Optional[int] = None,
         description: Optional[str] = None,
         time_zone: Optional[str] = None,
-        exadata_infrastructure_id: Optional[str] = None,
     ) -> None: ...
 
     @overload
@@ -7063,14 +6205,14 @@ class ExascaleDbStorageVaultTagsUpdate(_Model):
     :vartype tags: dict[str, str]
     """
 
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    tags: Optional[Dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Resource tags."""
 
     @overload
     def __init__(
         self,
         *,
-        tags: Optional[dict[str, str]] = None,
+        tags: Optional[Dict[str, str]] = None,
     ) -> None: ...
 
     @overload
@@ -7509,9 +6651,9 @@ class MaintenanceWindow(_Model):
     )
     """The maintenance window scheduling preference. Known values are: \"NoPreference\" and
      \"CustomPreference\"."""
-    months: Optional[list["_models.Month"]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
+    months: Optional[List["_models.Month"]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
     """Months during the year when maintenance should be performed."""
-    weeks_of_month: Optional[list[int]] = rest_field(
+    weeks_of_month: Optional[List[int]] = rest_field(
         name="weeksOfMonth", visibility=["read", "create", "update", "delete", "query"]
     )
     """Weeks during the month when maintenance should be performed. Weeks start on the 1st, 8th, 15th,
@@ -7521,11 +6663,11 @@ class MaintenanceWindow(_Model):
      be scheduled for the fifth week of months that contain more than 28 days. Note that this
      parameter works in conjunction with the  daysOfWeek and hoursOfDay parameters to allow you to
      specify specific days of the week and hours that maintenance will be performed."""
-    days_of_week: Optional[list["_models.DayOfWeek"]] = rest_field(
+    days_of_week: Optional[List["_models.DayOfWeek"]] = rest_field(
         name="daysOfWeek", visibility=["read", "create", "update", "delete", "query"]
     )
     """Days during the week when maintenance should be performed."""
-    hours_of_day: Optional[list[int]] = rest_field(
+    hours_of_day: Optional[List[int]] = rest_field(
         name="hoursOfDay", visibility=["read", "create", "update", "delete", "query"]
     )
     """The window of hours during the day when maintenance should be performed. The window is a 4 hour
@@ -7564,10 +6706,10 @@ class MaintenanceWindow(_Model):
         self,
         *,
         preference: Optional[Union[str, "_models.Preference"]] = None,
-        months: Optional[list["_models.Month"]] = None,
-        weeks_of_month: Optional[list[int]] = None,
-        days_of_week: Optional[list["_models.DayOfWeek"]] = None,
-        hours_of_day: Optional[list[int]] = None,
+        months: Optional[List["_models.Month"]] = None,
+        weeks_of_month: Optional[List[int]] = None,
+        days_of_week: Optional[List["_models.DayOfWeek"]] = None,
+        hours_of_day: Optional[List[int]] = None,
         lead_time_in_weeks: Optional[int] = None,
         patching_mode: Optional[Union[str, "_models.PatchingMode"]] = None,
         custom_action_timeout_in_mins: Optional[int] = None,
@@ -7605,291 +6747,6 @@ class Month(_Model):
         self,
         *,
         name: Union[str, "_models.MonthName"],
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class NetworkAnchor(TrackedResource):
-    """Network Anchor resource model.
-
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
-    :vartype id: str
-    :ivar name: The name of the resource.
-    :vartype name: str
-    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
-     "Microsoft.Storage/storageAccounts".
-    :vartype type: str
-    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
-     information.
-    :vartype system_data: ~azure.mgmt.oracledatabase.models.SystemData
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
-    :ivar location: The geo-location where the resource lives. Required.
-    :vartype location: str
-    :ivar properties: The resource-specific properties for this resource.
-    :vartype properties: ~azure.mgmt.oracledatabase.models.NetworkAnchorProperties
-    :ivar zones: The availability zones.
-    :vartype zones: list[str]
-    """
-
-    properties: Optional["_models.NetworkAnchorProperties"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The resource-specific properties for this resource."""
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """The availability zones."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        location: str,
-        tags: Optional[dict[str, str]] = None,
-        properties: Optional["_models.NetworkAnchorProperties"] = None,
-        zones: Optional[list[str]] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class NetworkAnchorProperties(_Model):
-    """Network Anchor properties.
-
-    :ivar resource_anchor_id: Corresponding resource anchor Azure ID. Required.
-    :vartype resource_anchor_id: str
-    :ivar provisioning_state: NetworkAnchor provisioning state. Known values are: "Succeeded",
-     "Failed", "Canceled", and "Provisioning".
-    :vartype provisioning_state: str or
-     ~azure.mgmt.oracledatabase.models.AzureResourceProvisioningState
-    :ivar vnet_id: VNET for network connectivity.
-    :vartype vnet_id: str
-    :ivar subnet_id: Client subnet. Required.
-    :vartype subnet_id: str
-    :ivar cidr_block: Delegated Azure subnet cidr block.
-    :vartype cidr_block: str
-    :ivar oci_vcn_id: Oracle Cloud Infrastructure VCN OCID.
-    :vartype oci_vcn_id: str
-    :ivar oci_vcn_dns_label: OCI DNS label. This is optional if DNS config is provided.
-    :vartype oci_vcn_dns_label: str
-    :ivar oci_subnet_id: Oracle Cloud Infrastructure subnet OCID.
-    :vartype oci_subnet_id: str
-    :ivar oci_backup_cidr_block: OCI backup subnet cidr block.
-    :vartype oci_backup_cidr_block: str
-    :ivar is_oracle_to_azure_dns_zone_sync_enabled: Indicates whether DNS zone sync from OCI to
-     Azure is enabled.
-    :vartype is_oracle_to_azure_dns_zone_sync_enabled: bool
-    :ivar is_oracle_dns_listening_endpoint_enabled: Indicates whether the Oracle DNS listening
-     endpoint is enabled.
-    :vartype is_oracle_dns_listening_endpoint_enabled: bool
-    :ivar is_oracle_dns_forwarding_endpoint_enabled: Indicates whether the Oracle DNS forwarding
-     endpoint is enabled.
-    :vartype is_oracle_dns_forwarding_endpoint_enabled: bool
-    :ivar dns_forwarding_rules: DNS forwarding rules.
-    :vartype dns_forwarding_rules: list[~azure.mgmt.oracledatabase.models.DnsForwardingRule]
-    :ivar dns_listening_endpoint_allowed_cidrs: Comma-separated list of CIDRs that are allowed to
-     send requests to the DNS listening endpoint.
-    :vartype dns_listening_endpoint_allowed_cidrs: str
-    :ivar dns_listening_endpoint_ip_address: DNS listening endpoint IP address.
-    :vartype dns_listening_endpoint_ip_address: str
-    :ivar dns_forwarding_endpoint_ip_address: DNS forwarding endpoint IP address.
-    :vartype dns_forwarding_endpoint_ip_address: str
-    :ivar dns_forwarding_rules_url: Deep link to OCI console DNS Forwarding rules page.
-    :vartype dns_forwarding_rules_url: str
-    :ivar dns_listening_endpoint_nsg_rules_url: Deep link to OCI console DNS Listening endpoint NSG
-     rules.
-    :vartype dns_listening_endpoint_nsg_rules_url: str
-    :ivar dns_forwarding_endpoint_nsg_rules_url: Deep link to OCI console DNS Forwarding endpoint
-     NSG rules.
-    :vartype dns_forwarding_endpoint_nsg_rules_url: str
-    """
-
-    resource_anchor_id: str = rest_field(name="resourceAnchorId", visibility=["read", "create"])
-    """Corresponding resource anchor Azure ID. Required."""
-    provisioning_state: Optional[Union[str, "_models.AzureResourceProvisioningState"]] = rest_field(
-        name="provisioningState", visibility=["read"]
-    )
-    """NetworkAnchor provisioning state. Known values are: \"Succeeded\", \"Failed\", \"Canceled\",
-     and \"Provisioning\"."""
-    vnet_id: Optional[str] = rest_field(name="vnetId", visibility=["read"])
-    """VNET for network connectivity."""
-    subnet_id: str = rest_field(name="subnetId", visibility=["read", "create"])
-    """Client subnet. Required."""
-    cidr_block: Optional[str] = rest_field(name="cidrBlock", visibility=["read"])
-    """Delegated Azure subnet cidr block."""
-    oci_vcn_id: Optional[str] = rest_field(name="ociVcnId", visibility=["read"])
-    """Oracle Cloud Infrastructure VCN OCID."""
-    oci_vcn_dns_label: Optional[str] = rest_field(name="ociVcnDnsLabel", visibility=["read", "create"])
-    """OCI DNS label. This is optional if DNS config is provided."""
-    oci_subnet_id: Optional[str] = rest_field(name="ociSubnetId", visibility=["read"])
-    """Oracle Cloud Infrastructure subnet OCID."""
-    oci_backup_cidr_block: Optional[str] = rest_field(
-        name="ociBackupCidrBlock", visibility=["read", "create", "update"]
-    )
-    """OCI backup subnet cidr block."""
-    is_oracle_to_azure_dns_zone_sync_enabled: Optional[bool] = rest_field(
-        name="isOracleToAzureDnsZoneSyncEnabled", visibility=["read", "create", "update"]
-    )
-    """Indicates whether DNS zone sync from OCI to Azure is enabled."""
-    is_oracle_dns_listening_endpoint_enabled: Optional[bool] = rest_field(
-        name="isOracleDnsListeningEndpointEnabled", visibility=["read", "create", "update"]
-    )
-    """Indicates whether the Oracle DNS listening endpoint is enabled."""
-    is_oracle_dns_forwarding_endpoint_enabled: Optional[bool] = rest_field(
-        name="isOracleDnsForwardingEndpointEnabled", visibility=["read", "create", "update"]
-    )
-    """Indicates whether the Oracle DNS forwarding endpoint is enabled."""
-    dns_forwarding_rules: Optional[list["_models.DnsForwardingRule"]] = rest_field(
-        name="dnsForwardingRules", visibility=["create"]
-    )
-    """DNS forwarding rules."""
-    dns_listening_endpoint_allowed_cidrs: Optional[str] = rest_field(
-        name="dnsListeningEndpointAllowedCidrs", visibility=["create"]
-    )
-    """Comma-separated list of CIDRs that are allowed to send requests to the DNS listening endpoint."""
-    dns_listening_endpoint_ip_address: Optional[str] = rest_field(
-        name="dnsListeningEndpointIpAddress", visibility=["read"]
-    )
-    """DNS listening endpoint IP address."""
-    dns_forwarding_endpoint_ip_address: Optional[str] = rest_field(
-        name="dnsForwardingEndpointIpAddress", visibility=["read"]
-    )
-    """DNS forwarding endpoint IP address."""
-    dns_forwarding_rules_url: Optional[str] = rest_field(name="dnsForwardingRulesUrl", visibility=["read"])
-    """Deep link to OCI console DNS Forwarding rules page."""
-    dns_listening_endpoint_nsg_rules_url: Optional[str] = rest_field(
-        name="dnsListeningEndpointNsgRulesUrl", visibility=["read"]
-    )
-    """Deep link to OCI console DNS Listening endpoint NSG rules."""
-    dns_forwarding_endpoint_nsg_rules_url: Optional[str] = rest_field(
-        name="dnsForwardingEndpointNsgRulesUrl", visibility=["read"]
-    )
-    """Deep link to OCI console DNS Forwarding endpoint NSG rules."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        resource_anchor_id: str,
-        subnet_id: str,
-        oci_vcn_dns_label: Optional[str] = None,
-        oci_backup_cidr_block: Optional[str] = None,
-        is_oracle_to_azure_dns_zone_sync_enabled: Optional[bool] = None,
-        is_oracle_dns_listening_endpoint_enabled: Optional[bool] = None,
-        is_oracle_dns_forwarding_endpoint_enabled: Optional[bool] = None,
-        dns_forwarding_rules: Optional[list["_models.DnsForwardingRule"]] = None,
-        dns_listening_endpoint_allowed_cidrs: Optional[str] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class NetworkAnchorUpdate(_Model):
-    """The type used for update operations of the NetworkAnchor.
-
-    :ivar zones: The availability zones.
-    :vartype zones: list[str]
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
-    :ivar properties: The resource-specific properties for this resource.
-    :vartype properties: ~azure.mgmt.oracledatabase.models.NetworkAnchorUpdateProperties
-    """
-
-    zones: Optional[list[str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """The availability zones."""
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """Resource tags."""
-    properties: Optional["_models.NetworkAnchorUpdateProperties"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The resource-specific properties for this resource."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        zones: Optional[list[str]] = None,
-        tags: Optional[dict[str, str]] = None,
-        properties: Optional["_models.NetworkAnchorUpdateProperties"] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class NetworkAnchorUpdateProperties(_Model):
-    """The updatable properties of the NetworkAnchor.
-
-    :ivar oci_backup_cidr_block: OCI backup subnet cidr block.
-    :vartype oci_backup_cidr_block: str
-    :ivar is_oracle_to_azure_dns_zone_sync_enabled: Indicates whether DNS zone sync from OCI to
-     Azure is enabled.
-    :vartype is_oracle_to_azure_dns_zone_sync_enabled: bool
-    :ivar is_oracle_dns_listening_endpoint_enabled: Indicates whether the Oracle DNS listening
-     endpoint is enabled.
-    :vartype is_oracle_dns_listening_endpoint_enabled: bool
-    :ivar is_oracle_dns_forwarding_endpoint_enabled: Indicates whether the Oracle DNS forwarding
-     endpoint is enabled.
-    :vartype is_oracle_dns_forwarding_endpoint_enabled: bool
-    """
-
-    oci_backup_cidr_block: Optional[str] = rest_field(
-        name="ociBackupCidrBlock", visibility=["read", "create", "update"]
-    )
-    """OCI backup subnet cidr block."""
-    is_oracle_to_azure_dns_zone_sync_enabled: Optional[bool] = rest_field(
-        name="isOracleToAzureDnsZoneSyncEnabled", visibility=["read", "create", "update"]
-    )
-    """Indicates whether DNS zone sync from OCI to Azure is enabled."""
-    is_oracle_dns_listening_endpoint_enabled: Optional[bool] = rest_field(
-        name="isOracleDnsListeningEndpointEnabled", visibility=["read", "create", "update"]
-    )
-    """Indicates whether the Oracle DNS listening endpoint is enabled."""
-    is_oracle_dns_forwarding_endpoint_enabled: Optional[bool] = rest_field(
-        name="isOracleDnsForwardingEndpointEnabled", visibility=["read", "create", "update"]
-    )
-    """Indicates whether the Oracle DNS forwarding endpoint is enabled."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        oci_backup_cidr_block: Optional[str] = None,
-        is_oracle_to_azure_dns_zone_sync_enabled: Optional[bool] = None,
-        is_oracle_dns_listening_endpoint_enabled: Optional[bool] = None,
-        is_oracle_dns_forwarding_endpoint_enabled: Optional[bool] = None,
     ) -> None: ...
 
     @overload
@@ -8129,7 +6986,7 @@ class OracleSubscriptionProperties(_Model):
     """Product code for the term unit."""
     intent: Optional[Union[str, "_models.Intent"]] = rest_field(visibility=["update"])
     """Intent for the update operation. Known values are: \"Retain\" and \"Reset\"."""
-    azure_subscription_ids: Optional[list[str]] = rest_field(name="azureSubscriptionIds", visibility=["read"])
+    azure_subscription_ids: Optional[List[str]] = rest_field(name="azureSubscriptionIds", visibility=["read"])
     """Azure subscriptions to be added."""
     add_subscription_operation_state: Optional[Union[str, "_models.AddSubscriptionOperationState"]] = rest_field(
         name="addSubscriptionOperationState", visibility=["read"]
@@ -8602,7 +7459,7 @@ class RemoveVirtualMachineFromExadbVmClusterDetails(_Model):  # pylint: disable=
     :vartype db_nodes: list[~azure.mgmt.oracledatabase.models.DbNodeDetails]
     """
 
-    db_nodes: list["_models.DbNodeDetails"] = rest_field(
+    db_nodes: List["_models.DbNodeDetails"] = rest_field(
         name="dbNodes", visibility=["read", "create", "update", "delete", "query"]
     )
     """The list of ExaCS DB nodes for the Exadata VM cluster on Exascale Infrastructure to be removed.
@@ -8612,105 +7469,7 @@ class RemoveVirtualMachineFromExadbVmClusterDetails(_Model):  # pylint: disable=
     def __init__(
         self,
         *,
-        db_nodes: list["_models.DbNodeDetails"],
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class ResourceAnchor(TrackedResource):
-    """Resource Anchor model.
-
-    :ivar id: Fully qualified resource ID for the resource. Ex -
-     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
-    :vartype id: str
-    :ivar name: The name of the resource.
-    :vartype name: str
-    :ivar type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or
-     "Microsoft.Storage/storageAccounts".
-    :vartype type: str
-    :ivar system_data: Azure Resource Manager metadata containing createdBy and modifiedBy
-     information.
-    :vartype system_data: ~azure.mgmt.oracledatabase.models.SystemData
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
-    :ivar location: The geo-location where the resource lives. Required.
-    :vartype location: str
-    :ivar properties: The resource-specific properties for this resource.
-    :vartype properties: ~azure.mgmt.oracledatabase.models.ResourceAnchorProperties
-    """
-
-    properties: Optional["_models.ResourceAnchorProperties"] = rest_field(
-        visibility=["read", "create", "update", "delete", "query"]
-    )
-    """The resource-specific properties for this resource."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        location: str,
-        tags: Optional[dict[str, str]] = None,
-        properties: Optional["_models.ResourceAnchorProperties"] = None,
-    ) -> None: ...
-
-    @overload
-    def __init__(self, mapping: Mapping[str, Any]) -> None:
-        """
-        :param mapping: raw JSON to initialize the model.
-        :type mapping: Mapping[str, Any]
-        """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-
-
-class ResourceAnchorProperties(_Model):
-    """Resource Anchor properties.
-
-    :ivar provisioning_state: ResourceAnchor provisioning state. Known values are: "Succeeded",
-     "Failed", "Canceled", and "Provisioning".
-    :vartype provisioning_state: str or
-     ~azure.mgmt.oracledatabase.models.AzureResourceProvisioningState
-    :ivar linked_compartment_id: Oracle Cloud Infrastructure compartment Id (ocid) which was
-     created or linked by customer with resource anchor. This compartmentId is different from where
-     resource Anchor lives.
-    :vartype linked_compartment_id: str
-    """
-
-    provisioning_state: Optional[Union[str, "_models.AzureResourceProvisioningState"]] = rest_field(
-        name="provisioningState", visibility=["read"]
-    )
-    """ResourceAnchor provisioning state. Known values are: \"Succeeded\", \"Failed\", \"Canceled\",
-     and \"Provisioning\"."""
-    linked_compartment_id: Optional[str] = rest_field(name="linkedCompartmentId", visibility=["read"])
-    """Oracle Cloud Infrastructure compartment Id (ocid) which was created or linked by customer with
-     resource anchor. This compartmentId is different from where resource Anchor lives."""
-
-
-class ResourceAnchorUpdate(_Model):
-    """The type used for update operations of the ResourceAnchor.
-
-    :ivar tags: Resource tags.
-    :vartype tags: dict[str, str]
-    """
-
-    tags: Optional[dict[str, str]] = rest_field(visibility=["read", "create", "update", "delete", "query"])
-    """Resource tags."""
-
-    @overload
-    def __init__(
-        self,
-        *,
-        tags: Optional[dict[str, str]] = None,
+        db_nodes: List["_models.DbNodeDetails"],
     ) -> None: ...
 
     @overload
@@ -8856,7 +7615,7 @@ class ScheduledOperationsType(_Model):
 class ScheduledOperationsTypeUpdate(_Model):
     """The list of scheduled operations.
 
-    :ivar day_of_week: Day of week.
+    :ivar day_of_week: Day of week. Required.
     :vartype day_of_week: ~azure.mgmt.oracledatabase.models.DayOfWeekUpdate
     :ivar scheduled_start_time: auto start time. value must be of ISO-8601 format HH:mm.
     :vartype scheduled_start_time: str
@@ -8864,10 +7623,10 @@ class ScheduledOperationsTypeUpdate(_Model):
     :vartype scheduled_stop_time: str
     """
 
-    day_of_week: Optional["_models.DayOfWeekUpdate"] = rest_field(
+    day_of_week: "_models.DayOfWeekUpdate" = rest_field(
         name="dayOfWeek", visibility=["read", "create", "update", "delete", "query"]
     )
-    """Day of week."""
+    """Day of week. Required."""
     scheduled_start_time: Optional[str] = rest_field(
         name="scheduledStartTime", visibility=["read", "create", "update", "delete", "query"]
     )
@@ -8881,7 +7640,7 @@ class ScheduledOperationsTypeUpdate(_Model):
     def __init__(
         self,
         *,
-        day_of_week: Optional["_models.DayOfWeekUpdate"] = None,
+        day_of_week: "_models.DayOfWeekUpdate",
         scheduled_start_time: Optional[str] = None,
         scheduled_stop_time: Optional[str] = None,
     ) -> None: ...

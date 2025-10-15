@@ -44,7 +44,6 @@ class TestPlaywrightMgmtPlaywrightWorkspacesOperations(AzureMgmtRecordedTestCase
                     "localAuth": "str",
                     "provisioningState": "str",
                     "regionalAffinity": "str",
-                    "workspaceId": "str",
                 },
                 "systemData": {
                     "createdAt": "2020-02-20 00:00:00",

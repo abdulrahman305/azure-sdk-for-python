@@ -1,2 +1,1 @@
--e ../../../eng/tools/azure-sdk-tools
-aiohttp
+-e ../../../tools/azure-sdk-tools

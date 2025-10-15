@@ -61,7 +61,6 @@ class TestOracleDatabaseMgmtCloudVmClustersOperations(AzureMgmtRecordedTestCase)
                     "dbServers": ["str"],
                     "diskRedundancy": "str",
                     "domain": "str",
-                    "exascaleDbStorageVaultId": "str",
                     "fileSystemConfigurationDetails": [{"fileSystemSizeGb": 0, "mountPoint": "str"}],
                     "iormConfigCache": {
                         "dbPlans": [{"dbName": "str", "flashCacheLimit": "str", "share": 0}],
@@ -90,7 +89,6 @@ class TestOracleDatabaseMgmtCloudVmClustersOperations(AzureMgmtRecordedTestCase)
                     "scanListenerPortTcp": 0,
                     "scanListenerPortTcpSsl": 0,
                     "shape": "str",
-                    "storageManagementType": "str",
                     "storageSizeInGbs": 0,
                     "subnetOcid": "str",
                     "systemVersion": "str",

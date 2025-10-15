@@ -146,7 +146,7 @@ class TableClient(TablesBaseClient):
         cls,
         table_url: str,
         *,
-        credential: Optional[Union[AzureNamedKeyCredential, AzureSasCredential, TokenCredential]] = None,
+        credential: Optional[Union[AzureNamedKeyCredential, AzureSasCredential]] = None,
         **kwargs: Any,
     ) -> "TableClient":
         """A client to interact with a specific Table.
@@ -158,8 +158,7 @@ class TableClient(TablesBaseClient):
             AzureSasCredential (azure-core), or a TokenCredential implementation from azure-identity.
         :paramtype credential:
             ~azure.core.credentials.AzureNamedKeyCredential or
-            ~azure.core.credentials.AzureSasCredential or
-            ~azure.core.credentials.TokenCredential or None
+            ~azure.core.credentials.AzureSasCredential or None
         :returns: A table client.
         :rtype: ~azure.data.tables.TableClient
         """

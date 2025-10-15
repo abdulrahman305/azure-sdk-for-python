@@ -9,7 +9,7 @@
 from collections.abc import MutableMapping
 from io import IOBase
 import json
-from typing import Any, AsyncIterator, Callable, IO, Optional, TypeVar, Union, cast, overload
+from typing import Any, AsyncIterator, Callable, Dict, IO, List, Optional, TypeVar, Union, cast, overload
 import urllib.parse
 
 from azure.core import AsyncPipelineClient
@@ -49,7 +49,6 @@ from ...operations._operations import (
     build_autonomous_database_national_character_sets_list_by_location_request,
     build_autonomous_database_versions_get_request,
     build_autonomous_database_versions_list_by_location_request,
-    build_autonomous_databases_action_request,
     build_autonomous_databases_change_disaster_recovery_configuration_request,
     build_autonomous_databases_create_or_update_request,
     build_autonomous_databases_delete_request,
@@ -63,7 +62,6 @@ from ...operations._operations import (
     build_autonomous_databases_switchover_request,
     build_autonomous_databases_update_request,
     build_cloud_exadata_infrastructures_add_storage_capacity_request,
-    build_cloud_exadata_infrastructures_configure_exascale_request,
     build_cloud_exadata_infrastructures_create_or_update_request,
     build_cloud_exadata_infrastructures_delete_request,
     build_cloud_exadata_infrastructures_get_request,
@@ -86,14 +84,6 @@ from ...operations._operations import (
     build_db_servers_list_by_parent_request,
     build_db_system_shapes_get_request,
     build_db_system_shapes_list_by_location_request,
-    build_db_systems_create_or_update_request,
-    build_db_systems_delete_request,
-    build_db_systems_get_request,
-    build_db_systems_list_by_resource_group_request,
-    build_db_systems_list_by_subscription_request,
-    build_db_systems_update_request,
-    build_db_versions_get_request,
-    build_db_versions_list_by_location_request,
     build_dns_private_views_get_request,
     build_dns_private_views_list_by_location_request,
     build_dns_private_zones_get_request,
@@ -120,12 +110,6 @@ from ...operations._operations import (
     build_gi_minor_versions_list_by_parent_request,
     build_gi_versions_get_request,
     build_gi_versions_list_by_location_request,
-    build_network_anchors_create_or_update_request,
-    build_network_anchors_delete_request,
-    build_network_anchors_get_request,
-    build_network_anchors_list_by_resource_group_request,
-    build_network_anchors_list_by_subscription_request,
-    build_network_anchors_update_request,
     build_operations_list_request,
     build_oracle_subscriptions_add_azure_subscriptions_request,
     build_oracle_subscriptions_create_or_update_request,
@@ -136,12 +120,6 @@ from ...operations._operations import (
     build_oracle_subscriptions_list_cloud_account_details_request,
     build_oracle_subscriptions_list_saas_subscription_details_request,
     build_oracle_subscriptions_update_request,
-    build_resource_anchors_create_or_update_request,
-    build_resource_anchors_delete_request,
-    build_resource_anchors_get_request,
-    build_resource_anchors_list_by_resource_group_request,
-    build_resource_anchors_list_by_subscription_request,
-    build_resource_anchors_update_request,
     build_system_versions_get_request,
     build_system_versions_list_by_location_request,
     build_virtual_network_addresses_create_or_update_request,
@@ -152,9 +130,8 @@ from ...operations._operations import (
 from .._configuration import OracleDatabaseMgmtClientConfiguration
 
 T = TypeVar("T")
-ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, dict[str, Any]], Any]]
+ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, Dict[str, Any]], Any]]
 JSON = MutableMapping[str, Any]
-List = list
 
 
 class Operations:
@@ -250,7 +227,7 @@ class Operations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -353,7 +330,7 @@ class CloudExadataInfrastructuresOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -416,7 +393,7 @@ class CloudExadataInfrastructuresOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -653,7 +630,7 @@ class CloudExadataInfrastructuresOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -722,7 +699,7 @@ class CloudExadataInfrastructuresOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -943,7 +920,7 @@ class CloudExadataInfrastructuresOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -1101,7 +1078,7 @@ class CloudExadataInfrastructuresOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -1150,7 +1127,7 @@ class CloudExadataInfrastructuresOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -1235,274 +1212,23 @@ class CloudExadataInfrastructuresOperations:
             self._client, raw_result, get_long_running_output, polling_method  # type: ignore
         )
 
-    @api_version_validation(
-        method_added_on="2025-08-01-preview",
-        params_added_on={
-            "2025-08-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "cloudexadatainfrastructurename",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def _configure_exascale_initial(
-        self,
-        resource_group_name: str,
-        cloudexadatainfrastructurename: str,
-        body: Union[_models.ConfigureExascaleCloudExadataInfrastructureDetails, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
 
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
+class ListActionsOperations:
+    """
+    .. warning::
+        **DO NOT** instantiate this class directly.
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
+        Instead, you should access the following operations through
+        :class:`~azure.mgmt.oracledatabase.aio.OracleDatabaseMgmtClient`'s
+        :attr:`list_actions` attribute.
+    """
 
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(body, (IOBase, bytes)):
-            _content = body
-        else:
-            _content = json.dumps(body, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_cloud_exadata_infrastructures_configure_exascale_request(
-            resource_group_name=resource_group_name,
-            cloudexadatainfrastructurename=cloudexadatainfrastructurename,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 202]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_configure_exascale(
-        self,
-        resource_group_name: str,
-        cloudexadatainfrastructurename: str,
-        body: _models.ConfigureExascaleCloudExadataInfrastructureDetails,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.CloudExadataInfrastructure]:
-        """Configures Exascale on Cloud exadata infrastructure resource.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param cloudexadatainfrastructurename: CloudExadataInfrastructure name. Required.
-        :type cloudexadatainfrastructurename: str
-        :param body: The content of the action request. Required.
-        :type body:
-         ~azure.mgmt.oracledatabase.models.ConfigureExascaleCloudExadataInfrastructureDetails
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns CloudExadataInfrastructure. The
-         CloudExadataInfrastructure is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.CloudExadataInfrastructure]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_configure_exascale(
-        self,
-        resource_group_name: str,
-        cloudexadatainfrastructurename: str,
-        body: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.CloudExadataInfrastructure]:
-        """Configures Exascale on Cloud exadata infrastructure resource.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param cloudexadatainfrastructurename: CloudExadataInfrastructure name. Required.
-        :type cloudexadatainfrastructurename: str
-        :param body: The content of the action request. Required.
-        :type body: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns CloudExadataInfrastructure. The
-         CloudExadataInfrastructure is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.CloudExadataInfrastructure]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_configure_exascale(
-        self,
-        resource_group_name: str,
-        cloudexadatainfrastructurename: str,
-        body: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.CloudExadataInfrastructure]:
-        """Configures Exascale on Cloud exadata infrastructure resource.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param cloudexadatainfrastructurename: CloudExadataInfrastructure name. Required.
-        :type cloudexadatainfrastructurename: str
-        :param body: The content of the action request. Required.
-        :type body: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns CloudExadataInfrastructure. The
-         CloudExadataInfrastructure is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.CloudExadataInfrastructure]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-08-01-preview",
-        params_added_on={
-            "2025-08-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "cloudexadatainfrastructurename",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def begin_configure_exascale(
-        self,
-        resource_group_name: str,
-        cloudexadatainfrastructurename: str,
-        body: Union[_models.ConfigureExascaleCloudExadataInfrastructureDetails, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.CloudExadataInfrastructure]:
-        """Configures Exascale on Cloud exadata infrastructure resource.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param cloudexadatainfrastructurename: CloudExadataInfrastructure name. Required.
-        :type cloudexadatainfrastructurename: str
-        :param body: The content of the action request. Is one of the following types:
-         ConfigureExascaleCloudExadataInfrastructureDetails, JSON, IO[bytes] Required.
-        :type body:
-         ~azure.mgmt.oracledatabase.models.ConfigureExascaleCloudExadataInfrastructureDetails or JSON or
-         IO[bytes]
-        :return: An instance of AsyncLROPoller that returns CloudExadataInfrastructure. The
-         CloudExadataInfrastructure is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.CloudExadataInfrastructure]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.CloudExadataInfrastructure] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._configure_exascale_initial(
-                resource_group_name=resource_group_name,
-                cloudexadatainfrastructurename=cloudexadatainfrastructurename,
-                body=body,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response_headers = {}
-            response = pipeline_response.http_response
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-            deserialized = _deserialize(_models.CloudExadataInfrastructure, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.CloudExadataInfrastructure].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.CloudExadataInfrastructure](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
+    def __init__(self, *args, **kwargs) -> None:
+        input_args = list(args)
+        self._client: AsyncPipelineClient = input_args.pop(0) if input_args else kwargs.pop("client")
+        self._config: OracleDatabaseMgmtClientConfiguration = input_args.pop(0) if input_args else kwargs.pop("config")
+        self._serialize: Serializer = input_args.pop(0) if input_args else kwargs.pop("serializer")
+        self._deserialize: Deserializer = input_args.pop(0) if input_args else kwargs.pop("deserializer")
 
 
 class DbServersOperations:
@@ -1580,7 +1306,7 @@ class DbServersOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -1679,7 +1405,7 @@ class DbServersOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -1782,7 +1508,7 @@ class CloudVmClustersOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -1845,7 +1571,7 @@ class CloudVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -2074,7 +1800,7 @@ class CloudVmClustersOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -2143,7 +1869,7 @@ class CloudVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -2359,7 +2085,7 @@ class CloudVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -2517,7 +2243,7 @@ class CloudVmClustersOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -2580,7 +2306,7 @@ class CloudVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -2814,7 +2540,7 @@ class CloudVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -3145,7 +2871,7 @@ class CloudVmClustersOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -3234,7 +2960,7 @@ class VirtualNetworkAddressesOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -3485,7 +3211,7 @@ class VirtualNetworkAddressesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -3541,7 +3267,7 @@ class VirtualNetworkAddressesOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -3705,7 +3431,7 @@ class VirtualNetworkAddressesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -3782,7 +3508,7 @@ class SystemVersionsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -3876,7 +3602,7 @@ class SystemVersionsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -3979,7 +3705,7 @@ class OracleSubscriptionsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -4036,7 +3762,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4218,7 +3944,7 @@ class OracleSubscriptionsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -4281,7 +4007,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4454,7 +4180,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4552,7 +4278,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4659,7 +4385,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4768,7 +4494,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4838,22 +4564,7 @@ class OracleSubscriptionsOperations:
 
     @api_version_validation(
         method_added_on="2024-06-01-preview",
-        params_added_on={"2024-06-01-preview": ["api_version", "subscription_id", "content_type"]},
-        api_versions_list=[
-            "2024-06-01-preview",
-            "2024-06-01",
-            "2024-08-01-preview",
-            "2024-10-01-preview",
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
+        params_added_on={"2024-06-01-preview": ["api_version", "subscription_id", "content_type", "accept"]},
     )
     async def _add_azure_subscriptions_initial(
         self, body: Union[_models.AzureSubscriptions, JSON, IO[bytes]], **kwargs: Any
@@ -4905,7 +4616,7 @@ class OracleSubscriptionsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -4970,22 +4681,7 @@ class OracleSubscriptionsOperations:
     @distributed_trace_async
     @api_version_validation(
         method_added_on="2024-06-01-preview",
-        params_added_on={"2024-06-01-preview": ["api_version", "subscription_id", "content_type"]},
-        api_versions_list=[
-            "2024-06-01-preview",
-            "2024-06-01",
-            "2024-08-01-preview",
-            "2024-10-01-preview",
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
+        params_added_on={"2024-06-01-preview": ["api_version", "subscription_id", "content_type", "accept"]},
     )
     async def begin_add_azure_subscriptions(
         self, body: Union[_models.AzureSubscriptions, JSON, IO[bytes]], **kwargs: Any
@@ -5115,7 +4811,7 @@ class DbNodesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -5214,7 +4910,7 @@ class DbNodesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -5279,7 +4975,7 @@ class DbNodesOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -5540,7 +5236,7 @@ class GiVersionsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -5557,20 +5253,8 @@ class GiVersionsOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={
-            "2024-12-01-preview": ["api_version", "subscription_id", "location", "shape", "zone", "accept"],
-            "2025-08-01-preview": ["shape_attribute"],
+            "2024-12-01-preview": ["api_version", "subscription_id", "location", "shape", "zone", "accept"]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_location(
         self,
@@ -5578,7 +5262,6 @@ class GiVersionsOperations:
         *,
         shape: Optional[Union[str, _models.SystemShapes]] = None,
         zone: Optional[str] = None,
-        shape_attribute: Optional[str] = None,
         **kwargs: Any
     ) -> AsyncItemPaged["_models.GiVersion"]:
         """List GiVersion resources by SubscriptionLocationResource.
@@ -5590,9 +5273,6 @@ class GiVersionsOperations:
         :paramtype shape: str or ~azure.mgmt.oracledatabase.models.SystemShapes
         :keyword zone: Filters the result for the given Azure Availability Zone. Default value is None.
         :paramtype zone: str
-        :keyword shape_attribute: Filters the result for the given Shape Attribute, such as
-         BLOCK_STORAGE or SMART_STORAGE. Default value is None.
-        :paramtype shape_attribute: str
         :return: An iterator like instance of GiVersion
         :rtype: ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.GiVersion]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -5618,7 +5298,6 @@ class GiVersionsOperations:
                     subscription_id=self._config.subscription_id,
                     shape=shape,
                     zone=zone,
-                    shape_attribute=shape_attribute,
                     api_version=self._config.api_version,
                     headers=_headers,
                     params=_params,
@@ -5670,7 +5349,7 @@ class GiVersionsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -5709,17 +5388,6 @@ class GiMinorVersionsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_parent(
         self,
@@ -5820,7 +5488,7 @@ class GiMinorVersionsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -5840,17 +5508,6 @@ class GiMinorVersionsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def get(
         self, location: str, giversionname: str, gi_minor_version_name: str, **kwargs: Any
@@ -5908,7 +5565,7 @@ class GiMinorVersionsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -5991,7 +5648,7 @@ class DbSystemShapesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -6007,24 +5664,10 @@ class DbSystemShapesOperations:
     @distributed_trace
     @api_version_validation(
         method_added_on="2024-12-01-preview",
-        params_added_on={
-            "2024-12-01-preview": ["api_version", "subscription_id", "location", "zone", "accept"],
-            "2025-08-01-preview": ["shape_attribute"],
-        },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
+        params_added_on={"2024-12-01-preview": ["api_version", "subscription_id", "location", "zone", "accept"]},
     )
     def list_by_location(
-        self, location: str, *, zone: Optional[str] = None, shape_attribute: Optional[str] = None, **kwargs: Any
+        self, location: str, *, zone: Optional[str] = None, **kwargs: Any
     ) -> AsyncItemPaged["_models.DbSystemShape"]:
         """List DbSystemShape resources by SubscriptionLocationResource.
 
@@ -6032,9 +5675,6 @@ class DbSystemShapesOperations:
         :type location: str
         :keyword zone: Filters the result for the given Azure Availability Zone. Default value is None.
         :paramtype zone: str
-        :keyword shape_attribute: Filters the result for the given Shape Attribute, such as
-         BLOCK_STORAGE or SMART_STORAGE. Default value is None.
-        :paramtype shape_attribute: str
         :return: An iterator like instance of DbSystemShape
         :rtype:
          ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.DbSystemShape]
@@ -6060,7 +5700,6 @@ class DbSystemShapesOperations:
                     location=location,
                     subscription_id=self._config.subscription_id,
                     zone=zone,
-                    shape_attribute=shape_attribute,
                     api_version=self._config.api_version,
                     headers=_headers,
                     params=_params,
@@ -6112,7 +5751,7 @@ class DbSystemShapesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -6189,7 +5828,7 @@ class DnsPrivateViewsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -6283,7 +5922,7 @@ class DnsPrivateViewsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -6360,7 +5999,7 @@ class DnsPrivateZonesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -6454,7 +6093,7 @@ class DnsPrivateZonesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -6485,16 +6124,6 @@ class FlexComponentsOperations:
         params_added_on={
             "2025-01-01-preview": ["api_version", "subscription_id", "location", "flex_component_name", "accept"]
         },
-        api_versions_list=[
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def get(self, location: str, flex_component_name: str, **kwargs: Any) -> _models.FlexComponent:
         """Get a FlexComponent.
@@ -6547,7 +6176,7 @@ class FlexComponentsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -6564,16 +6193,6 @@ class FlexComponentsOperations:
     @api_version_validation(
         method_added_on="2025-01-01-preview",
         params_added_on={"2025-01-01-preview": ["api_version", "subscription_id", "location", "shape", "accept"]},
-        api_versions_list=[
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_parent(
         self, location: str, *, shape: Optional[Union[str, _models.SystemShapes]] = None, **kwargs: Any
@@ -6661,7 +6280,7 @@ class FlexComponentsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -6669,7 +6288,7 @@ class FlexComponentsOperations:
         return AsyncItemPaged(get_next, extract_data)
 
 
-class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
+class AutonomousDatabasesOperations:
     """
     .. warning::
         **DO NOT** instantiate this class directly.
@@ -6764,7 +6383,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -6827,7 +6446,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -7062,7 +6681,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -7117,7 +6736,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -7247,7 +6866,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -7510,7 +7129,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -7573,7 +7192,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -7811,7 +7430,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -8151,7 +7770,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -8220,7 +7839,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -8445,7 +8064,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -8543,18 +8162,6 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-10-01-preview",
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _change_disaster_recovery_configuration_initial(  # pylint: disable=name-too-long
         self,
@@ -8612,7 +8219,7 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -8727,18 +8334,6 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-10-01-preview",
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_change_disaster_recovery_configuration(  # pylint: disable=name-too-long
         self,
@@ -8774,285 +8369,6 @@ class AutonomousDatabasesOperations:  # pylint: disable=too-many-public-methods
         cont_token: Optional[str] = kwargs.pop("continuation_token", None)
         if cont_token is None:
             raw_result = await self._change_disaster_recovery_configuration_initial(
-                resource_group_name=resource_group_name,
-                autonomousdatabasename=autonomousdatabasename,
-                body=body,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response_headers = {}
-            response = pipeline_response.http_response
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-            deserialized = _deserialize(_models.AutonomousDatabase, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.AutonomousDatabase].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.AutonomousDatabase](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @api_version_validation(
-        method_added_on="2025-06-01-preview",
-        params_added_on={
-            "2025-06-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "autonomousdatabasename",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _action_initial(
-        self,
-        resource_group_name: str,
-        autonomousdatabasename: str,
-        body: Union[_models.AutonomousDatabaseLifecycleAction, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(body, (IOBase, bytes)):
-            _content = body
-        else:
-            _content = json.dumps(body, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_autonomous_databases_action_request(
-            resource_group_name=resource_group_name,
-            autonomousdatabasename=autonomousdatabasename,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 202]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_action(
-        self,
-        resource_group_name: str,
-        autonomousdatabasename: str,
-        body: _models.AutonomousDatabaseLifecycleAction,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.AutonomousDatabase]:
-        """Perform Lifecycle Management Action on Autonomous Database.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param autonomousdatabasename: The database name. Required.
-        :type autonomousdatabasename: str
-        :param body: The content of the action request. Required.
-        :type body: ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleAction
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns AutonomousDatabase. The AutonomousDatabase
-         is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.AutonomousDatabase]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_action(
-        self,
-        resource_group_name: str,
-        autonomousdatabasename: str,
-        body: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.AutonomousDatabase]:
-        """Perform Lifecycle Management Action on Autonomous Database.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param autonomousdatabasename: The database name. Required.
-        :type autonomousdatabasename: str
-        :param body: The content of the action request. Required.
-        :type body: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns AutonomousDatabase. The AutonomousDatabase
-         is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.AutonomousDatabase]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_action(
-        self,
-        resource_group_name: str,
-        autonomousdatabasename: str,
-        body: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.AutonomousDatabase]:
-        """Perform Lifecycle Management Action on Autonomous Database.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param autonomousdatabasename: The database name. Required.
-        :type autonomousdatabasename: str
-        :param body: The content of the action request. Required.
-        :type body: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns AutonomousDatabase. The AutonomousDatabase
-         is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.AutonomousDatabase]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-06-01-preview",
-        params_added_on={
-            "2025-06-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "autonomousdatabasename",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_action(
-        self,
-        resource_group_name: str,
-        autonomousdatabasename: str,
-        body: Union[_models.AutonomousDatabaseLifecycleAction, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.AutonomousDatabase]:
-        """Perform Lifecycle Management Action on Autonomous Database.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param autonomousdatabasename: The database name. Required.
-        :type autonomousdatabasename: str
-        :param body: The content of the action request. Is one of the following types:
-         AutonomousDatabaseLifecycleAction, JSON, IO[bytes] Required.
-        :type body: ~azure.mgmt.oracledatabase.models.AutonomousDatabaseLifecycleAction or JSON or
-         IO[bytes]
-        :return: An instance of AsyncLROPoller that returns AutonomousDatabase. The AutonomousDatabase
-         is compatible with MutableMapping
-        :rtype:
-         ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.AutonomousDatabase]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.AutonomousDatabase] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._action_initial(
                 resource_group_name=resource_group_name,
                 autonomousdatabasename=autonomousdatabasename,
                 body=body,
@@ -9175,7 +8491,7 @@ class AutonomousDatabaseBackupsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -9427,7 +8743,7 @@ class AutonomousDatabaseBackupsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -9483,7 +8799,7 @@ class AutonomousDatabaseBackupsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -9618,7 +8934,7 @@ class AutonomousDatabaseBackupsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -9897,7 +9213,7 @@ class AutonomousDatabaseBackupsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -9975,7 +9291,7 @@ class AutonomousDatabaseCharacterSetsOperations:  # pylint: disable=name-too-lon
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -10071,7 +9387,7 @@ class AutonomousDatabaseCharacterSetsOperations:  # pylint: disable=name-too-lon
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -10151,7 +9467,7 @@ class AutonomousDatabaseNationalCharacterSetsOperations:  # pylint: disable=name
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -10249,7 +9565,7 @@ class AutonomousDatabaseNationalCharacterSetsOperations:  # pylint: disable=name
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -10326,7 +9642,7 @@ class AutonomousDatabaseVersionsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -10420,7 +9736,7 @@ class AutonomousDatabaseVersionsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -10449,17 +9765,6 @@ class ExadbVmClustersOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={"2024-12-01-preview": ["api_version", "subscription_id", "accept"]},
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_subscription(self, **kwargs: Any) -> AsyncItemPaged["_models.ExadbVmCluster"]:
         """List ExadbVmCluster resources by subscription ID.
@@ -10538,7 +9843,7 @@ class ExadbVmClustersOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -10557,17 +9862,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _create_or_update_initial(
         self,
@@ -10625,7 +9919,7 @@ class ExadbVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -10739,17 +10033,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_create_or_update(
         self,
@@ -10837,17 +10120,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def get(self, resource_group_name: str, exadb_vm_cluster_name: str, **kwargs: Any) -> _models.ExadbVmCluster:
         """Get a ExadbVmCluster.
@@ -10901,7 +10173,7 @@ class ExadbVmClustersOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -10926,17 +10198,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _update_initial(
         self,
@@ -10994,7 +10255,7 @@ class ExadbVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -11106,17 +10367,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_update(
         self,
@@ -11195,19 +10445,14 @@ class ExadbVmClustersOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={
-            "2024-12-01-preview": ["api_version", "subscription_id", "resource_group_name", "exadb_vm_cluster_name"]
+            "2024-12-01-preview": [
+                "api_version",
+                "subscription_id",
+                "resource_group_name",
+                "exadb_vm_cluster_name",
+                "accept",
+            ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _delete_initial(
         self, resource_group_name: str, exadb_vm_cluster_name: str, **kwargs: Any
@@ -11251,7 +10496,7 @@ class ExadbVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -11270,19 +10515,14 @@ class ExadbVmClustersOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={
-            "2024-12-01-preview": ["api_version", "subscription_id", "resource_group_name", "exadb_vm_cluster_name"]
+            "2024-12-01-preview": [
+                "api_version",
+                "subscription_id",
+                "resource_group_name",
+                "exadb_vm_cluster_name",
+                "accept",
+            ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_delete(
         self, resource_group_name: str, exadb_vm_cluster_name: str, **kwargs: Any
@@ -11346,17 +10586,6 @@ class ExadbVmClustersOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={"2024-12-01-preview": ["api_version", "subscription_id", "resource_group_name", "accept"]},
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_resource_group(
         self, resource_group_name: str, **kwargs: Any
@@ -11441,7 +10670,7 @@ class ExadbVmClustersOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -11460,17 +10689,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _remove_vms_initial(
         self,
@@ -11528,7 +10746,7 @@ class ExadbVmClustersOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -11640,17 +10858,6 @@ class ExadbVmClustersOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_remove_vms(
         self,
@@ -11762,17 +10969,6 @@ class ExascaleDbNodesOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def get(
         self, resource_group_name: str, exadb_vm_cluster_name: str, exascale_db_node_name: str, **kwargs: Any
@@ -11831,7 +11027,7 @@ class ExascaleDbNodesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -11856,17 +11052,6 @@ class ExascaleDbNodesOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_parent(
         self, resource_group_name: str, exadb_vm_cluster_name: str, **kwargs: Any
@@ -11954,7 +11139,7 @@ class ExascaleDbNodesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -11974,17 +11159,6 @@ class ExascaleDbNodesOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _action_initial(
         self,
@@ -12044,7 +11218,7 @@ class ExascaleDbNodesOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -12166,17 +11340,6 @@ class ExascaleDbNodesOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_action(
         self,
@@ -12290,17 +11453,6 @@ class ExascaleDbStorageVaultsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def get(
         self, resource_group_name: str, exascale_db_storage_vault_name: str, **kwargs: Any
@@ -12356,7 +11508,7 @@ class ExascaleDbStorageVaultsOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -12381,17 +11533,6 @@ class ExascaleDbStorageVaultsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _create_initial(
         self,
@@ -12449,7 +11590,7 @@ class ExascaleDbStorageVaultsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -12566,17 +11707,6 @@ class ExascaleDbStorageVaultsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_create(
         self,
@@ -12665,17 +11795,6 @@ class ExascaleDbStorageVaultsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _update_initial(
         self,
@@ -12733,7 +11852,7 @@ class ExascaleDbStorageVaultsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -12848,17 +11967,6 @@ class ExascaleDbStorageVaultsOperations:
                 "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_update(
         self,
@@ -12944,19 +12052,9 @@ class ExascaleDbStorageVaultsOperations:
                 "subscription_id",
                 "resource_group_name",
                 "exascale_db_storage_vault_name",
+                "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def _delete_initial(
         self, resource_group_name: str, exascale_db_storage_vault_name: str, **kwargs: Any
@@ -13000,7 +12098,7 @@ class ExascaleDbStorageVaultsOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -13024,19 +12122,9 @@ class ExascaleDbStorageVaultsOperations:
                 "subscription_id",
                 "resource_group_name",
                 "exascale_db_storage_vault_name",
+                "accept",
             ]
         },
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     async def begin_delete(
         self, resource_group_name: str, exascale_db_storage_vault_name: str, **kwargs: Any
@@ -13100,17 +12188,6 @@ class ExascaleDbStorageVaultsOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={"2024-12-01-preview": ["api_version", "subscription_id", "resource_group_name", "accept"]},
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_resource_group(
         self, resource_group_name: str, **kwargs: Any
@@ -13195,7 +12272,7 @@ class ExascaleDbStorageVaultsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -13206,17 +12283,6 @@ class ExascaleDbStorageVaultsOperations:
     @api_version_validation(
         method_added_on="2024-12-01-preview",
         params_added_on={"2024-12-01-preview": ["api_version", "subscription_id", "accept"]},
-        api_versions_list=[
-            "2024-12-01-preview",
-            "2025-01-01-preview",
-            "2025-03-01",
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
     )
     def list_by_subscription(self, **kwargs: Any) -> AsyncItemPaged["_models.ExascaleDbStorageVault"]:
         """List ExascaleDbStorageVault resources by subscription ID.
@@ -13295,3148 +12361,7 @@ class ExascaleDbStorageVaultsOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-
-class NetworkAnchorsOperations:
-    """
-    .. warning::
-        **DO NOT** instantiate this class directly.
-
-        Instead, you should access the following operations through
-        :class:`~azure.mgmt.oracledatabase.aio.OracleDatabaseMgmtClient`'s
-        :attr:`network_anchors` attribute.
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        input_args = list(args)
-        self._client: AsyncPipelineClient = input_args.pop(0) if input_args else kwargs.pop("client")
-        self._config: OracleDatabaseMgmtClientConfiguration = input_args.pop(0) if input_args else kwargs.pop("config")
-        self._serialize: Serializer = input_args.pop(0) if input_args else kwargs.pop("serializer")
-        self._deserialize: Deserializer = input_args.pop(0) if input_args else kwargs.pop("deserializer")
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={"2025-04-01-preview": ["api_version", "subscription_id", "accept"]},
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    def list_by_subscription(self, **kwargs: Any) -> AsyncItemPaged["_models.NetworkAnchor"]:
-        """List NetworkAnchor resources by subscription ID.
-
-        :return: An iterator like instance of NetworkAnchor
-        :rtype:
-         ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.NetworkAnchor]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_network_anchors_list_by_subscription_request(
-                    subscription_id=self._config.subscription_id,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.NetworkAnchor], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "network_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _create_or_update_initial(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        resource: Union[_models.NetworkAnchor, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(resource, (IOBase, bytes)):
-            _content = resource
-        else:
-            _content = json.dumps(resource, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_network_anchors_create_or_update_request(
-            resource_group_name=resource_group_name,
-            network_anchor_name=network_anchor_name,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 201]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 201:
-            response_headers["Azure-AsyncOperation"] = self._deserialize(
-                "str", response.headers.get("Azure-AsyncOperation")
-            )
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        resource: _models.NetworkAnchor,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Create a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: ~azure.mgmt.oracledatabase.models.NetworkAnchor
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        resource: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Create a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        resource: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Create a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "network_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        resource: Union[_models.NetworkAnchor, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Create a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param resource: Resource create parameters. Is one of the following types: NetworkAnchor,
-         JSON, IO[bytes] Required.
-        :type resource: ~azure.mgmt.oracledatabase.models.NetworkAnchor or JSON or IO[bytes]
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.NetworkAnchor] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._create_or_update_initial(
-                resource_group_name=resource_group_name,
-                network_anchor_name=network_anchor_name,
-                resource=resource,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response = pipeline_response.http_response
-            deserialized = _deserialize(_models.NetworkAnchor, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, {})  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.NetworkAnchor].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.NetworkAnchor](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "network_anchor_name",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def get(self, resource_group_name: str, network_anchor_name: str, **kwargs: Any) -> _models.NetworkAnchor:
-        """Get a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :return: NetworkAnchor. The NetworkAnchor is compatible with MutableMapping
-        :rtype: ~azure.mgmt.oracledatabase.models.NetworkAnchor
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[_models.NetworkAnchor] = kwargs.pop("cls", None)
-
-        _request = build_network_anchors_get_request(
-            resource_group_name=resource_group_name,
-            network_anchor_name=network_anchor_name,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = kwargs.pop("stream", False)
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200]:
-            if _stream:
-                try:
-                    await response.read()  # Load the body in memory and close the socket
-                except (StreamConsumedError, StreamClosedError):
-                    pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        if _stream:
-            deserialized = response.iter_bytes()
-        else:
-            deserialized = _deserialize(_models.NetworkAnchor, response.json())
-
-        if cls:
-            return cls(pipeline_response, deserialized, {})  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "network_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _update_initial(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        properties: Union[_models.NetworkAnchorUpdate, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(properties, (IOBase, bytes)):
-            _content = properties
-        else:
-            _content = json.dumps(properties, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_network_anchors_update_request(
-            resource_group_name=resource_group_name,
-            network_anchor_name=network_anchor_name,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 202]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        properties: _models.NetworkAnchorUpdate,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Update a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: ~azure.mgmt.oracledatabase.models.NetworkAnchorUpdate
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        properties: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Update a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        properties: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Update a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "network_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        network_anchor_name: str,
-        properties: Union[_models.NetworkAnchorUpdate, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.NetworkAnchor]:
-        """Update a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :param properties: The resource properties to be updated. Is one of the following types:
-         NetworkAnchorUpdate, JSON, IO[bytes] Required.
-        :type properties: ~azure.mgmt.oracledatabase.models.NetworkAnchorUpdate or JSON or IO[bytes]
-        :return: An instance of AsyncLROPoller that returns NetworkAnchor. The NetworkAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.NetworkAnchor] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._update_initial(
-                resource_group_name=resource_group_name,
-                network_anchor_name=network_anchor_name,
-                properties=properties,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response = pipeline_response.http_response
-            deserialized = _deserialize(_models.NetworkAnchor, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, {})  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.NetworkAnchor].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.NetworkAnchor](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": ["api_version", "subscription_id", "resource_group_name", "network_anchor_name"]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _delete_initial(
-        self, resource_group_name: str, network_anchor_name: str, **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        _request = build_network_anchors_delete_request(
-            resource_group_name=resource_group_name,
-            network_anchor_name=network_anchor_name,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [202, 204]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": ["api_version", "subscription_id", "resource_group_name", "network_anchor_name"]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_delete(
-        self, resource_group_name: str, network_anchor_name: str, **kwargs: Any
-    ) -> AsyncLROPoller[None]:
-        """Delete a NetworkAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param network_anchor_name: The name of the NetworkAnchor. Required.
-        :type network_anchor_name: str
-        :return: An instance of AsyncLROPoller that returns None
-        :rtype: ~azure.core.polling.AsyncLROPoller[None]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[None] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._delete_initial(
-                resource_group_name=resource_group_name,
-                network_anchor_name=network_anchor_name,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):  # pylint: disable=inconsistent-return-statements
-            if cls:
-                return cls(pipeline_response, None, {})  # type: ignore
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[None].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[None](self._client, raw_result, get_long_running_output, polling_method)  # type: ignore
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={"2025-04-01-preview": ["api_version", "subscription_id", "resource_group_name", "accept"]},
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    def list_by_resource_group(
-        self, resource_group_name: str, **kwargs: Any
-    ) -> AsyncItemPaged["_models.NetworkAnchor"]:
-        """List NetworkAnchor resources by resource group.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :return: An iterator like instance of NetworkAnchor
-        :rtype:
-         ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.NetworkAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.NetworkAnchor]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_network_anchors_list_by_resource_group_request(
-                    resource_group_name=resource_group_name,
-                    subscription_id=self._config.subscription_id,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.NetworkAnchor], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-
-class ResourceAnchorsOperations:
-    """
-    .. warning::
-        **DO NOT** instantiate this class directly.
-
-        Instead, you should access the following operations through
-        :class:`~azure.mgmt.oracledatabase.aio.OracleDatabaseMgmtClient`'s
-        :attr:`resource_anchors` attribute.
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        input_args = list(args)
-        self._client: AsyncPipelineClient = input_args.pop(0) if input_args else kwargs.pop("client")
-        self._config: OracleDatabaseMgmtClientConfiguration = input_args.pop(0) if input_args else kwargs.pop("config")
-        self._serialize: Serializer = input_args.pop(0) if input_args else kwargs.pop("serializer")
-        self._deserialize: Deserializer = input_args.pop(0) if input_args else kwargs.pop("deserializer")
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={"2025-04-01-preview": ["api_version", "subscription_id", "accept"]},
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    def list_by_subscription(self, **kwargs: Any) -> AsyncItemPaged["_models.ResourceAnchor"]:
-        """List ResourceAnchor resources by subscription ID.
-
-        :return: An iterator like instance of ResourceAnchor
-        :rtype:
-         ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.ResourceAnchor]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_resource_anchors_list_by_subscription_request(
-                    subscription_id=self._config.subscription_id,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.ResourceAnchor], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "resource_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _create_or_update_initial(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        resource: Union[_models.ResourceAnchor, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(resource, (IOBase, bytes)):
-            _content = resource
-        else:
-            _content = json.dumps(resource, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_resource_anchors_create_or_update_request(
-            resource_group_name=resource_group_name,
-            resource_anchor_name=resource_anchor_name,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 201]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 201:
-            response_headers["Azure-AsyncOperation"] = self._deserialize(
-                "str", response.headers.get("Azure-AsyncOperation")
-            )
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        resource: _models.ResourceAnchor,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Create a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: ~azure.mgmt.oracledatabase.models.ResourceAnchor
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        resource: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Create a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        resource: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Create a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "resource_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        resource: Union[_models.ResourceAnchor, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Create a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param resource: Resource create parameters. Is one of the following types: ResourceAnchor,
-         JSON, IO[bytes] Required.
-        :type resource: ~azure.mgmt.oracledatabase.models.ResourceAnchor or JSON or IO[bytes]
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.ResourceAnchor] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._create_or_update_initial(
-                resource_group_name=resource_group_name,
-                resource_anchor_name=resource_anchor_name,
-                resource=resource,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response = pipeline_response.http_response
-            deserialized = _deserialize(_models.ResourceAnchor, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, {})  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.ResourceAnchor].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.ResourceAnchor](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "resource_anchor_name",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def get(self, resource_group_name: str, resource_anchor_name: str, **kwargs: Any) -> _models.ResourceAnchor:
-        """Get a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :return: ResourceAnchor. The ResourceAnchor is compatible with MutableMapping
-        :rtype: ~azure.mgmt.oracledatabase.models.ResourceAnchor
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[_models.ResourceAnchor] = kwargs.pop("cls", None)
-
-        _request = build_resource_anchors_get_request(
-            resource_group_name=resource_group_name,
-            resource_anchor_name=resource_anchor_name,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = kwargs.pop("stream", False)
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200]:
-            if _stream:
-                try:
-                    await response.read()  # Load the body in memory and close the socket
-                except (StreamConsumedError, StreamClosedError):
-                    pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        if _stream:
-            deserialized = response.iter_bytes()
-        else:
-            deserialized = _deserialize(_models.ResourceAnchor, response.json())
-
-        if cls:
-            return cls(pipeline_response, deserialized, {})  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "resource_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _update_initial(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        properties: Union[_models.ResourceAnchorUpdate, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(properties, (IOBase, bytes)):
-            _content = properties
-        else:
-            _content = json.dumps(properties, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_resource_anchors_update_request(
-            resource_group_name=resource_group_name,
-            resource_anchor_name=resource_anchor_name,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 202]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        properties: _models.ResourceAnchorUpdate,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Update a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: ~azure.mgmt.oracledatabase.models.ResourceAnchorUpdate
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        properties: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Update a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        properties: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Update a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "resource_anchor_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        resource_anchor_name: str,
-        properties: Union[_models.ResourceAnchorUpdate, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.ResourceAnchor]:
-        """Update a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :param properties: The resource properties to be updated. Is one of the following types:
-         ResourceAnchorUpdate, JSON, IO[bytes] Required.
-        :type properties: ~azure.mgmt.oracledatabase.models.ResourceAnchorUpdate or JSON or IO[bytes]
-        :return: An instance of AsyncLROPoller that returns ResourceAnchor. The ResourceAnchor is
-         compatible with MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.ResourceAnchor] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._update_initial(
-                resource_group_name=resource_group_name,
-                resource_anchor_name=resource_anchor_name,
-                properties=properties,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response = pipeline_response.http_response
-            deserialized = _deserialize(_models.ResourceAnchor, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, {})  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.ResourceAnchor].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.ResourceAnchor](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": ["api_version", "subscription_id", "resource_group_name", "resource_anchor_name"]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def _delete_initial(
-        self, resource_group_name: str, resource_anchor_name: str, **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        _request = build_resource_anchors_delete_request(
-            resource_group_name=resource_group_name,
-            resource_anchor_name=resource_anchor_name,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [202, 204]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={
-            "2025-04-01-preview": ["api_version", "subscription_id", "resource_group_name", "resource_anchor_name"]
-        },
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    async def begin_delete(
-        self, resource_group_name: str, resource_anchor_name: str, **kwargs: Any
-    ) -> AsyncLROPoller[None]:
-        """Delete a ResourceAnchor.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param resource_anchor_name: The name of the ResourceAnchor. Required.
-        :type resource_anchor_name: str
-        :return: An instance of AsyncLROPoller that returns None
-        :rtype: ~azure.core.polling.AsyncLROPoller[None]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[None] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._delete_initial(
-                resource_group_name=resource_group_name,
-                resource_anchor_name=resource_anchor_name,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):  # pylint: disable=inconsistent-return-statements
-            if cls:
-                return cls(pipeline_response, None, {})  # type: ignore
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[None].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[None](self._client, raw_result, get_long_running_output, polling_method)  # type: ignore
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-04-01-preview",
-        params_added_on={"2025-04-01-preview": ["api_version", "subscription_id", "resource_group_name", "accept"]},
-        api_versions_list=[
-            "2025-04-01-preview",
-            "2025-06-01-preview",
-            "2025-07-01-preview",
-            "2025-08-01-preview",
-            "2025-08-15-preview",
-            "2025-09-01",
-        ],
-    )
-    def list_by_resource_group(
-        self, resource_group_name: str, **kwargs: Any
-    ) -> AsyncItemPaged["_models.ResourceAnchor"]:
-        """List ResourceAnchor resources by resource group.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :return: An iterator like instance of ResourceAnchor
-        :rtype:
-         ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.ResourceAnchor]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.ResourceAnchor]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_resource_anchors_list_by_resource_group_request(
-                    resource_group_name=resource_group_name,
-                    subscription_id=self._config.subscription_id,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.ResourceAnchor], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-
-class DbSystemsOperations:
-    """
-    .. warning::
-        **DO NOT** instantiate this class directly.
-
-        Instead, you should access the following operations through
-        :class:`~azure.mgmt.oracledatabase.aio.OracleDatabaseMgmtClient`'s
-        :attr:`db_systems` attribute.
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        input_args = list(args)
-        self._client: AsyncPipelineClient = input_args.pop(0) if input_args else kwargs.pop("client")
-        self._config: OracleDatabaseMgmtClientConfiguration = input_args.pop(0) if input_args else kwargs.pop("config")
-        self._serialize: Serializer = input_args.pop(0) if input_args else kwargs.pop("serializer")
-        self._deserialize: Deserializer = input_args.pop(0) if input_args else kwargs.pop("deserializer")
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={"2025-07-01-preview": ["api_version", "subscription_id", "accept"]},
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    def list_by_subscription(self, **kwargs: Any) -> AsyncItemPaged["_models.DbSystem"]:
-        """List DbSystem resources by subscription ID.
-
-        :return: An iterator like instance of DbSystem
-        :rtype: ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.DbSystem]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_db_systems_list_by_subscription_request(
-                    subscription_id=self._config.subscription_id,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.DbSystem], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "db_system_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def _create_or_update_initial(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        resource: Union[_models.DbSystem, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(resource, (IOBase, bytes)):
-            _content = resource
-        else:
-            _content = json.dumps(resource, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_db_systems_create_or_update_request(
-            resource_group_name=resource_group_name,
-            db_system_name=db_system_name,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 201]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 201:
-            response_headers["Azure-AsyncOperation"] = self._deserialize(
-                "str", response.headers.get("Azure-AsyncOperation")
-            )
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        resource: _models.DbSystem,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Create a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: ~azure.mgmt.oracledatabase.models.DbSystem
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        resource: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Create a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        resource: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Create a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param resource: Resource create parameters. Required.
-        :type resource: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "db_system_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def begin_create_or_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        resource: Union[_models.DbSystem, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Create a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param resource: Resource create parameters. Is one of the following types: DbSystem, JSON,
-         IO[bytes] Required.
-        :type resource: ~azure.mgmt.oracledatabase.models.DbSystem or JSON or IO[bytes]
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.DbSystem] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._create_or_update_initial(
-                resource_group_name=resource_group_name,
-                db_system_name=db_system_name,
-                resource=resource,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response = pipeline_response.http_response
-            deserialized = _deserialize(_models.DbSystem, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, {})  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.DbSystem].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.DbSystem](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": ["api_version", "subscription_id", "resource_group_name", "db_system_name", "accept"]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def get(self, resource_group_name: str, db_system_name: str, **kwargs: Any) -> _models.DbSystem:
-        """Get a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :return: DbSystem. The DbSystem is compatible with MutableMapping
-        :rtype: ~azure.mgmt.oracledatabase.models.DbSystem
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[_models.DbSystem] = kwargs.pop("cls", None)
-
-        _request = build_db_systems_get_request(
-            resource_group_name=resource_group_name,
-            db_system_name=db_system_name,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = kwargs.pop("stream", False)
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200]:
-            if _stream:
-                try:
-                    await response.read()  # Load the body in memory and close the socket
-                except (StreamConsumedError, StreamClosedError):
-                    pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        if _stream:
-            deserialized = response.iter_bytes()
-        else:
-            deserialized = _deserialize(_models.DbSystem, response.json())
-
-        if cls:
-            return cls(pipeline_response, deserialized, {})  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "db_system_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def _update_initial(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        properties: Union[_models.DbSystemUpdate, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        content_type = content_type or "application/json"
-        _content = None
-        if isinstance(properties, (IOBase, bytes)):
-            _content = properties
-        else:
-            _content = json.dumps(properties, cls=SdkJSONEncoder, exclude_readonly=True)  # type: ignore
-
-        _request = build_db_systems_update_request(
-            resource_group_name=resource_group_name,
-            db_system_name=db_system_name,
-            subscription_id=self._config.subscription_id,
-            content_type=content_type,
-            api_version=self._config.api_version,
-            content=_content,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200, 202]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        properties: _models.DbSystemUpdate,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Update a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: ~azure.mgmt.oracledatabase.models.DbSystemUpdate
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        properties: JSON,
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Update a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: JSON
-        :keyword content_type: Body Parameter content-type. Content type parameter for JSON body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @overload
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        properties: IO[bytes],
-        *,
-        content_type: str = "application/json",
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Update a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param properties: The resource properties to be updated. Required.
-        :type properties: IO[bytes]
-        :keyword content_type: Body Parameter content-type. Content type parameter for binary body.
-         Default value is "application/json".
-        :paramtype content_type: str
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": [
-                "api_version",
-                "subscription_id",
-                "resource_group_name",
-                "db_system_name",
-                "content_type",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def begin_update(
-        self,
-        resource_group_name: str,
-        db_system_name: str,
-        properties: Union[_models.DbSystemUpdate, JSON, IO[bytes]],
-        **kwargs: Any
-    ) -> AsyncLROPoller[_models.DbSystem]:
-        """Update a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :param properties: The resource properties to be updated. Is one of the following types:
-         DbSystemUpdate, JSON, IO[bytes] Required.
-        :type properties: ~azure.mgmt.oracledatabase.models.DbSystemUpdate or JSON or IO[bytes]
-        :return: An instance of AsyncLROPoller that returns DbSystem. The DbSystem is compatible with
-         MutableMapping
-        :rtype: ~azure.core.polling.AsyncLROPoller[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
-        _params = kwargs.pop("params", {}) or {}
-
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.DbSystem] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._update_initial(
-                resource_group_name=resource_group_name,
-                db_system_name=db_system_name,
-                properties=properties,
-                content_type=content_type,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):
-            response = pipeline_response.http_response
-            deserialized = _deserialize(_models.DbSystem, response.json())
-            if cls:
-                return cls(pipeline_response, deserialized, {})  # type: ignore
-            return deserialized
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[_models.DbSystem].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[_models.DbSystem](
-            self._client, raw_result, get_long_running_output, polling_method  # type: ignore
-        )
-
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": ["api_version", "subscription_id", "resource_group_name", "db_system_name"]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def _delete_initial(
-        self, resource_group_name: str, db_system_name: str, **kwargs: Any
-    ) -> AsyncIterator[bytes]:
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[AsyncIterator[bytes]] = kwargs.pop("cls", None)
-
-        _request = build_db_systems_delete_request(
-            resource_group_name=resource_group_name,
-            db_system_name=db_system_name,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = True
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [202, 204]:
-            try:
-                await response.read()  # Load the body in memory and close the socket
-            except (StreamConsumedError, StreamClosedError):
-                pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        response_headers = {}
-        if response.status_code == 202:
-            response_headers["Location"] = self._deserialize("str", response.headers.get("Location"))
-            response_headers["Retry-After"] = self._deserialize("int", response.headers.get("Retry-After"))
-
-        deserialized = response.iter_bytes()
-
-        if cls:
-            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": ["api_version", "subscription_id", "resource_group_name", "db_system_name"]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def begin_delete(self, resource_group_name: str, db_system_name: str, **kwargs: Any) -> AsyncLROPoller[None]:
-        """Delete a DbSystem.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :param db_system_name: The name of the DbSystem. Required.
-        :type db_system_name: str
-        :return: An instance of AsyncLROPoller that returns None
-        :rtype: ~azure.core.polling.AsyncLROPoller[None]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[None] = kwargs.pop("cls", None)
-        polling: Union[bool, AsyncPollingMethod] = kwargs.pop("polling", True)
-        lro_delay = kwargs.pop("polling_interval", self._config.polling_interval)
-        cont_token: Optional[str] = kwargs.pop("continuation_token", None)
-        if cont_token is None:
-            raw_result = await self._delete_initial(
-                resource_group_name=resource_group_name,
-                db_system_name=db_system_name,
-                cls=lambda x, y, z: x,
-                headers=_headers,
-                params=_params,
-                **kwargs
-            )
-            await raw_result.http_response.read()  # type: ignore
-        kwargs.pop("error_map", None)
-
-        def get_long_running_output(pipeline_response):  # pylint: disable=inconsistent-return-statements
-            if cls:
-                return cls(pipeline_response, None, {})  # type: ignore
-
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-
-        if polling is True:
-            polling_method: AsyncPollingMethod = cast(
-                AsyncPollingMethod, AsyncARMPolling(lro_delay, path_format_arguments=path_format_arguments, **kwargs)
-            )
-        elif polling is False:
-            polling_method = cast(AsyncPollingMethod, AsyncNoPolling())
-        else:
-            polling_method = polling
-        if cont_token:
-            return AsyncLROPoller[None].from_continuation_token(
-                polling_method=polling_method,
-                continuation_token=cont_token,
-                client=self._client,
-                deserialization_callback=get_long_running_output,
-            )
-        return AsyncLROPoller[None](self._client, raw_result, get_long_running_output, polling_method)  # type: ignore
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={"2025-07-01-preview": ["api_version", "subscription_id", "resource_group_name", "accept"]},
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    def list_by_resource_group(self, resource_group_name: str, **kwargs: Any) -> AsyncItemPaged["_models.DbSystem"]:
-        """List DbSystem resources by resource group.
-
-        :param resource_group_name: The name of the resource group. The name is case insensitive.
-         Required.
-        :type resource_group_name: str
-        :return: An iterator like instance of DbSystem
-        :rtype: ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.DbSystem]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.DbSystem]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_db_systems_list_by_resource_group_request(
-                    resource_group_name=resource_group_name,
-                    subscription_id=self._config.subscription_id,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.DbSystem], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
-                raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-            return pipeline_response
-
-        return AsyncItemPaged(get_next, extract_data)
-
-
-class DbVersionsOperations:
-    """
-    .. warning::
-        **DO NOT** instantiate this class directly.
-
-        Instead, you should access the following operations through
-        :class:`~azure.mgmt.oracledatabase.aio.OracleDatabaseMgmtClient`'s
-        :attr:`db_versions` attribute.
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        input_args = list(args)
-        self._client: AsyncPipelineClient = input_args.pop(0) if input_args else kwargs.pop("client")
-        self._config: OracleDatabaseMgmtClientConfiguration = input_args.pop(0) if input_args else kwargs.pop("config")
-        self._serialize: Serializer = input_args.pop(0) if input_args else kwargs.pop("serializer")
-        self._deserialize: Deserializer = input_args.pop(0) if input_args else kwargs.pop("deserializer")
-
-    @distributed_trace_async
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": ["api_version", "subscription_id", "location", "dbversionsname", "accept"]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    async def get(self, location: str, dbversionsname: str, **kwargs: Any) -> _models.DbVersion:
-        """Get a DbVersion.
-
-        :param location: The name of the Azure region. Required.
-        :type location: str
-        :param dbversionsname: DbVersion name. Required.
-        :type dbversionsname: str
-        :return: DbVersion. The DbVersion is compatible with MutableMapping
-        :rtype: ~azure.mgmt.oracledatabase.models.DbVersion
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[_models.DbVersion] = kwargs.pop("cls", None)
-
-        _request = build_db_versions_get_request(
-            location=location,
-            dbversionsname=dbversionsname,
-            subscription_id=self._config.subscription_id,
-            api_version=self._config.api_version,
-            headers=_headers,
-            params=_params,
-        )
-        path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.base_url", self._config.base_url, "str", skip_quote=True),
-        }
-        _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-        _stream = kwargs.pop("stream", False)
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            _request, stream=_stream, **kwargs
-        )
-
-        response = pipeline_response.http_response
-
-        if response.status_code not in [200]:
-            if _stream:
-                try:
-                    await response.read()  # Load the body in memory and close the socket
-                except (StreamConsumedError, StreamClosedError):
-                    pass
-            map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
-            raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
-
-        if _stream:
-            deserialized = response.iter_bytes()
-        else:
-            deserialized = _deserialize(_models.DbVersion, response.json())
-
-        if cls:
-            return cls(pipeline_response, deserialized, {})  # type: ignore
-
-        return deserialized  # type: ignore
-
-    @distributed_trace
-    @api_version_validation(
-        method_added_on="2025-07-01-preview",
-        params_added_on={
-            "2025-07-01-preview": [
-                "api_version",
-                "subscription_id",
-                "location",
-                "db_system_shape",
-                "db_system_id",
-                "storage_management",
-                "is_upgrade_supported",
-                "is_database_software_image_supported",
-                "shape_family",
-                "accept",
-            ]
-        },
-        api_versions_list=["2025-07-01-preview", "2025-08-01-preview", "2025-08-15-preview", "2025-09-01"],
-    )
-    def list_by_location(
-        self,
-        location: str,
-        *,
-        db_system_shape: Optional[Union[str, _models.BaseDbSystemShapes]] = None,
-        db_system_id: Optional[str] = None,
-        storage_management: Optional[Union[str, _models.StorageManagementType]] = None,
-        is_upgrade_supported: Optional[bool] = None,
-        is_database_software_image_supported: Optional[bool] = None,
-        shape_family: Optional[Union[str, _models.ShapeFamilyType]] = None,
-        **kwargs: Any
-    ) -> AsyncItemPaged["_models.DbVersion"]:
-        """List DbVersion resources by SubscriptionLocationResource.
-
-        :param location: The name of the Azure region. Required.
-        :type location: str
-        :keyword db_system_shape: If provided, filters the results to the set of database versions
-         which are supported for the given shape. e.g., VM.Standard.E5.Flex. "VM.Standard.x86" Default
-         value is None.
-        :paramtype db_system_shape: str or ~azure.mgmt.oracledatabase.models.BaseDbSystemShapes
-        :keyword db_system_id: The DB system AzureId. If provided, filters the results to the set of
-         database versions which are supported for the DB system. Default value is None.
-        :paramtype db_system_id: str
-        :keyword storage_management: The DB system storage management option. Used to list database
-         versions available for that storage manager. Valid values are ASM and LVM. "LVM" Default value
-         is None.
-        :paramtype storage_management: str or ~azure.mgmt.oracledatabase.models.StorageManagementType
-        :keyword is_upgrade_supported: If true, filters the results to the set of database versions
-         which are supported for Upgrade. Default value is None.
-        :paramtype is_upgrade_supported: bool
-        :keyword is_database_software_image_supported: If true, filters the results to the set of
-         Oracle Database versions that are supported for the database software images. Default value is
-         None.
-        :paramtype is_database_software_image_supported: bool
-        :keyword shape_family: If provided, filters the results to the set of database versions which
-         are supported for the given shape family. Known values are: "EXADATA", "EXADB_XS",
-         "SINGLENODE", and "VIRTUALMACHINE". Default value is None.
-        :paramtype shape_family: str or ~azure.mgmt.oracledatabase.models.ShapeFamilyType
-        :return: An iterator like instance of DbVersion
-        :rtype: ~azure.core.async_paging.AsyncItemPaged[~azure.mgmt.oracledatabase.models.DbVersion]
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        _headers = kwargs.pop("headers", {}) or {}
-        _params = kwargs.pop("params", {}) or {}
-
-        cls: ClsType[List[_models.DbVersion]] = kwargs.pop("cls", None)
-
-        error_map: MutableMapping = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
-        }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
-        def prepare_request(next_link=None):
-            if not next_link:
-
-                _request = build_db_versions_list_by_location_request(
-                    location=location,
-                    subscription_id=self._config.subscription_id,
-                    db_system_shape=db_system_shape,
-                    db_system_id=db_system_id,
-                    storage_management=storage_management,
-                    is_upgrade_supported=is_upgrade_supported,
-                    is_database_software_image_supported=is_database_software_image_supported,
-                    shape_family=shape_family,
-                    api_version=self._config.api_version,
-                    headers=_headers,
-                    params=_params,
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            else:
-                # make call to next link with the client's api-version
-                _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
-                _next_request_params["api-version"] = self._config.api_version
-                _request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
-                path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.base_url", self._config.base_url, "str", skip_quote=True
-                    ),
-                }
-                _request.url = self._client.format_url(_request.url, **path_format_arguments)
-
-            return _request
-
-        async def extract_data(pipeline_response):
-            deserialized = pipeline_response.http_response.json()
-            list_of_elem = _deserialize(List[_models.DbVersion], deserialized.get("value", []))
-            if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
-            return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
-
-        async def get_next(next_link=None):
-            _request = prepare_request(next_link)
-
-            _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                _request, stream=_stream, **kwargs
-            )
-            response = pipeline_response.http_response
-
-            if response.status_code not in [200]:
-                map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response

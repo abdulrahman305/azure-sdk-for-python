@@ -26,6 +26,7 @@ from azure.monitor.opentelemetry.exporter.export.metrics._exporter import (
     AzureMonitorMetricExporter,
     _get_metric_export_result,
 )
+from azure.monitor.opentelemetry.exporter.statsbeat._exporter import _StatsBeatExporter
 from azure.monitor.opentelemetry.exporter._generated.models import ContextTagKeys
 from azure.monitor.opentelemetry.exporter._utils import (
     azure_monitor_context,
@@ -291,9 +292,7 @@ class TestAzureMetricExporter(unittest.TestCase):
     @mock.patch("azure.monitor.opentelemetry.exporter.export.metrics._exporter._utils._is_on_aks", return_value=True)
     @mock.patch("azure.monitor.opentelemetry.exporter.export.metrics._exporter._utils._is_attach_enabled", return_value=True)
     def test_point_to_envelope_statsbeat(self, attach_mock, aks_mock):
-        exporter = AzureMonitorMetricExporter(
-            is_sdkstats=True,
-        )
+        exporter = _StatsBeatExporter()
         point = self._number_data_point
         envelope = exporter._point_to_envelope(point, "attach")
         self.assertEqual(len(envelope.data.base_data.properties), 1)
@@ -818,9 +817,7 @@ class TestAzureMetricExporter(unittest.TestCase):
     @mock.patch("azure.monitor.opentelemetry.exporter.export.metrics._exporter._utils._is_on_aks", return_value=True)
     @mock.patch("azure.monitor.opentelemetry.exporter.export.metrics._exporter._utils._is_attach_enabled", return_value=True)
     def test_constructor_log_analytics_statsbeat(self, attach_mock, aks_mock):
-        exporter = AzureMonitorMetricExporter(
-            is_sdkstats=True,
-        )
+        exporter = _StatsBeatExporter()
         self.assertTrue(exporter._metrics_to_log_analytics)
 
     @mock.patch.dict("os.environ", {

@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 # coding=utf-8
 # --------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
@@ -40,14 +41,6 @@ class ActivityState(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     INACTIVE = "Inactive"
 
 
-class AmazonRdsForOracleAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """Authentication type for connecting to the AmazonRdsForOracle database. Only used for Version
-    2.0.
-    """
-
-    BASIC = "Basic"
-
-
 class AmazonRdsForOraclePartitionOption(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """AmazonRdsForOraclePartitionOption."""
 
@@ -83,14 +76,6 @@ class AzureFunctionActivityMethod(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     OPTIONS = "OPTIONS"
     HEAD = "HEAD"
     TRACE = "TRACE"
-
-
-class AzurePostgreSqlWriteMethodEnum(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """The write behavior for the operation. Default is Bulk Insert."""
-
-    BULK_INSERT = "BulkInsert"
-    COPY_COMMAND = "CopyCommand"
-    UPSERT = "Upsert"
 
 
 class AzureSearchIndexWriteBehaviorType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
@@ -427,14 +412,6 @@ class HDInsightActivityDebugInfoOption(str, Enum, metaclass=CaseInsensitiveEnumM
     FAILURE = "Failure"
 
 
-class HDInsightClusterAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """HDInsight cluster authentication type."""
-
-    BASIC_AUTH = "BasicAuth"
-    SYSTEM_ASSIGNED_MANAGED_IDENTITY = "SystemAssignedManagedIdentity"
-    USER_ASSIGNED_MANAGED_IDENTITY = "UserAssignedManagedIdentity"
-
-
 class HiveAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """The authentication method used to access the Hive server."""
 
@@ -476,13 +453,6 @@ class ImpalaAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     ANONYMOUS = "Anonymous"
     SASL_USERNAME = "SASLUsername"
     USERNAME_AND_PASSWORD = "UsernameAndPassword"
-
-
-class ImpalaThriftTransportProtocol(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """The transport protocol to use in the Thrift layer (for V2 only). Default value is Binary."""
-
-    BINARY = "Binary"
-    HTTP = "HTTP"
 
 
 class IntegrationRuntimeEdition(str, Enum, metaclass=CaseInsensitiveEnumMeta):
@@ -559,14 +529,6 @@ class JsonWriteFilePattern(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     ARRAY_OF_OBJECTS = "arrayOfObjects"
 
 
-class LakehouseAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """The authentication type to use."""
-
-    SERVICE_PRINCIPAL = "ServicePrincipal"
-    SYSTEM_ASSIGNED_MANAGED_IDENTITY = "SystemAssignedManagedIdentity"
-    USER_ASSIGNED_MANAGED_IDENTITY = "UserAssignedManagedIdentity"
-
-
 class LivyStates(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """The batch state."""
 
@@ -630,6 +592,7 @@ class NotebookParameterType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     INT = "int"
     FLOAT = "float"
     BOOL = "bool"
+    INT_ENUM = "int"
 
 
 class NotebookReferenceType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
@@ -688,6 +651,7 @@ class ParameterType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     BOOL = "Bool"
     ARRAY = "Array"
     SECURE_STRING = "SecureString"
+    INT_ENUM = "Int"
 
 
 class ParquetCompressionCodecEnum(str, Enum, metaclass=CaseInsensitiveEnumMeta):
@@ -1100,6 +1064,7 @@ class StoredProcedureParameterType(str, Enum, metaclass=CaseInsensitiveEnumMeta)
     GUID = "Guid"
     BOOLEAN = "Boolean"
     DATE = "Date"
+    INT_ENUM = "Int"
 
 
 class SybaseAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
@@ -1167,13 +1132,6 @@ class Type(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     LINKED_SERVICE_REFERENCE = "LinkedServiceReference"
 
 
-class ValueType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """Type of value copied from source."""
-
-    ACTUAL = "actual"
-    DISPLAY = "display"
-
-
 class VariableType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """Variable type."""
 
@@ -1181,14 +1139,6 @@ class VariableType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     BOOL = "Bool"
     BOOLEAN = "Boolean"
     ARRAY = "Array"
-
-
-class WarehouseAuthenticationType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """The authentication type to use."""
-
-    SERVICE_PRINCIPAL = "ServicePrincipal"
-    SYSTEM_ASSIGNED_MANAGED_IDENTITY = "SystemAssignedManagedIdentity"
-    USER_ASSIGNED_MANAGED_IDENTITY = "UserAssignedManagedIdentity"
 
 
 class WebActivityMethod(str, Enum, metaclass=CaseInsensitiveEnumMeta):

@@ -43,12 +43,10 @@ class TestTrustedSigningMgmtCertificateProfilesOperationsAsync(AzureMgmtRecorded
                     "id": "str",
                     "name": "str",
                     "properties": {
-                        "identityValidationId": "str",
                         "profileType": "str",
                         "certificates": [
                             {
                                 "createdDate": "str",
-                                "enhancedKeyUsage": "str",
                                 "expiryDate": "str",
                                 "revocation": {
                                     "effectiveAt": "2020-02-20 00:00:00",
@@ -64,13 +62,23 @@ class TestTrustedSigningMgmtCertificateProfilesOperationsAsync(AzureMgmtRecorded
                                 "thumbprint": "str",
                             }
                         ],
+                        "city": "str",
+                        "commonName": "str",
+                        "country": "str",
+                        "enhancedKeyUsage": "str",
+                        "identityValidationId": "str",
                         "includeCity": bool,
                         "includeCountry": bool,
                         "includePostalCode": bool,
                         "includeState": bool,
                         "includeStreetAddress": bool,
+                        "organization": "str",
+                        "organizationUnit": "str",
+                        "postalCode": "str",
                         "provisioningState": "str",
+                        "state": "str",
                         "status": "str",
+                        "streetAddress": "str",
                     },
                     "systemData": {
                         "createdAt": "2020-02-20 00:00:00",

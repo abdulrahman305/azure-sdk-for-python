@@ -45,20 +45,20 @@ class EnablementStatus(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """The enablement status of a feature."""
 
     ENABLED = "Enabled"
-    """The feature is enabled."""
+    """The feature is Enabled."""
     DISABLED = "Disabled"
-    """The feature is disabled."""
+    """The feature is Disabled."""
 
 
 class FreeTrialState(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """The free trial state."""
+    """The free-trial state."""
 
     ACTIVE = "Active"
-    """The free trial is active and available for use."""
+    """The free-trial is Active."""
     EXPIRED = "Expired"
-    """The free trial has expired and is no longer available."""
+    """The free-trial is Expired."""
     NOT_APPLICABLE = "NotApplicable"
-    """The free trial is not applicable for this resource."""
+    """The free-trial is Not Applicable."""
 
 
 class Origin(str, Enum, metaclass=CaseInsensitiveEnumMeta):
@@ -84,15 +84,15 @@ class ProvisioningState(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     CANCELED = "Canceled"
     """Resource creation was canceled."""
     CREATING = "Creating"
-    """Resource creation is in progress."""
+    """Creation in progress.."""
     DELETING = "Deleting"
-    """Resource deletion is in progress."""
+    """Deletion in progress.."""
     ACCEPTED = "Accepted"
-    """Request has been accepted for processing."""
+    """Request accepted for processing.."""
 
 
 class QuotaName(str, Enum, metaclass=CaseInsensitiveEnumMeta):
-    """Available Playwright quota types."""
+    """Playwright quota names."""
 
     EXECUTION_MINUTES = "ExecutionMinutes"
     """Quota for execution duration in minutes."""

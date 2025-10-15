@@ -81,7 +81,6 @@ class TestServiceFabricManagedClustersManagementManagedClustersOperationsAsync(A
                         "enableAutoOSUpgrade": bool,
                         "enableHttpGatewayExclusiveAuthMode": bool,
                         "enableIpv6": bool,
-                        "enableOutboundOnlyNodeTypes": bool,
                         "enableServicePublicIP": bool,
                         "fabricSettings": [{"name": "str", "parameters": [{"name": "str", "value": "str"}]}],
                         "fqdn": "str",
@@ -122,7 +121,7 @@ class TestServiceFabricManagedClustersManagementManagedClustersOperationsAsync(A
                         "provisioningState": "str",
                         "publicIPPrefixId": "str",
                         "publicIPv6PrefixId": "str",
-                        "serviceEndpoints": [{"service": "str", "locations": ["str"], "networkIdentifier": "str"}],
+                        "serviceEndpoints": [{"service": "str", "locations": ["str"]}],
                         "subnetId": "str",
                         "upgradeDescription": {
                             "deltaHealthPolicy": {
@@ -133,11 +132,11 @@ class TestServiceFabricManagedClustersManagementManagedClustersOperationsAsync(A
                             "forceRestart": bool,
                             "healthPolicy": {"maxPercentUnhealthyApplications": 0, "maxPercentUnhealthyNodes": 0},
                             "monitoringPolicy": {
-                                "healthCheckRetryTimeout": "1 day, 0:00:00",
+                                "healthCheckRetryTimeout": "str",
                                 "healthCheckStableDuration": "1 day, 0:00:00",
                                 "healthCheckWaitDuration": "1 day, 0:00:00",
-                                "upgradeDomainTimeout": "1 day, 0:00:00",
-                                "upgradeTimeout": "1 day, 0:00:00",
+                                "upgradeDomainTimeout": "str",
+                                "upgradeTimeout": "str",
                             },
                             "upgradeReplicaSetCheckTimeout": "str",
                         },

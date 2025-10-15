@@ -89,7 +89,6 @@ class TestServiceFabricManagedClustersManagementNodeTypesOperations(AzureMgmtRec
                         }
                     ],
                     "hostGroupId": "str",
-                    "isOutboundOnly": bool,
                     "isSpotVM": bool,
                     "isStateless": bool,
                     "multiplePlacementGroups": bool,

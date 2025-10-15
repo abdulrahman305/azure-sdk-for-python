@@ -1,5 +1,6 @@
--e ../../../eng/tools/azure-sdk-tools
+-e ../../../tools/azure-sdk-tools
 ../../nspkg/azure-search-nspkg
-aiohttp>=3.0
+aiohttp>=3.12.14
 azure-identity
 azure-mgmt-resource<=21.1.0
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability

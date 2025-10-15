@@ -1,5 +1,6 @@
--e ../../../eng/tools/azure-sdk-tools
+-e ../../../tools/azure-sdk-tools
 -e ../azure-mgmt-network
 -e ../../identity/azure-identity
 azure-mgmt-resource<=21.1.0
 aiohttp
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability

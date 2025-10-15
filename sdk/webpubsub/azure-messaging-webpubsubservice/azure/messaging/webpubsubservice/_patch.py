@@ -1,14 +1,33 @@
 # coding=utf-8
 # --------------------------------------------------------------------------
+#
 # Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License.txt in the project root for license information.
+#
+# The MIT License (MIT)
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the ""Software""), to
+# deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
+#
 # --------------------------------------------------------------------------
-"""Customize generated code here.
 
-Follow our quickstart for examples: https://aka.ms/azsdk/python/dpcodegen/python/customize
-"""
-from typing import List, Any, TYPE_CHECKING, Optional, Union, Awaitable
-from datetime import datetime, timedelta, timezone
+
+from typing import Any, TYPE_CHECKING, Optional, Union, Awaitable
+from datetime import datetime, timedelta
 import jwt
 
 from azure.core.pipeline import PipelineRequest
@@ -16,6 +35,8 @@ from azure.core.pipeline.policies import SansIOHTTPPolicy, ProxyPolicy
 from azure.core.credentials import AzureKeyCredential
 
 from ._client import WebPubSubServiceClient as WebPubSubServiceClientGenerated
+from ._operations._patch import _UTC_TZ
+from ._models import GroupMember
 
 
 if TYPE_CHECKING:
@@ -83,7 +104,7 @@ class JwtCredentialPolicy(SansIOHTTPPolicy):
     def _encode(self, url: AzureKeyCredential) -> str:
         data = {
             "aud": url,
-            "exp": datetime.now(tz=timezone.utc) + timedelta(seconds=60),
+            "exp": datetime.now(tz=_UTC_TZ()) + timedelta(seconds=60),
         }
         if self._user:
             data[self.NAME_CLAIM_TYPE] = self._user
@@ -134,7 +155,7 @@ class WebPubSubServiceClientBase:
                 reverse_proxy_endpoint=kwargs.get("reverse_proxy_endpoint"),
             )
         kwargs["proxy_policy"] = kwargs.pop("proxy_policy", ApiManagementProxy(**kwargs))
-        super().__init__(endpoint=endpoint, credential=credential, hub=hub, **kwargs)
+        super().__init__(endpoint=endpoint, hub=hub, credential=credential, **kwargs)
 
 
 class WebPubSubServiceClient(WebPubSubServiceClientBase, WebPubSubServiceClientGenerated):
@@ -174,15 +195,8 @@ class WebPubSubServiceClient(WebPubSubServiceClientBase, WebPubSubServiceClientG
         return cls(hub=hub, credential=credential, **kwargs)
 
 
-__all__: List[str] = [
-    "WebPubSubServiceClient",
-]  # Add all objects you want publicly available to users at this package level
+__all__ = ["WebPubSubServiceClient", "GroupMember"]
 
 
 def patch_sdk():
-    """Do not remove from this file.
-
-    `patch_sdk` is a last resort escape hatch that allows you to do customizations
-    you can't accomplish using the techniques described in
-    https://aka.ms/azsdk/python/dpcodegen/python/customize
-    """
+    pass

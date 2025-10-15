@@ -33,26 +33,26 @@ def main():
 
     response = client.exascale_db_storage_vaults.begin_create(
         resource_group_name="rgopenapi",
-        exascale_db_storage_vault_name="storagevault1",
+        exascale_db_storage_vault_name="vmClusterName",
         resource={
-            "location": "zuoudqbvlxerpjtlfooyqlb",
+            "location": "ltguhzffucaytqg",
             "properties": {
                 "additionalFlashCacheInPercent": 0,
-                "description": "kgqvxvtegzwyppegpvqxnlslvetbjlgveofcpjddenhbpocyzwtswaeaetqkipcxyhedsymuljalirryldlbviuvidhssyiwodacajjnbpkbvbvzwzsjctsidchalyjkievnivikwnnypaojcvhmokddstxwiqxmbfmbvglfimseguwyvibwzllggjtwejdfgezoeuvjjbsyfozswihydzuscjrqnklewongumiljeordhqlsclwlmftzdoey",
-                "displayName": "storagevault1",
-                "highCapacityDatabaseStorage": {"availableSizeInGbs": 4, "totalSizeInGbs": 12},
-                "highCapacityDatabaseStorageInput": {"totalSizeInGbs": 1},
+                "description": "dmnvnnduldfmrmkkvvsdtuvmsmruxzzpsfdydgytlckutfozephjygjetrauvbdfcwmti",
+                "displayName": "hbsybtelyvhpalemszcvartlhwvskrnpiveqfblvkdihoytqaotdgsgauvgivzaftfgeiwlyeqzssicwrrnlxtsmeakbcsxabjlt",
+                "highCapacityDatabaseStorage": {"availableSizeInGbs": 28, "totalSizeInGbs": 16},
+                "highCapacityDatabaseStorageInput": {"totalSizeInGbs": 21},
                 "lifecycleState": "Provisioning",
                 "ocid": "ocid1.autonomousdatabase.oc1..aaaaa3klq",
-                "timeZone": "hyjcftlal",
+                "timeZone": "ltrbozwxjunncicrtzjrpqnqrcjgghohztrdlbfjrbkpenopyldwolslwgrgumjfkyovvkzcuxjujuxtjjzubvqvnhrswnbdgcbslopeofmtepbrrlymqwwszvsglmyuvlcuejshtpokirwklnwpcykhyinjmlqvxtyixlthtdishhmtipbygsayvgqzfrprgppylydlcskbmvwctxifdltippfvsxiughqbojqpqrekxsotnqsk",
             },
-            "tags": {"key4521": "rrgotvwzckepkhgkbz"},
-            "zones": ["npqjhyekyumfybqas"],
+            "tags": {"key7827": "xqi"},
+            "zones": ["qk"],
         },
     ).result()
     print(response)
 
 
-# x-ms-original-file: 2025-09-01/ExascaleDbStorageVaults_Create_MaximumSet_Gen.json
+# x-ms-original-file: 2025-03-01/ExascaleDbStorageVaults_Create_MaximumSet_Gen.json
 if __name__ == "__main__":
     main()

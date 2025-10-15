@@ -9,7 +9,7 @@
 from collections.abc import MutableMapping
 from io import IOBase
 import json
-from typing import Any, AsyncIterator, Callable, IO, Optional, TypeVar, Union, cast, overload
+from typing import Any, AsyncIterable, AsyncIterator, Callable, Dict, IO, List, Optional, TypeVar, Union, cast, overload
 import urllib.parse
 
 from azure.core import AsyncPipelineClient
@@ -58,8 +58,7 @@ from .._configuration import SiteManagerMgmtClientConfiguration
 
 JSON = MutableMapping[str, Any]
 T = TypeVar("T")
-ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, dict[str, Any]], Any]]
-List = list
+ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, Dict[str, Any]], Any]]
 
 
 class SitesOperations:
@@ -132,7 +131,7 @@ class SitesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -197,7 +196,7 @@ class SitesOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -522,7 +521,7 @@ class SitesOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -583,14 +582,14 @@ class SitesOperations:
 
         if response.status_code not in [200, 204]:
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
             return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace
-    def list_by_resource_group(self, resource_group_name: str, **kwargs: Any) -> AsyncItemPaged["_models.Site"]:
+    def list_by_resource_group(self, resource_group_name: str, **kwargs: Any) -> AsyncIterable["_models.Site"]:
         """List Site resources by resource group.
 
         :param resource_group_name: The name of the resource group. The name is case insensitive.
@@ -670,7 +669,7 @@ class SitesOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -696,7 +695,7 @@ class SitesBySubscriptionOperations:
         self._deserialize: Deserializer = input_args.pop(0) if input_args else kwargs.pop("deserializer")
 
     @distributed_trace
-    def list(self, **kwargs: Any) -> AsyncItemPaged["_models.Site"]:
+    def list(self, **kwargs: Any) -> AsyncIterable["_models.Site"]:
         """List Site resources by subscription ID.
 
         :return: An iterator like instance of Site
@@ -772,7 +771,7 @@ class SitesBySubscriptionOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -828,7 +827,7 @@ class SitesBySubscriptionOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -892,7 +891,7 @@ class SitesBySubscriptionOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -1151,7 +1150,7 @@ class SitesBySubscriptionOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -1208,7 +1207,7 @@ class SitesBySubscriptionOperations:
 
         if response.status_code not in [200, 204]:
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:
@@ -1236,9 +1235,8 @@ class SitesByServiceGroupOperations:
     @api_version_validation(
         method_added_on="2025-03-01-preview",
         params_added_on={"2025-03-01-preview": ["api_version", "servicegroup_name", "accept"]},
-        api_versions_list=["2025-03-01-preview", "2025-06-01"],
     )
-    def list_by_service_group(self, servicegroup_name: str, **kwargs: Any) -> AsyncItemPaged["_models.Site"]:
+    def list_by_service_group(self, servicegroup_name: str, **kwargs: Any) -> AsyncIterable["_models.Site"]:
         """list Site at SG scope.
 
         :param servicegroup_name: The name of the service group. Required.
@@ -1316,7 +1314,7 @@ class SitesByServiceGroupOperations:
 
             if response.status_code not in [200]:
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
-                error = _failsafe_deserialize(_models.ErrorResponse, response)
+                error = _failsafe_deserialize(_models.ErrorResponse, response.json())
                 raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
             return pipeline_response
@@ -1327,7 +1325,6 @@ class SitesByServiceGroupOperations:
     @api_version_validation(
         method_added_on="2025-03-01-preview",
         params_added_on={"2025-03-01-preview": ["api_version", "servicegroup_name", "site_name", "accept"]},
-        api_versions_list=["2025-03-01-preview", "2025-06-01"],
     )
     async def get(self, servicegroup_name: str, site_name: str, **kwargs: Any) -> _models.Site:
         """Get Site at SG scope.
@@ -1379,7 +1376,7 @@ class SitesByServiceGroupOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -1397,7 +1394,6 @@ class SitesByServiceGroupOperations:
         params_added_on={
             "2025-03-01-preview": ["api_version", "servicegroup_name", "site_name", "content_type", "accept"]
         },
-        api_versions_list=["2025-03-01-preview", "2025-06-01"],
     )
     async def _create_or_update_initial(
         self, servicegroup_name: str, site_name: str, resource: Union[_models.Site, JSON, IO[bytes]], **kwargs: Any
@@ -1450,7 +1446,7 @@ class SitesByServiceGroupOperations:
             except (StreamConsumedError, StreamClosedError):
                 pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         response_headers = {}
@@ -1554,7 +1550,6 @@ class SitesByServiceGroupOperations:
         params_added_on={
             "2025-03-01-preview": ["api_version", "servicegroup_name", "site_name", "content_type", "accept"]
         },
-        api_versions_list=["2025-03-01-preview", "2025-06-01"],
     )
     async def begin_create_or_update(
         self, servicegroup_name: str, site_name: str, resource: Union[_models.Site, JSON, IO[bytes]], **kwargs: Any
@@ -1709,7 +1704,6 @@ class SitesByServiceGroupOperations:
         params_added_on={
             "2025-03-01-preview": ["api_version", "servicegroup_name", "site_name", "content_type", "accept"]
         },
-        api_versions_list=["2025-03-01-preview", "2025-06-01"],
     )
     async def update(
         self,
@@ -1780,7 +1774,7 @@ class SitesByServiceGroupOperations:
                 except (StreamConsumedError, StreamClosedError):
                     pass
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if _stream:
@@ -1796,8 +1790,7 @@ class SitesByServiceGroupOperations:
     @distributed_trace_async
     @api_version_validation(
         method_added_on="2025-03-01-preview",
-        params_added_on={"2025-03-01-preview": ["api_version", "servicegroup_name", "site_name"]},
-        api_versions_list=["2025-03-01-preview", "2025-06-01"],
+        params_added_on={"2025-03-01-preview": ["api_version", "servicegroup_name", "site_name", "accept"]},
     )
     async def delete(self, servicegroup_name: str, site_name: str, **kwargs: Any) -> None:
         """delete Site at SG scope.
@@ -1844,7 +1837,7 @@ class SitesByServiceGroupOperations:
 
         if response.status_code not in [200, 204]:
             map_error(status_code=response.status_code, response=response, error_map=error_map)
-            error = _failsafe_deserialize(_models.ErrorResponse, response)
+            error = _failsafe_deserialize(_models.ErrorResponse, response.json())
             raise HttpResponseError(response=response, model=error, error_format=ARMErrorFormat)
 
         if cls:

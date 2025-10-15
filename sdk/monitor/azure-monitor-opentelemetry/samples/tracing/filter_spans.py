@@ -4,7 +4,7 @@
 # license information.
 # --------------------------------------------------------------------------
 
-import requests # type: ignore[import-untyped]
+import requests
 from azure.monitor.opentelemetry import configure_azure_monitor
 from opentelemetry.sdk.trace import SpanProcessor
 from opentelemetry.trace import get_tracer, SpanContext, SpanKind, TraceFlags

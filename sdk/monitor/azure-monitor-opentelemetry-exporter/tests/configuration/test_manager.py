@@ -558,33 +558,4 @@ class TestConfigurationManager(unittest.TestCase):
 
     @patch.dict(os.environ, {"APPLICATIONINSIGHTS_CONTROLPLANE_DISABLED": "true"})
     def test_configuration_manager_disabled(self):
-        """Test that configuration manager is disabled when environment variable is set."""
-        
-        # When controlplane is disabled, get_configuration_manager should return None
-        manager = get_configuration_manager()
-        self.assertIsNone(manager)
-
-    @patch.dict(os.environ, {"APPLICATIONINSIGHTS_CONTROLPLANE_DISABLED": "false"})
-    def test_configuration_manager_enabled(self):
-        """Test that configuration manager is enabled when environment variable is false."""
-        
-        # When controlplane is not disabled, get_configuration_manager should return instance
-        manager = get_configuration_manager()
-        self.assertIsNotNone(manager)
-        self.assertIsInstance(manager, _ConfigurationManager)
-
-    def test_configuration_manager_enabled_by_default(self):
-        """Test that configuration manager is enabled by default when no environment variable is set."""
-        
-        # Ensure env var is not set
-        if "APPLICATIONINSIGHTS_CONTROLPLANE_DISABLED" in os.environ:
-            del os.environ["APPLICATIONINSIGHTS_CONTROLPLANE_DISABLED"]
-        
-        # When no env var is set, get_configuration_manager should return instance
-        manager = get_configuration_manager()
-        self.assertIsNotNone(manager)
-        self.assertIsInstance(manager, _ConfigurationManager)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        """T
