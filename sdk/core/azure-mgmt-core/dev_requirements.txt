@@ -1,6 +1,7 @@
 trio
-aiohttp>=3.0
+aiohttp>=3.12.14
 typing_extensions>=3.7.2
 ../azure-core
 httpretty
 -e ../../../eng/tools/azure-sdk-tools
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
