@@ -97,3 +97,5 @@ agent-framework-core
 langchain
 langchain-openai
 azure-ai-language-questionanswering
+sqlparse>=0.5.4 # not directly required, pinned by Snyk to avoid a vulnerability
+werkzeug>=3.1.4 # not directly required, pinned by Snyk to avoid a vulnerability
