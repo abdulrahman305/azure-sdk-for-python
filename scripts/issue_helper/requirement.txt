@@ -1,3 +1,4 @@
 PyGithub==1.55
 datetime
 requests
+urllib3>=2.6.0 # not directly required, pinned by Snyk to avoid a vulnerability
